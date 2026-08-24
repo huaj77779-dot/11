@@ -1,0 +1,31 @@
+/* Large visual cards support both fabric close-ups and finished-garment photos. */
+.fabric-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.fabric-card {
+  border-radius: 11px;
+}
+
+.swatch {
+  min-height: 235px;
+  height: clamp(235px, 25vw, 330px);
+  background-position: center;
+  background-size: cover;
+}
+
+.fabric-copy {
+  padding: 15px 16px 16px;
+}
+
+.fabric-copy small { font-size: 8px; }
+.fabric-copy b { font-size: 12px; margin-top: 6px; }
+.fabric-copy em { font-size: 9px; margin-top: 5px; }
+.fabric-copy p { font-size: 8px; margin-top: 9px; }
+.fabric-copy strong { font-size: 8px; margin-top: 10px; }
+
+@media (max-width: 760px) {
+  .fabric-list { grid-template-columns: 1fr; }
+  .swatch { height: 300px; }
+}

@@ -1,0 +1,2 @@
+# 企业微信群机器人 Webhook。复制本文件为 .dev.vars 后填入真实地址。
+WECHAT_WEBHOOK_URL="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=替换为你的机器人key"

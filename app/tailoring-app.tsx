@@ -1,0 +1,3959 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { shirtOptionImageUrl } from "./shirt-option-images";
+import { suitOptionImageUrl } from "./suit-option-images";
+import { useLocale } from "./lib/i18n";
+import { fabricDisplayName, fabricTerm, tailoringTerm } from "./lib/tailoring-terms";
+import { LanguageSwitcher } from "./_components/LanguageSwitcher";
+import { apiFetch, clearAuth } from "./lib/api";
+import { useAuthGuard } from "./lib/useAuthGuard";
+import {
+  STYLBIELLA_FABRICS,
+  STYLBIELLA_BOOK_META,
+  STYLBIELLA_SHIRT_FABRICS,
+} from "./lib/stylbiella-fabrics";
+import { STYLBIELLA_FABRIC_COLORS } from "./lib/stylbiella-fabric-colors";
+import { Country, State } from "country-state-city";
+
+const garments = {
+  jacket: {
+    name: "西装上衣",
+    en: "Jacket",
+    fields: [
+      "夹宽",
+      "肩宽",
+      "臂围",
+      "袖长",
+      "胸围",
+      "中腰",
+      "腰围",
+      "下摆",
+      "前长",
+      "后长",
+    ],
+    values: [
+      [44, 46],
+      [45, 45.5],
+      [34, 36],
+      [61, 62],
+      [98, 106],
+      [88, 96],
+      [90, 98],
+      [100, 108],
+      [74, 75],
+      [71, 72],
+    ],
+  },
+  trousers: {
+    name: "西裤",
+    en: "Trousers",
+    fields: ["裤腰", "臀围", "横档", "腿围", "全档", "裤长", "脚口"],
+    values: [
+      [86, 88],
+      [98, 102],
+      [27, 29],
+      [56, 58],
+      [74, 76],
+      [101, 102],
+      [36, 37],
+    ],
+  },
+  waistcoat: {
+    name: "马甲",
+    en: "Waistcoat",
+    fields: ["胸围", "腰围", "前长", "后长"],
+    values: [
+      [98, 102],
+      [90, 94],
+      [61, 62],
+      [55, 56],
+    ],
+  },
+  shirt: {
+    name: "衬衫",
+    en: "Shirt",
+    fields: [
+      "领围",
+      "肩宽",
+      "胸围",
+      "肚围",
+      "摆围",
+      "袖肥",
+      "腕围",
+      "长袖长",
+      "前衣长",
+      "后衣长",
+    ],
+    values: [
+      [39, 40],
+      [45, 46],
+      [98, 110],
+      [90, 102],
+      [100, 110],
+      [34, 37],
+      [18, 20],
+      [61, 62],
+      [74, 75],
+      [76, 77],
+    ],
+  },
+};
+
+const FABRIC_BOOK_DETAILS: Record<string, {
+  pages: number;
+  title: string;
+  summary: string;
+  positioning: string;
+  products: string;
+  season: string;
+  weight: string;
+}> = {
+  "6401": { pages: 37, title: "SKYLINE", summary: "Super 110's 羊毛 · 270g · 四季", positioning: "经典西装系列，色彩覆盖全面，兼顾商务、通勤与正式场合；面料手感柔软、结构平衡，适合制作成套西装。", products: "西装、西装上衣、西裤、马甲", season: "四季", weight: "270g" },
+  "6402": { pages: 23, title: "JACKETING", summary: "混纺面料 · 260-480g", positioning: "专为单西与休闲西装设计的花型系列，强调纹理、层次和搭配表现，适合希望突出个性与面料质感的客户。", products: "西装上衣、休闲单西", season: "多季节", weight: "260-480g" },
+  "6403": { pages: 23, title: "OVERCOAT", summary: "羊毛、羊绒、羊驼 · 440-720g", positioning: "秋冬大衣系列，以羊毛、羊绒及羊驼等保暖纤维为主，强调丰厚手感、保暖性和高级垂坠感。", products: "大衣、外套", season: "秋冬", weight: "440-720g" },
+  "6410": { pages: 12, title: "SKYLINE", summary: "Super 110's 纯羊毛 · 270g · 150cm · 四季", positioning: "色彩丰富的纯色西装系列，从柔和浅色、清新亮色到优雅混色均有覆盖。2×2 斜纹结构带来柔软、紧实且平衡的穿着表现。", products: "西装、西装上衣、西裤、马甲", season: "四季", weight: "270g" },
+  "6411": { pages: 10, title: "KNIGHT", summary: "纯羊毛 · 360g", positioning: "偏厚实且具有稳定结构感的纯羊毛系列，适合强调挺括轮廓、耐穿性与秋冬商务风格的成衣。", products: "西装、西装上衣、西裤", season: "秋冬", weight: "360g" },
+  "6412": { pages: 7, title: "HIGHLAND", summary: "Super 150's 羊毛与羊绒 · 300g", positioning: "高支羊毛与羊绒结合的高端系列，突出细腻触感、柔软度和精致光泽，适合高级定制及重要正式场合。", products: "高级西装、西装上衣", season: "秋冬及过渡季", weight: "300g" },
+  "6413": { pages: 12, title: "ESSENTIAL", summary: "Super 110's 羊毛 · 270g", positioning: "面向日常商务衣橱的基础核心系列，颜色实用、适配面广，在舒适度、耐用度与正式感之间保持平衡。", products: "西装、西装上衣、西裤、马甲", season: "四季", weight: "270g" },
+  "6414": { pages: 6, title: "JOURNEY", summary: "羊毛真丝 / Super 120's · 320/280g", positioning: "兼顾旅行与商务穿着的系列，强调回弹、舒适和易打理，并通过羊毛真丝或高支羊毛呈现精致质感。", products: "旅行西装、西装上衣、西裤", season: "多季节", weight: "320g / 280g" },
+  "6415": { pages: 6, title: "MARBLE FLANNEL", summary: "羊毛、棉与羊绒 · 310g", positioning: "带有柔和绒面与混色层次的法兰绒系列，风格温暖自然，适合秋冬商务休闲和质感型定制。", products: "西装、西装上衣、西裤", season: "秋冬", weight: "310g" },
+  "6416": { pages: 5, title: "OVERCOATS", summary: "纯羊绒 · 500g", positioning: "纯羊绒高端大衣系列，强调轻柔触感、保暖性和奢华外观，定位于高级冬季外套与精品定制。", products: "大衣、高级外套", season: "冬季", weight: "500g" },
+};
+const FABRIC_BOOK_DETAILS_EN: Record<string, Pick<(typeof FABRIC_BOOK_DETAILS)[string], "summary" | "positioning" | "products" | "season">> = {
+  "6401": { summary: "Super 110's wool · 270g · All season", positioning: "A versatile suiting collection with a broad colour range, from business essentials to formal occasions. Its balanced structure and refined handle make it suitable for year-round tailoring.", products: "Suits, jackets, trousers and waistcoats", season: "All season" },
+  "6402": { summary: "Wool blends · 260–480g", positioning: "A jacketing collection designed for separates, combining distinctive texture with an easy drape for clients seeking character and comfort.", products: "Jackets and casual tailoring", season: "Multi-season" },
+  "6403": { summary: "Wool, cashmere and alpaca · 440–720g", positioning: "An autumn/winter overcoating collection focused on warmth, tactile depth and an elegant drape, using premium insulating fibres.", products: "Overcoats and outerwear", season: "Autumn / Winter" },
+  "6410": { summary: "Super 110's pure wool · 270g · 150cm · All season", positioning: "A richly coloured plain suiting collection spanning soft neutrals, fresh brights and elegant deep tones. The 2×2 twill construction provides a supple, compact and well-balanced handle.", products: "Suits, jackets, trousers and waistcoats", season: "All season" },
+  "6411": { summary: "Pure wool · 360g", positioning: "A substantial pure-wool collection with a stable structure, ideal for tailored garments requiring body, resilience and cold-season comfort.", products: "Suits, jackets and trousers", season: "Autumn / Winter" },
+  "6412": { summary: "Super 150's wool and cashmere · 300g", positioning: "A premium fine-wool and cashmere collection distinguished by its soft hand, quiet sheen and refined appearance for luxury tailoring and formal wear.", products: "Luxury suits and formal tailoring", season: "Autumn / Winter / Transitional" },
+  "6413": { summary: "Super 110's wool · 270g", positioning: "An essential business and everyday tailoring collection balancing practical colours, comfort, durability and a polished formal appearance.", products: "Suits, jackets, trousers and waistcoats", season: "All season" },
+  "6414": { summary: "Wool and silk / Super 120's · 320/280g", positioning: "A travel-oriented collection that combines comfort, crease recovery and elegance through wool-silk and fine-wool constructions.", products: "Travel suits, jackets and trousers", season: "Multi-season" },
+  "6415": { summary: "Wool, cotton and cashmere · 310g", positioning: "A flannel collection with soft marbled colour effects and a warm, natural handle for autumn/winter business, casual and bespoke garments.", products: "Suits, jackets and trousers", season: "Autumn / Winter" },
+  "6416": { summary: "Pure cashmere · 500g", positioning: "A premium pure-cashmere overcoating collection offering exceptional softness, warmth and a luxurious appearance for high-end outerwear.", products: "Overcoats and luxury outerwear", season: "Winter" },
+};
+const emptyMeasurements = () => {
+  const empty: Record<string, [string, string]> = {};
+  (Object.keys(garments) as GarmentKey[]).forEach((key) =>
+    garments[key].fields.forEach((field) => {
+      empty[`${key}:${field}`] = ["", ""];
+    }),
+  );
+  return empty;
+};
+const optionsByGarment = {
+  jacket: [
+    {
+      title: "正面款式",
+      items: [
+        "单排两粒扣",
+        "单排一粒扣",
+        "单排三粒扣",
+        "单排四粒扣",
+        "双排四扣四",
+        "双排四扣二",
+        "双排六扣四",
+        "双排六扣二",
+      ],
+    },
+    { title: "胸兜款式", items: ["直兜", "双牙兜", "弧形兜"] },
+    { title: "下摆开角大小", items: ["标准下摆", "大开角下摆", "小开角下摆"] },
+    { title: "肩膀样式", items: ["自然肩", "法式翘肩"] },
+    {
+      title: "口袋款式",
+      items: [
+        "标准兜",
+        "标准兜票据兜",
+        "明贴兜",
+        "双牙兜",
+        "双牙兜票据兜",
+        "双牙斜兜票据兜",
+        "斜兜",
+        "斜兜票据兜",
+      ],
+    },
+    {
+      title: "西服背面款式",
+      items: ["常规后背", "T型后背", "后腰带捏褶", "后腰固定腰带"],
+    },
+    { title: "西服开衩选择", items: ["双开衩", "不开衩", "单开衩"] },
+    { title: "毛衬", items: ["粘合衬", "半麻衬", "全麻衬"] },
+    {
+      title: "里布位置",
+      items: ["全里布", "二分之一里布", "三分之一里布", "四分之一里布"],
+    },
+    { title: "驳头款式", items: ["平驳领", "青果领", "戗驳领"] },
+    { title: "驳头眼位置", items: ["左侧", "双侧", "无", "右侧"] },
+    { title: "袖叉款式", items: ["假扣眼", "无扣眼", "真扣眼"] },
+  ],
+  trousers: [
+    {
+      title: "扣型",
+      items: [
+        "圆腰头",
+        "双扣意式腰头",
+        "好莱坞腰头",
+        "宝剑头",
+        "平腰头",
+        "廓尔格腰头",
+      ],
+    },
+    { title: "褶皱", items: ["三褶皱", "无褶皱", "单褶皱", "双褶皱"] },
+    {
+      title: "裤脚",
+      items: ["裤脚口内折边", "毛边", "裤脚口外翻翘", "靴裤脚口"],
+    },
+    { title: "裤型", items: ["喇叭裤型", "锥状裤型", "标准裤型", "直筒裤型"] },
+    { title: "裤脚口", items: ["裤脚口打开", "裤脚口三角开口"] },
+  ],
+  waistcoat: [
+    {
+      title: "马甲款式",
+      items: [
+        "标准五粒扣",
+        "圆形三粒扣",
+        "双排六扣三",
+        "青果领三粒扣",
+        "平驳领五粒扣",
+        "平驳领六扣三",
+        "戗驳领五粒扣",
+        "戗驳领六扣三",
+      ],
+    },
+    { title: "马甲口袋数量", items: ["无胸兜", "单胸兜", "双胸兜"] },
+    { title: "马甲口袋款式", items: ["标准兜", "带兜盖", "双牙兜"] },
+    { title: "马甲下摆", items: ["平摆", "尖摆"] },
+  ],
+  shirt: [
+    {
+      title: "领型",
+      items: [
+        "标准领",
+        "小八领(5.7)",
+        "中八领(7.1)",
+        "大八领(8.0)",
+        "法式温莎领(8.0)",
+        "意式温莎领(8.2)",
+        "雅致一字领(8.5×3.5)",
+        "伊顿领(6.0)",
+        "大尖领(8.0)",
+        "意式长尖领(10)",
+        "古巴领",
+        "意式一片领(9.5)",
+        "针孔领(11.5)",
+        "燕子领(5.9)",
+        "立领圆角带扣(3.4)",
+      ],
+    },
+    {
+      title: "领插片",
+      items: ["无插片", "固定内插片", "活动外插片", "领尖外扣", "领尖底扣"],
+    },
+    { title: "领硬度", items: ["硬手感", "中手感", "软手感"] },
+    { title: "袖口折", items: ["单折", "双折", "意式三折", "意式碎折"] },
+    { title: "口袋", items: ["无口袋", "圆口袋", "六角袋", "三角袋"] },
+    {
+      title: "袖口",
+      items: [
+        "圆角单扣",
+        "直角单扣",
+        "斜角单扣",
+        "圆角双扣",
+        "直角双扣",
+        "斜角双扣",
+        "圆角三扣",
+        "直角三扣",
+        "斜角三扣",
+        "方角月牙袖口",
+        "大圆角",
+        "直角法式袖",
+        "圆角法式袖口",
+        "斜角法袖",
+        "单层圆角法式",
+        "意式法式袖3#",
+        "意式法式袖2#",
+      ],
+    },
+    {
+      title: "前幅门襟",
+      items: ["明门襟默认3.0", "明门襟2.5", "翻门襟", "暗门襟"],
+    },
+    { title: "下摆", items: ["圆摆", "圆摆贴三角", "圆摆宝剑头贴", "平摆"] },
+    { title: "后担干", items: ["正常担干", "担干八字拼接"] },
+    {
+      title: "后幅",
+      items: [
+        "无折无省",
+        "打双折",
+        "后腰收腰省",
+        "工字折",
+        "意式后片碎折",
+        "后反字折",
+        "后工字折到底",
+      ],
+    },
+    { title: "侧缝工艺", items: ["手工包缝"] },
+    { title: "袖山意式碎折", items: ["袖山意式碎折"] },
+    { title: "错位上袖", items: ["需要"] },
+    { title: "鸡爪扣钉", items: ["需要"] },
+    { title: "礼服打条", items: ["礼服打条"] },
+    { title: "字体", items: ["509", "511", "512", "不需要", "图片"] },
+    {
+      title: "文字位置",
+      items: [
+        "左领尖",
+        "左前胸",
+        "口袋",
+        "领下底门襟",
+        "后领中",
+        "左袖口左",
+        "左袖口中",
+      ],
+    },
+  ],
+};
+const OPTIONAL_SHIRT_GROUPS = new Set([
+  "侧缝工艺",
+  "袖山意式碎折",
+  "错位上袖",
+  "鸡爪扣钉",
+  "礼服打条",
+]);
+const POSTURE_GROUPS = [
+  { title: "驼背", options: ["正常背", "背长加长 1cm", "背长加长 1.5cm", "背长加长 2cm", "背长加长 2.5cm"] },
+  { title: "凸肚", options: ["正常肚", "前肚围加大 1cm", "前肚围加大 2cm", "前肚围加大 3cm", "前肚围加大 4cm"] },
+  { title: "挺胸", options: ["正常胸", "前腰节长加 1cm", "前腰节长加 1.5cm", "前腰节长加 2cm", "前腰节长加 2.5cm"] },
+  { title: "左平溜肩", options: ["平肩上提 2cm", "平肩上提 1.5cm", "平肩上提 1cm", "平肩上提 0.5cm", "正常肩", "微溜肩下调 0.5cm", "中溜肩下调 0.8cm", "重溜肩下调 1.2cm"] },
+  { title: "右平溜肩", options: ["平肩上提 2cm", "平肩上提 1.5cm", "平肩上提 1cm", "平肩上提 0.5cm", "正常肩", "微溜肩下调 0.5cm", "中溜肩下调 0.8cm", "重溜肩下调 1.2cm"] },
+] as const;
+type GarmentKey = keyof typeof garments;
+type PiItem = {
+  key: string;
+  kind: "product" | "fabric";
+  garmentType?: GarmentKey;
+  garmentName?: string;
+  fabricCode?: string;
+  fabricName?: string;
+  fabricMill?: string;
+  meters?: number;
+  basePrice: number;
+  fabricPrice: number;
+  optionExtra: number;
+  shippingFee: number;
+  productPrice: number;
+  weightKg: number;
+  options: Array<{ group: string; item: string; price: number }>;
+  measurements: Array<{ field: string; net: string; finished: string }>;
+};
+const basePrices: Record<GarmentKey, number> = {
+  jacket: 1880,
+  trousers: 780,
+  waistcoat: 680,
+  shirt: 520,
+};
+const fabricPrices: Record<string, number> = {
+  "VBC-110-NV": 680,
+  "TR-120-CH": 420,
+  "TR-121-NV": 460,
+  "TR-122-MG": 500,
+  "TR-123-BE": 380,
+  "TR-124-BR": 560,
+  "WC-MATCH-01": 0,
+  "WC-CT-IVO": 480,
+  "WC-GLD-JQ": 680,
+  "WC-BRG-JQ": 620,
+  "WC-GRY-CK": 520,
+  "SH-100-WH": 180,
+  "SH-102-ST": 260,
+  "SH-103-CK": 120,
+  "SH-104-IV": 240,
+  "SH-105-PK": 150,
+};
+const STYLBIELLA_PRICE_RANGES: Array<[number, number, number]> = [
+  [34421, 34558, 375], [71671, 71672, 220], [71673, 71677, 240],
+  [71678, 71680, 260], [71681, 71681, 280], [71682, 71685, 300],
+  [33731, 33736, 645], [33737, 33737, 545], [33738, 33738, 450],
+  [33739, 33759, 645], [63461, 63462, 285], [63463, 63468, 295],
+  [63469, 63469, 345], [63470, 63472, 375],
+  [60531, 60532, 950], [60533, 60535, 850], [60536, 60536, 1390],
+  [60537, 60537, 950], [60538, 60539, 850], [60540, 60540, 1390],
+  [60541, 60541, 950], [60542, 60542, 850], [60543, 60543, 1390],
+  [60544, 60544, 750], [60545, 60545, 850], [60546, 60546, 750],
+  [60547, 60550, 950], [60551, 60551, 850], [60552, 60552, 680],
+  [60553, 60554, 1390], [60555, 60556, 850], [60557, 60559, 750],
+  [60560, 60560, 850], [60561, 60562, 750], [60563, 60563, 850],
+  [60564, 60568, 750], [34561, 34658, 375], [34701, 34719, 455],
+  [34720, 34723, 430], [34724, 34754, 455], [34755, 34771, 430],
+  [34881, 34929, 695], [34781, 34835, 395], [34836, 34844, 375],
+  [34845, 34854, 395], [34855, 34872, 375], [34661, 34676, 645],
+  [34677, 34692, 595], [34381, 34412, 595], [60571, 60594, 1480],
+];
+const getStylbiellaPrice = (code?: string) => {
+  const numericCode = Number(code);
+  if (!Number.isFinite(numericCode)) return undefined;
+  return STYLBIELLA_PRICE_RANGES.find(
+    ([start, end]) => numericCode >= start && numericCode <= end,
+  )?.[2];
+};
+const getFabricPrice = (code?: string) =>
+  code
+    ? (getStylbiellaPrice(code) ??
+      STYLBIELLA_FABRICS.find((f) => f.code === code)?.price ??
+      fabricPrices[code] ??
+      320)
+    : 0;
+const garmentShippingWeight: Record<GarmentKey, number> = {
+  jacket: 1.2,
+  trousers: 0.65,
+  waistcoat: 0.55,
+  shirt: 0.45,
+};
+const shippingRates: Record<
+  string,
+  { label: string; base: number; half: number }
+> = {
+  GB: { label: "英国", base: 160, half: 35 },
+  US: { label: "美国", base: 185, half: 42 },
+  CA: { label: "加拿大", base: 190, half: 44 },
+  AU: { label: "澳大利亚", base: 195, half: 46 },
+  OTHER: { label: "其他国家/地区", base: 230, half: 55 },
+};
+function optionSurcharge(
+  garment: GarmentKey,
+  groupIndex: number,
+  itemIndex: number,
+) {
+  if (itemIndex <= 0) return 0;
+  const rules: Record<GarmentKey, Record<number, number[]>> = {
+    jacket: {
+      0: [0, 0, 30, 30, 180, 180, 220, 220],
+      5: [0, 40, 80, 120],
+      7: [0, 90, 280],
+      8: [0, 60, 80, 100],
+      10: [0, 45, 65],
+    },
+    trousers: {
+      0: [0, 20, 30, 40],
+      1: [0, 20, 40, 60],
+      2: [0, 0, 0, 45, 45, 45, 45, 80],
+      4: [0, 35],
+    },
+    waistcoat: {
+      0: [0, 30, 80, 80, 100, 100, 120, 120],
+      1: [0, 20, 40],
+      2: [0, 25, 50],
+    },
+    shirt: {
+      0: [0, 20, 20, 25, 35, 35, 40, 30, 35, 45, 20, 50, 45, 25, 40],
+      3: [0, 25, 45, 45],
+      4: [0, 15, 15, 20],
+      5: [
+        0, 20, 20, 35, 35, 35, 45, 45, 45, 55, 65, 45, 60, 60, 60, 70, 80, 80,
+      ],
+      10: [0, 80],
+      15: [0, 30, 60, 0, 90],
+    },
+  };
+  return rules[garment][groupIndex]?.[itemIndex] ?? 0;
+}
+const fabricsByGarment = {
+  jacket: [
+    {
+      code: "VBC-110-NV",
+      mill: "Vitale Barberis Canonico",
+      name: "深海军蓝精纺",
+      meta: "100% 羊毛 · 260g · 四季",
+      tone: "navy",
+      stock: "有库存",
+    },
+    ...STYLBIELLA_FABRICS.map((f) => {
+      const detected = STYLBIELLA_FABRIC_COLORS[f.code];
+      return {
+        code: f.code,
+        mill: "STYLBIELLA",
+        name: f.name,
+        book: f.book,
+        imageUrl: f.imageUrl,
+        tone: "custom",
+        stock: "现货",
+        meta: f.meta || STYLBIELLA_BOOK_META[f.book].meta,
+        color: detected?.color || f.color,
+        colors: detected?.colors || f.colors,
+        pattern: f.pattern,
+        weight: f.weight,
+        composition: f.composition,
+      };
+    }),
+  ],
+  trousers: [
+    {
+      code: "TR-120-CH",
+      mill: "House Collection",
+      name: "炭灰耐磨精纺",
+      meta: "100% 羊毛 · 280g · 四季",
+      tone: "charcoal",
+      stock: "有库存",
+    },
+    {
+      code: "TR-121-NV",
+      mill: "House Collection",
+      name: "经典海军蓝",
+      meta: "100% 羊毛 · 275g · 四季",
+      tone: "navy",
+      stock: "有库存",
+    },
+    {
+      code: "TR-122-MG",
+      mill: "House Collection",
+      name: "中灰人字纹",
+      meta: "100% 羊毛 · 290g · 秋冬",
+      tone: "herring",
+      stock: "有库存",
+    },
+    {
+      code: "TR-123-BE",
+      mill: "House Collection",
+      name: "米色高捻羊毛",
+      meta: "100% 羊毛 · 240g · 春夏",
+      tone: "beige",
+      stock: "库存较少",
+    },
+    {
+      code: "TR-124-BR",
+      mill: "House Collection",
+      name: "深棕法兰绒",
+      meta: "100% 羊毛 · 320g · 秋冬",
+      tone: "brown",
+      stock: "有库存",
+    },
+  ],
+  waistcoat: [
+    {
+      code: "WC-MATCH-01",
+      mill: "与西装上衣同料",
+      name: "同步上衣面料",
+      meta: "自动引用西装上衣所选面料",
+      tone: "navy",
+      stock: "推荐",
+    },
+    {
+      code: "WC-CT-IVO",
+      mill: "Ceremony Collection",
+      name: "象牙白礼服纹",
+      meta: "棉丝混纺 · 240g · 四季",
+      tone: "ivory",
+      stock: "有库存",
+    },
+    {
+      code: "WC-GLD-JQ",
+      mill: "Ceremony Collection",
+      name: "香槟金提花",
+      meta: "真丝混纺 · 230g · 四季",
+      tone: "gold",
+      stock: "库存较少",
+    },
+    {
+      code: "WC-BRG-JQ",
+      mill: "Ceremony Collection",
+      name: "勃艮第红提花",
+      meta: "真丝混纺 · 245g · 四季",
+      tone: "burgundy",
+      stock: "有库存",
+    },
+    {
+      code: "WC-GRY-CK",
+      mill: "House Collection",
+      name: "复古灰格纹",
+      meta: "100% 羊毛 · 280g · 秋冬",
+      tone: "greycheck",
+      stock: "有库存",
+    },
+  ],
+  shirt: [
+    {
+      code: "SH-100-WH",
+      mill: "Albini",
+      name: "经典白色府绸",
+      meta: "100% 长绒棉 · 120g · 四季",
+      tone: "white",
+      stock: "有库存",
+    },
+    {
+      code: "SH-102-ST",
+      mill: "Albini",
+      name: "蓝白细条纹",
+      meta: "100% 长绒棉 · 130g · 四季",
+      tone: "shirtstripe",
+      stock: "有库存",
+    },
+    {
+      code: "SH-103-CK",
+      mill: "House Collection",
+      name: "蓝色小格纹",
+      meta: "100% 棉 · 135g · 四季",
+      tone: "shirtcheck",
+      stock: "库存较少",
+    },
+    {
+      code: "SH-104-IV",
+      mill: "Canclini",
+      name: "象牙白斜纹",
+      meta: "100% 棉 · 145g · 秋冬",
+      tone: "ivory",
+      stock: "有库存",
+    },
+    {
+      code: "SH-105-PK",
+      mill: "House Collection",
+      name: "淡粉牛津纺",
+      meta: "100% 棉 · 155g · 四季",
+      tone: "pink",
+      stock: "有库存",
+    },
+    ...STYLBIELLA_SHIRT_FABRICS.map((f) => {
+      const detected = STYLBIELLA_FABRIC_COLORS[f.code];
+      return {
+        code: f.code,
+        mill: "STYLBIELLA",
+        name: f.name,
+        book: f.book,
+        imageUrl: f.imageUrl,
+        tone: "custom",
+        stock: "现货",
+        meta: f.meta,
+        color: detected?.color || f.color,
+        colors: detected?.colors || f.colors,
+        pattern: f.pattern,
+        weight: f.weight,
+        composition: f.composition,
+      };
+    }),
+  ],
+};
+
+export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
+  const { loc, t } = useLocale();
+  const { user, ready } = useAuthGuard(false);
+  const [loginReq, setLoginReq] = useState(false);
+  const WHATSAPP = "8613800000000";
+  const logout = async () => {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token") ?? ""}`,
+        },
+      });
+    } catch {}
+    clearAuth();
+    window.location.href = "/login";
+  };
+  const [customerName, setCustomerName] = useState("");
+  const [customerHeight, setCustomerHeight] = useState("");
+  const [customerWeight, setCustomerWeight] = useState("");
+  const [channelCode, setChannelCode] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string>();
+  const [country, setCountry] = useState("");
+  const [region, setRegion] = useState("");
+  const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [storeName, setStoreName] = useState("Baker Street Tailors");
+  const [watermarkUrl, setWatermarkUrl] = useState<string>();
+  const [fabricZoom, setFabricZoom] = useState(false);
+  const [styleZoom, setStyleZoom] = useState<{ src: string; label: string } | null>(null);
+  const [embroideryFont, setEmbroideryFont] = useState("");
+  const [embroideryImageUrl, setEmbroideryImageUrl] = useState<string>();
+  const [garment, setGarment] = useState<GarmentKey>("jacket");
+  const [step, setStep] = useState<"measure" | "style">("style");
+  const [fabricFirst, setFabricFirst] = useState(true);
+  const fabricPageScrollY = useRef(0);
+  const [selected, setSelected] = useState<Record<string, string>>(() => {
+    const init: Record<string, string> = {};
+    (Object.keys(optionsByGarment) as GarmentKey[]).forEach((key) => {
+      optionsByGarment[key].forEach((group) => {
+        if (
+          group.items[0] &&
+          !(key === "shirt" && OPTIONAL_SHIRT_GROUPS.has(group.title))
+        )
+          init[`${key}:${group.title}`] = group.items[0];
+      });
+    });
+    return init;
+  });
+  const [fabricByGarment, setFabricByGarment] = useState<
+    Partial<Record<GarmentKey, string>>
+  >({});
+  const [fabricSearch, setFabricSearch] = useState("");
+  const active = garments[garment];
+  const optionGroups = optionsByGarment[garment];
+  const groupRows =
+    garment === "jacket"
+      ? [
+          ["正面款式"],
+          ["胸兜款式", "肩膀样式", "驳头款式"],
+          ["口袋款式"],
+          ["下摆开角大小", "袖叉款式"],
+          ["西服背面款式", "西服开衩选择"],
+          ["里布位置", "毛衬"],
+        ]
+      : garment === "trousers"
+        ? [["扣型", "褶皱"], ["裤脚", "裤型", "裤脚口"]]
+        : garment === "waistcoat"
+          ? [["马甲款式"], ["马甲口袋数量", "马甲口袋款式", "马甲下摆"]]
+          : garment === "shirt"
+            ? [
+                ["领型"],
+                ["领插片", "领硬度"],
+                ["袖口折", "口袋"],
+                ["袖口"],
+                ["前幅门襟", "下摆", "后担干"],
+                ["后幅"],
+                ["侧缝工艺", "袖山意式碎折", "错位上袖", "鸡爪扣钉", "礼服打条"],
+                ["字体"],
+                ["文字位置"],
+              ]
+            : null;
+  const currentFabric = [
+    ...fabricsByGarment.jacket,
+    ...fabricsByGarment.trousers,
+    ...fabricsByGarment.waistcoat,
+    ...fabricsByGarment.shirt,
+  ].find((f) => f.code === fabricByGarment[garment]);
+  const optionExtra = optionGroups.reduce((sum, group, groupIndex) => {
+    const item = selected[`${garment}:${group.title}`];
+    const itemIndex = group.items.indexOf(item);
+    return (
+      sum +
+      (itemIndex >= 0 ? optionSurcharge(garment, groupIndex, itemIndex) : 0)
+    );
+  }, 0);
+  const fabricPrice = getFabricPrice(fabricByGarment[garment]);
+  const orderWeight = Math.ceil((garmentShippingWeight[garment] + 0.3) * 2) / 2;
+  const rate = shippingRates[country] || shippingRates.OTHER;
+  const selectedCountryName =
+    Country.getCountryByCode(country)?.name || rate.label;
+  const shippingFee =
+    rate.base + Math.max(0, Math.round((orderWeight - 0.5) / 0.5)) * rate.half;
+  const productPrice = basePrices[garment] + fabricPrice + optionExtra;
+  const totalPrice = productPrice + shippingFee;
+  const [measurements, setMeasurements] =
+    useState<Record<string, [string, string]>>(emptyMeasurements);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitMsg, setSubmitMsg] = useState<string | null>(null);
+  const [piItems, setPiItems] = useState<PiItem[]>([]);
+  const [piMsg, setPiMsg] = useState<string | null>(null);
+  const [fabricEditItemKey, setFabricEditItemKey] = useState<string>();
+  const [styleEditItemKey, setStyleEditItemKey] = useState<string>();
+  const [mTab, setMTab] = useState<GarmentKey | "posture">("jacket");
+  const [postureSelections, setPostureSelections] = useState<Record<string, string>>({});
+  const setMeasureTab = (
+    g: GarmentKey,
+    field: string,
+    slot: 0 | 1,
+    value: string,
+  ) =>
+    setMeasurements((prev) => {
+      const key = `${g}:${field}`;
+      const cur = prev[key] ?? ["", ""];
+      const next = [cur[0], cur[1]];
+      next[slot] = value;
+      return { ...prev, [key]: next };
+    });
+  const [unit, setUnit] = useState<"cm" | "in">("cm");
+  const [customerMode, setCustomerMode] = useState<"new" | "returning">("new");
+  const [lookupName, setLookupName] = useState("");
+  const [lookupResults, setLookupResults] = useState<
+    {
+      id: number;
+      name: string;
+      height: string;
+      weight: string;
+      channelCode: string;
+      avatarUrl: string | null;
+      measurements: string | null;
+    }[]
+  >([]);
+  const [loadedCustomer, setLoadedCustomer] = useState<{
+    id: number;
+    name: string;
+    height: string;
+    weight: string;
+    channelCode: string;
+  } | null>(null);
+  const cmToIn = (v: string) => {
+    const n = parseFloat(v);
+    return Number.isFinite(n) ? (n / 2.54).toFixed(1) : "";
+  };
+  const inToCm = (v: string) => {
+    const n = parseFloat(v);
+    return Number.isFinite(n) ? (n * 2.54).toFixed(1) : "";
+  };
+  const dispCm = (v: string) => (unit === "cm" ? v : cmToIn(v));
+  const storeCm = (v: string) => (unit === "cm" ? v : inToCm(v));
+  const searchCustomers = async () => {
+    if (!lookupName.trim()) return;
+    try {
+      const data = await apiFetch<{
+        customers: {
+          id: number;
+          name: string;
+          height: string;
+          weight: string;
+          channelCode: string;
+          avatarUrl: string | null;
+          measurements: string | null;
+        }[];
+      }>(
+        `/api/customers?q=${encodeURIComponent(lookupName.trim())}&t=${Date.now()}`,
+      );
+      setLookupResults(data.customers ?? []);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : t("common.searchFailed"));
+    }
+  };
+  const loadCustomer = (c: {
+    id: number;
+    name: string;
+    height: string;
+    weight: string;
+    channelCode: string;
+    avatarUrl: string | null;
+    measurements: string | null;
+  }) => {
+    setCustomerName(c.name);
+    setCustomerHeight(c.height || "");
+    setCustomerWeight(c.weight || "");
+    setChannelCode(c.channelCode || "");
+    if (c.avatarUrl) setAvatarUrl(c.avatarUrl);
+    try {
+      const m = JSON.parse(c.measurements || "{}");
+      if (m && typeof m === "object") {
+        const { __posture, ...sizeValues } = m as Record<string, unknown>;
+        setMeasurements(sizeValues as Record<string, [string, string]>);
+        setPostureSelections(
+          __posture && typeof __posture === "object"
+            ? (__posture as Record<string, string>)
+            : {},
+        );
+      }
+    } catch {}
+    setLoadedCustomer(c);
+    setLookupResults([]);
+    setLookupName("");
+    setLookupOpen(false);
+    setFormOpen(true);
+  };
+  const [formOpen, setFormOpen] = useState(false);
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileSavedAt, setProfileSavedAt] = useState("");
+  const [profileSaveMessage, setProfileSaveMessage] = useState("");
+  useEffect(() => {
+    if (formOpen && !loadedCustomer) {
+      setMeasurements(emptyMeasurements());
+      setPostureSelections({});
+      setImp({ ft: "", in: "" });
+    }
+  }, [formOpen, loadedCustomer]);
+  useEffect(() => {
+    if (loadedCustomer)
+      setMeasurements((prev) => ({ ...emptyMeasurements(), ...prev }));
+  }, [loadedCustomer?.id]);
+  const saveCustomerProfile = async () => {
+    if (!customerName.trim()) {
+      setProfileSaveMessage(t("cust.nameRequired"));
+      return;
+    }
+    setProfileSaving(true);
+    setProfileSaveMessage("");
+    try {
+      const savedAt = new Date().toISOString();
+      const payload = {
+        name: customerName.trim(),
+        height: customerHeight,
+        weight: customerWeight,
+        channelCode,
+        avatarUrl: avatarUrl ?? "",
+        country,
+        region,
+        city,
+        street,
+        postalCode,
+        measurements: JSON.stringify({
+          ...measurements,
+          __posture: postureSelections,
+        }),
+        measurementsSavedAt: savedAt,
+      };
+      const data = loadedCustomer
+        ? await apiFetch<{
+            customer: {
+              id: number;
+              name: string;
+              height: string;
+              weight: string;
+              channelCode: string;
+              updatedAt: string;
+            };
+          }>(`/api/customers/${loadedCustomer.id}`, {
+            method: "PATCH",
+            body: JSON.stringify(payload),
+          })
+        : await apiFetch<{
+            customer: {
+              id: number;
+              name: string;
+              height: string;
+              weight: string;
+              channelCode: string;
+              updatedAt: string;
+            };
+          }>("/api/customers", {
+            method: "POST",
+            body: JSON.stringify(payload),
+          });
+      setLoadedCustomer(data.customer);
+      setProfileSavedAt(data.customer.updatedAt || savedAt);
+      setProfileSaveMessage(t("cust.saved"));
+      setTimeout(() => setProfileSaveMessage(""), 3000);
+    } catch (e) {
+      setProfileSaveMessage(e instanceof Error ? e.message : t("cust.saveFailed"));
+    } finally {
+      setProfileSaving(false);
+    }
+  };
+  const [lookupOpen, setLookupOpen] = useState(false);
+  const [imp, setImp] = useState<{ ft: string; in: string }>({
+    ft: "",
+    in: "",
+  });
+  const enterImperial = () => {
+    setUnit("in");
+    const n = parseFloat(customerHeight) / 2.54;
+    if (Number.isFinite(n) && n > 0) {
+      setImp({
+        ft: String(Math.floor(n / 12)),
+        in: (n - Math.floor(n / 12) * 12).toFixed(1),
+      });
+    } else {
+      setImp({ ft: "", in: "" });
+    }
+  };
+  const kgToLb = (v: string) => {
+    const n = parseFloat(v);
+    return Number.isFinite(n) ? (n * 2.20462).toFixed(1) : "";
+  };
+  const lbToKg = (v: string) => {
+    const n = parseFloat(v);
+    return Number.isFinite(n) ? (n / 2.20462).toFixed(2) : "";
+  };
+  const buildItem = (): PiItem => {
+    const options = optionGroups.flatMap((group, groupIndex) => {
+      const item = selected[`${garment}:${group.title}`];
+      const itemIndex = group.items.indexOf(item);
+      return item
+        ? [
+            {
+              group: group.title,
+              item,
+              price: optionSurcharge(garment, groupIndex, itemIndex),
+            },
+          ]
+        : [];
+    });
+    if (garment === "shirt" && embroideryFont.trim()) {
+      options.push({ group: "刺绣文字", item: embroideryFont.trim(), price: 0 });
+    }
+    const measurementRows = active.fields.map((field, index) => {
+      const [net, finished] = measurements[`${garment}:${field}`] ?? [
+        String(active.values[index][0]),
+        String(active.values[index][1]),
+      ];
+      return { field, net, finished };
+    });
+    return {
+      key: `${garment}:${Date.now()}`,
+      kind: "product",
+      garmentType: garment,
+      garmentName: active.name,
+      fabricCode: fabricByGarment[garment] ?? "",
+      fabricName: currentFabric?.name,
+      fabricMill: currentFabric?.mill,
+      basePrice: basePrices[garment],
+      fabricPrice,
+      optionExtra,
+      shippingFee,
+      productPrice,
+      weightKg: orderWeight,
+      options,
+      measurements: measurementRows,
+    };
+  };
+  const addToPi = () => {
+    if (!fabricByGarment[garment]) {
+      alert(t("home.pleaseFabric"));
+      return;
+    }
+    const nextItem = buildItem();
+    setPiItems((prev) =>
+      styleEditItemKey
+        ? prev.map((item) =>
+            item.key === styleEditItemKey
+              ? { ...nextItem, key: styleEditItemKey }
+              : item,
+          )
+        : [...prev, nextItem],
+    );
+    setStyleEditItemKey(undefined);
+    setPiMsg(t("home.addedPi"));
+    setTimeout(() => setPiMsg(null), 2000);
+  };
+  const addFabricToPi = (code: string, metersInput: number) => {
+    const meters = Number(metersInput) || 0;
+    if (meters <= 0) {
+      alert(t("home.invalidMeters"));
+      return;
+    }
+    const fabric = [
+      ...fabricsByGarment.jacket,
+      ...fabricsByGarment.trousers,
+      ...fabricsByGarment.waistcoat,
+      ...fabricsByGarment.shirt,
+    ].find((item) => item.code === code);
+    const perMeter = getFabricPrice(code);
+    // 合并同类项：同款面料直接累加米数
+    const idx = piItems.findIndex(
+      (item) => item.kind === "fabric" && item.fabricCode === code,
+    );
+    let next: PiItem[];
+    let added: PiItem;
+    if (idx >= 0) {
+      const exist = piItems[idx];
+      const newMeters = (exist.meters ?? 0) + meters;
+      const fabricTotal = Math.round(perMeter * newMeters);
+      const weight = Math.ceil((newMeters * 0.35 + 0.3) * 2) / 2;
+      const shipping =
+        rate.base + Math.max(0, Math.round((weight - 0.5) / 0.5)) * rate.half;
+      added = {
+        ...exist,
+        meters: newMeters,
+        basePrice: fabricTotal,
+        shippingFee: shipping,
+        productPrice: fabricTotal,
+        weightKg: weight,
+        options: [
+          { group: "购买米数", item: `${newMeters} 米`, price: perMeter },
+        ],
+      };
+      next = piItems.map((item, i) => (i === idx ? added : item));
+    } else {
+      const fabricTotal = Math.round(perMeter * meters);
+      const weight = Math.ceil((meters * 0.35 + 0.3) * 2) / 2;
+      const shipping =
+        rate.base + Math.max(0, Math.round((weight - 0.5) / 0.5)) * rate.half;
+      added = {
+        key: `fabric:${code}:${Date.now()}`,
+        kind: "fabric",
+        fabricCode: code,
+        fabricName: fabric?.name,
+        fabricMill: fabric?.mill,
+        meters,
+        basePrice: fabricTotal,
+        fabricPrice: perMeter,
+        optionExtra: 0,
+        shippingFee: shipping,
+        productPrice: fabricTotal,
+        weightKg: weight,
+        options: [{ group: "购买米数", item: `${meters} 米`, price: perMeter }],
+        measurements: [],
+      };
+      next = [...piItems, added];
+    }
+    setPiItems(next);
+    setPiMsg(t("home.addedPi"));
+    setTimeout(() => setPiMsg(null), 2000);
+  };
+  const submitOrder = async () => {
+    if (!user) {
+      setLoginReq(true);
+      return;
+    }
+    if (!customerName.trim()) {
+      alert(t("home.pleaseName"));
+      return;
+    }
+    if (!fabricByGarment[garment]) {
+      alert(t("home.pleaseFabric"));
+      return;
+    }
+    const submitItems = piItems.length ? piItems : [buildItem()];
+    const items = submitItems.map((item) =>
+      item.kind === "fabric"
+        ? {
+            garmentType: "fabric",
+            garmentName: `${t("pi.fabric")} · ${item.fabricName ?? item.fabricCode}`,
+            fabricCode: item.fabricCode,
+            fabricName: item.fabricName,
+            fabricMill: item.fabricMill,
+            basePrice: item.basePrice,
+            fabricPrice: item.fabricPrice,
+            optionExtra: 0,
+            shippingFee: item.shippingFee,
+            totalPrice: item.productPrice + item.shippingFee,
+            currency: "CNY",
+            weightKg: item.weightKg,
+            options: item.options,
+            measurements: [],
+            shippingAddress: {
+              country: selectedCountryName,
+              region,
+              city,
+              street,
+              postalCode,
+            },
+          }
+        : {
+            garmentType: item.garmentType,
+            garmentName: item.garmentName,
+            fabricCode: item.fabricCode,
+            fabricName: item.fabricName,
+            fabricMill: item.fabricMill,
+            basePrice: item.basePrice,
+            fabricPrice: item.fabricPrice,
+            optionExtra: item.optionExtra,
+            shippingFee: item.shippingFee,
+            totalPrice: item.productPrice + item.shippingFee,
+            currency: "CNY",
+            weightKg: item.weightKg,
+            options: item.options,
+            measurements: item.measurements,
+            shippingAddress: {
+              country: selectedCountryName,
+              region,
+              city,
+              street,
+              postalCode,
+            },
+          },
+    );
+    setSubmitting(true);
+    setSubmitMsg(null);
+    try {
+      const data = await apiFetch<{
+        orders?: unknown[];
+        customer?: { id: number };
+      }>(`/api/orders?t=${Date.now()}`, {
+        method: "POST",
+        body: JSON.stringify({
+          customer: {
+            name: customerName.trim(),
+            height: customerHeight,
+            weight: customerWeight,
+            channelCode,
+            avatarUrl,
+            country,
+            region,
+            city,
+            street,
+            postalCode,
+          },
+          order: { items },
+        }),
+      });
+      const cid = data.customer?.id;
+      if (cid) {
+        try {
+          const m: Record<string, [string, string]> = {};
+          for (const g of Object.keys(garments) as GarmentKey[]) {
+            for (const f of garments[g].fields) {
+              const v = measurements[`${g}:${f}`];
+              if (v && (v[0] || v[1])) m[`${g}:${f}`] = v;
+            }
+          }
+          await apiFetch(`/api/customers/${cid}`, {
+            method: "PATCH",
+            body: JSON.stringify({
+              measurements: JSON.stringify({
+                ...m,
+                __posture: postureSelections,
+              }),
+              height: customerHeight,
+              weight: customerWeight,
+              name: customerName.trim(),
+              channelCode,
+            }),
+          });
+        } catch {}
+      }
+      const count = data.orders?.length ?? 1;
+      setSubmitMsg(t("home.submitted").replace("{n}", String(count)));
+      setTimeout(() => {
+        window.location.href = "/orders";
+      }, 900);
+    } catch (e) {
+      setSubmitting(false);
+      alert(
+        e instanceof Error
+          ? e.message
+          : t("home.submitFailed"),
+      );
+    }
+  };
+  return (
+    <main className={`shell ${whiteLabel ? "white-label-mode" : ""}`}>
+      <aside className="side">
+        <div className="brand">
+          <i>A</i>
+          <div>
+            <b>ATELIER OS</b>
+            <small>WHITE-LABEL PORTAL</small>
+          </div>
+        </div>
+        <nav>
+          <a className="on" href="/customize">
+            ▦　{t("home.newOrder")}
+          </a>
+          <a href="/customers">♙　{t("home.customers")}</a>
+          <a href="/orders">▤　{t("home.orders")}</a>
+          {ready && user?.role === "master" && (
+            <a href="/admin">⚙　{t("home.admin")}</a>
+          )}
+        </nav>
+        <div className="store">
+          <i />
+          <div>
+            <b>Baker Street Tailors</b>
+            <small>{t("home.storeLocation")}</small>
+          </div>
+        </div>
+      </aside>
+      <section className="work">
+        {whiteLabel ? (
+          <header className="white-label-header">
+            <div className="store-identity">
+              <label className="watermark-upload">
+                {watermarkUrl ? (
+                  <img src={watermarkUrl} alt={t("home.watermark")} />
+                ) : (
+                  <span>
+                    LOGO
+                    <br />
+                    {t("home.watermark")}
+                  </span>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (file) setWatermarkUrl(URL.createObjectURL(file));
+                  }}
+                />
+              </label>
+              <div>
+                <p className="eyebrow">PRIVATE MADE-TO-MEASURE SERVICE</p>
+                <input
+                  aria-label={t("landing.contactName")}
+                  value={storeName}
+                  onChange={(event) => setStoreName(event.target.value)}
+                />
+                <small>{t("home.whiteLabelSub")}</small>
+              </div>
+            </div>
+            <div className="actions">
+              <LanguageSwitcher />
+              {ready && user ? (
+                <>
+                  <button className="account-switch" onClick={logout}>
+                    {t("home.switchAccount")}
+                  </button>
+                  <a className="home-return" href="/">
+                    {t("home.backHome")}
+                  </a>
+                </>
+              ) : (
+                <>
+                  <a className="login-link" href="/login">
+                    {t("home.loginRegister")}
+                  </a>
+                  <a className="home-return" href="/">
+                    {t("home.backHome")}
+                  </a>
+                </>
+              )}
+            </div>
+          </header>
+        ) : (
+          <header>
+            <div>
+              <p className="eyebrow">{t("home.eyebrow")}</p>
+              <h1>{t("home.title")}</h1>
+            </div>
+            <div className="actions">
+              <LanguageSwitcher />
+              <button>{t("home.saveDraft")}</button>
+              <button
+                className="primary"
+                onClick={submitOrder}
+                disabled={submitting}
+              >
+                {submitting
+                  ? t("home.submitting")
+                  : `${t("home.submitOrder")}　→`}
+              </button>
+              {ready && user ? (
+                <>
+                  <span className="user-chip">
+                    {user.storeName || user.username}
+                    {user.role === "master" ? " · 主账号" : ""}
+                  </span>
+                  <button onClick={logout} title={t("home.logout")}>
+                    ⇥
+                  </button>
+                </>
+              ) : (
+                <a className="login-link" href="/login">
+                  {t("home.loginRegister")}
+                </a>
+              )}
+            </div>
+          </header>
+        )}
+        {submitMsg && <div className="submit-banner">{submitMsg}</div>}
+        {loginReq && (
+          <div
+            className="login-req-backdrop"
+            onClick={() => setLoginReq(false)}
+          >
+            <div className="login-req" onClick={(e) => e.stopPropagation()}>
+              <div className="login-req-head">
+                <div>
+                  <p className="eyebrow">ACCOUNT REQUIRED</p>
+                  <h3>{t("home.loginReqTitle")}</h3>
+                </div>
+                <button
+                  className="mgmt-close"
+                  onClick={() => setLoginReq(false)}
+                  aria-label={t("common.close")}
+                >
+                  ×
+                </button>
+              </div>
+              <p className="login-req-text">{t("home.loginReqText")}</p>
+              <div className="login-req-actions">
+                <a
+                  className="wa-btn"
+                  href={`https://wa.me/${WHATSAPP}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <i>✆</i>
+                  {t("home.waRegister")}
+                </a>
+                <a className="login-btn2" href="/login">
+                  {t("home.goLogin")}
+                </a>
+              </div>
+              <small className="login-req-note">{t("home.loginReqNote")}</small>
+            </div>
+          </div>
+        )}
+        <div className="layout" id="order">
+          <div>
+            <section className="client client-form">
+              <div className="client-form-top">
+                {formOpen && (
+                  <button
+                    className="form-back"
+                    onClick={() => setFormOpen(false)}
+                    title={t("common.back")}
+                  >
+                    ←
+                  </button>
+                )}
+                <b className="form-title">{t("home.customerInfo")}</b>
+              </div>
+              {!formOpen ? (
+                <div className="customer-entry">
+                  <div className="entry-head">
+                    <small>{t("home.customerInfo")}</small>
+                    <p>{t("cust.entryHelp")}</p>
+                  </div>
+                  <div className="entry-actions">
+                    <button
+                      className="entry-new"
+                      onClick={() => {
+                        setCustomerMode("new");
+                        setLoadedCustomer(null);
+                        setFormOpen(true);
+                        setCustomerName("");
+                        setCustomerHeight("");
+                        setCustomerWeight("");
+                        setChannelCode("");
+                        setCountry("");
+                        setRegion("");
+                        setCity("");
+                        setStreet("");
+                        setPostalCode("");
+                        setAvatarUrl(undefined);
+                      }}
+                    >
+                      <i>＋</i>
+                      <b>{t("home.addNewCustomer")}</b>
+                      <em>{t("home.addNewCustomerSub")}</em>
+                    </button>
+                    <button
+                      className="entry-return"
+                      onClick={() => setLookupOpen(true)}
+                    >
+                      <i>⌕</i>
+                      <b>{t("home.searchExistingCustomer")}</b>
+                      <em>{t("home.searchExistingCustomerSub")}</em>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <label className="avatar-upload">
+                    <span className="avatar">
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt={t("home.avatar")} />
+                      ) : (
+                        customerName
+                          .trim()
+                          .split(/\s+/)
+                          .map((name) => name[0])
+                          .join("")
+                          .slice(0, 2)
+                          .toUpperCase() || t("home.photoFallback")
+                      )}
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(event) => {
+                        const file = event.target.files?.[0];
+                        if (file) setAvatarUrl(URL.createObjectURL(file));
+                      }}
+                    />
+                    <small>
+                      {avatarUrl
+                        ? t("home.avatarChange")
+                        : t("home.avatarUpload")}
+                    </small>
+                  </label>
+                  <div className="client-fields">
+                    <label className="name">
+                      <span>
+                        {t("home.customerName")} <i>*</i>
+                      </span>
+                      <input
+                        required
+                        value={customerName}
+                        onChange={(event) =>
+                          setCustomerName(event.target.value)
+                        }
+                        placeholder={t("home.customerName")}
+                      />
+                    </label>
+                    <label>
+                      <span>
+                        {t("home.height")} <i>*</i>
+                      </span>
+                      <div>
+                        {unit === "cm" ? (
+                          <input
+                            required
+                            inputMode="decimal"
+                            value={customerHeight}
+                            onChange={(event) =>
+                              setCustomerHeight(
+                                event.target.value.replace(/[^0-9.]/g, ""),
+                              )
+                            }
+                            placeholder="180"
+                          />
+                        ) : (
+                          <div className="height-imperial">
+                            <label>
+                              <input
+                                required
+                                inputMode="decimal"
+                                value={imp.ft}
+                                onChange={(event) => {
+                                  const v = event.target.value.replace(
+                                    /[^0-9.]/g,
+                                    "",
+                                  );
+                                  setImp((p) => ({ ...p, ft: v }));
+                                  setCustomerHeight(
+                                    (
+                                      ((parseFloat(v) || 0) * 12 +
+                                        (parseFloat(imp.in) || 0)) *
+                                      2.54
+                                    ).toFixed(1),
+                                  );
+                                }}
+                                placeholder="5"
+                              />
+                              <em>ft</em>
+                            </label>
+                            <label>
+                              <input
+                                required
+                                inputMode="decimal"
+                                value={imp.in}
+                                onChange={(event) => {
+                                  const v = event.target.value.replace(
+                                    /[^0-9.]/g,
+                                    "",
+                                  );
+                                  setImp((p) => ({ ...p, in: v }));
+                                  setCustomerHeight(
+                                    ((parseFloat(imp.ft) || 0) * 12 +
+                                      (parseFloat(v) || 0)) *
+                                      2.54,
+                                  ).toFixed(1);
+                                }}
+                                placeholder="9"
+                              />
+                              <em>in</em>
+                            </label>
+                          </div>
+                        )}
+                      </div>
+                    </label>
+                    <label>
+                      <span>
+                        {t("home.weight")} <i>*</i>
+                      </span>
+                      <div>
+                        <input
+                          required
+                          inputMode="decimal"
+                          value={
+                            unit === "cm"
+                              ? customerWeight
+                              : kgToLb(customerWeight)
+                          }
+                          onChange={(event) =>
+                            setCustomerWeight(
+                              unit === "cm"
+                                ? event.target.value.replace(/[^0-9.]/g, "")
+                                : lbToKg(event.target.value),
+                            )
+                          }
+                          placeholder="78"
+                        />
+                        <em>{unit === "cm" ? "kg" : "lb"}</em>
+                      </div>
+                    </label>
+                    <label>
+                      <span>{t("home.channel")}</span>
+                      <input
+                        maxLength={8}
+                        value={channelCode}
+                        onChange={(event) =>
+                          setChannelCode(
+                            event.target.value.replace(/[^a-zA-Z0-9]/g, ""),
+                          )
+                        }
+                        placeholder="BST"
+                      />
+                    </label>
+                  </div>
+                  <div className="client-measure">
+                    <div className="client-measure-head">
+                      <small>{t("cust.measureProfile")}</small>
+                      <div className="mtabs">
+                        <div className="unit-toggle" aria-label={t("cust.unit") }>
+                          <button
+                            className={unit === "cm" ? "on" : ""}
+                            onClick={() => setUnit("cm")}
+                          >
+                            {t("cust.metric")}
+                          </button>
+                          <button
+                            className={unit === "in" ? "on" : ""}
+                            onClick={enterImperial}
+                          >
+                            {t("cust.imperial")}
+                          </button>
+                        </div>
+                        {(Object.keys(garments) as GarmentKey[]).map((key) => (
+                          <button
+                            key={key}
+                            className={mTab === key ? "on" : ""}
+                            onClick={() => setMTab(key)}
+                          >
+                            {tailoringTerm(garments[key].name, locale)}
+                          </button>
+                        ))}
+                        <button
+                          className={mTab === "posture" ? "on" : ""}
+                          onClick={() => setMTab("posture")}
+                        >
+                          {t("cust.posture")}
+                        </button>
+                      </div>
+                    </div>
+                    {(function () {
+                      if (mTab === "posture") {
+                        return (
+                          <div className="posture-register" aria-label={t("cust.posture")}>
+                            {POSTURE_GROUPS.map((group) => (
+                              <section key={group.title}>
+                                <b>{tailoringTerm(group.title, locale)}</b>
+                                <select
+                                  aria-label={`${tailoringTerm(group.title, locale)} ${t("cust.level")}`}
+                                  value={postureSelections[group.title] ?? ""}
+                                  onChange={(event) =>
+                                    setPostureSelections((current) => ({
+                                      ...current,
+                                      [group.title]: event.target.value,
+                                    }))
+                                  }
+                                >
+                                  <option value="">{t("cust.choose")}</option>
+                                  {group.options.map((option) => (
+                                    <option key={option} value={option}>
+                                      {tailoringTerm(option, locale)}
+                                    </option>
+                                  ))}
+                                </select>
+                              </section>
+                            ))}
+                          </div>
+                        );
+                      }
+                      const isPaper =
+                        mTab === "shirt" ||
+                        mTab === "jacket" ||
+                        mTab === "trousers" ||
+                        mTab === "waistcoat";
+                      const shownFields =
+                        mTab === "jacket"
+                          ? garments[mTab].fields.filter((f) => f !== "夹宽")
+                          : garments[mTab].fields;
+                      const corner =
+                        mTab === "shirt"
+                          ? "衬衫"
+                          : mTab === "jacket"
+                            ? "夹克"
+                            : mTab === "trousers"
+                              ? "裤子"
+                              : mTab === "waistcoat"
+                                ? "马甲"
+                                : "尺寸项目";
+                      return (
+                        <>
+                          <p className="cm-req">
+                            ※ {t("cust.measureHint")}
+                          </p>
+                          <div className="cm-table-wrap">
+                            <div
+                              className={`cm-table ${isPaper ? "bw" : ""}`}
+                              style={{
+                                gridTemplateColumns: `90px repeat(${shownFields.length}, 1fr)`,
+                              }}
+                            >
+                              <div className="cm-tr head">
+                                <b>{tailoringTerm(corner, locale)}</b>
+                                {shownFields.map((f) => (
+                                  <span key={f}>{tailoringTerm(f, locale)}</span>
+                                ))}
+                              </div>
+                              <div className="cm-tr">
+                                <b>{t("cust.body")}</b>
+                                {shownFields.map((field) => {
+                                  const oi =
+                                    garments[mTab].fields.indexOf(field);
+                                  const m = measurements[
+                                    `${mTab}:${field}`
+                                  ] ?? [
+                                    String(garments[mTab].values[oi][0]),
+                                    String(garments[mTab].values[oi][1]),
+                                  ];
+                                  return (
+                                    <label key={field}>
+                                      <input
+                                        inputMode="decimal"
+                                        value={dispCm(m[0])}
+                                        onChange={(e) =>
+                                          setMeasureTab(
+                                            mTab,
+                                            field,
+                                            0,
+                                            storeCm(
+                                              e.target.value.replace(
+                                                /[^0-9.]/g,
+                                                "",
+                                              ),
+                                            ),
+                                          )
+                                        }
+                                      />
+                                      <em>{unit}</em>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                              <div className="cm-tr">
+                                <b>{t("cust.finished")}</b>
+                                {shownFields.map((field) => {
+                                  const oi =
+                                    garments[mTab].fields.indexOf(field);
+                                  const m = measurements[
+                                    `${mTab}:${field}`
+                                  ] ?? [
+                                    String(garments[mTab].values[oi][0]),
+                                    String(garments[mTab].values[oi][1]),
+                                  ];
+                                  return (
+                                    <label key={field}>
+                                      <input
+                                        inputMode="decimal"
+                                        value={dispCm(m[1])}
+                                        onChange={(e) =>
+                                          setMeasureTab(
+                                            mTab,
+                                            field,
+                                            1,
+                                            storeCm(
+                                              e.target.value.replace(
+                                                /[^0-9.]/g,
+                                                "",
+                                              ),
+                                            ),
+                                          )
+                                        }
+                                      />
+                                      <em>{unit}</em>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                              {!isPaper && (
+                                <div className="cm-tr ease">
+                                  <b>{t("cust.ease")}</b>
+                                  {garments[mTab].fields.map((field, index) => {
+                                    const m = measurements[
+                                      `${mTab}:${field}`
+                                    ] ?? [
+                                      String(garments[mTab].values[index][0]),
+                                      String(garments[mTab].values[index][1]),
+                                    ];
+                                    const ease = Number(m[1]) - Number(m[0]);
+                                    return (
+                                      <strong key={field}>
+                                        {Number.isFinite(ease)
+                                          ? ease.toFixed(1)
+                                          : "0.0"}
+                                      </strong>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                </>
+              )}
+              {lookupOpen && (
+                <div
+                  className="lookup-modal-backdrop"
+                  onClick={() => setLookupOpen(false)}
+                  role="presentation"
+                >
+                  <div
+                    className="lookup-modal"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={t("home.searchExistingCustomer")}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      className="lookup-modal-close"
+                      onClick={() => setLookupOpen(false)}
+                      aria-label={t("common.close")}
+                    >
+                      ×
+                    </button>
+                    <div className="lookup-head">
+                      <small>{t("home.searchExistingCustomer")}</small>
+                      <div>
+                        <input
+                          value={lookupName}
+                          onChange={(e) => setLookupName(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") searchCustomers();
+                          }}
+                          placeholder={t("cust.searchName")}
+                        />
+                        <button onClick={searchCustomers}>{t("common.search")}</button>
+                      </div>
+                    </div>
+                    {lookupResults.length > 0 && (
+                      <div className="lookup-results">
+                        {lookupResults.map((c) => (
+                          <button
+                            key={c.id}
+                            className="lookup-item"
+                            onClick={() => loadCustomer(c)}
+                          >
+                            <span className="avatar-mini">
+                              {c.avatarUrl ? (
+                                <img src={c.avatarUrl} alt="" />
+                              ) : (
+                                c.name
+                                  .trim()
+                                  .split(/\s+/)
+                                  .map((n) => n[0])
+                                  .join("")
+                                  .slice(0, 2)
+                                  .toUpperCase()
+                              )}
+                            </span>
+                            <span className="lookup-meta">
+                              <b>{c.name}</b>
+                              <em>
+                                {c.height || "—"} cm · {c.weight || "—"} kg
+                              </em>
+                            </span>
+                            <i>{c.channelCode || t("cust.noChannel")}</i>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </section>
+            {formOpen && (
+              <div className="profile-save-bar">
+                <div>
+                  {profileSaveMessage && (
+                    <b
+                      className={
+                        profileSaveMessage === t("cust.saved") ? "saved" : "error"
+                      }
+                    >
+                      {profileSaveMessage}
+                    </b>
+                  )}
+                  {profileSavedAt && (
+                    <small>
+                      {t("cust.savedAt")}：
+                      {new Date(profileSavedAt).toLocaleString(locale)}
+                    </small>
+                  )}
+                </div>
+                <button onClick={saveCustomerProfile} disabled={profileSaving}>
+                  {profileSaving ? t("cust.saving") : t("cust.saveProfile")}
+                </button>
+              </div>
+            )}
+            <div hidden={!fabricFirst}>
+              <FabricFirst
+                search={fabricSearch}
+                setSearch={setFabricSearch}
+                onQuickSelect={
+                  fabricEditItemKey
+                    ? (code) => {
+                        const fabric = [
+                          ...fabricsByGarment.jacket,
+                          ...fabricsByGarment.trousers,
+                          ...fabricsByGarment.waistcoat,
+                          ...fabricsByGarment.shirt,
+                        ].find((entry) => entry.code === code);
+                        const nextFabricPrice = getFabricPrice(code);
+                        setPiItems((prev) =>
+                          prev.map((item) =>
+                            item.key === fabricEditItemKey
+                              ? {
+                                  ...item,
+                                  fabricCode: code,
+                                  fabricName: fabric?.name,
+                                  fabricMill: fabric?.mill,
+                                  fabricPrice: nextFabricPrice,
+                                  productPrice:
+                                    item.basePrice +
+                                    nextFabricPrice +
+                                    item.optionExtra,
+                                }
+                              : item,
+                          ),
+                        );
+                        const editingItem = piItems.find(
+                          (item) => item.key === fabricEditItemKey,
+                        );
+                        if (editingItem?.garmentType) {
+                          setFabricByGarment((prev) => ({
+                            ...prev,
+                            [editingItem.garmentType!]: code,
+                          }));
+                        }
+                        setFabricEditItemKey(undefined);
+                        setFabricFirst(false);
+                        requestAnimationFrame(() => {
+                          document
+                            .querySelector(".pi-preview")
+                            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        });
+                      }
+                    : undefined
+                }
+                onContinue={(key, code) => {
+                  fabricPageScrollY.current = window.scrollY;
+                  setGarment(key);
+                  setFabricByGarment({ ...fabricByGarment, [key]: code });
+                  setFabricFirst(false);
+                  setStep("style");
+                }}
+                onFabricOnly={addFabricToPi}
+              />
+            </div>
+            {!fabricFirst && (
+              <>
+                <div className="chosen-fabric-bar">
+                  <button
+                    onClick={() => {
+                      setFabricFirst(true);
+                      requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                          window.scrollTo({
+                            top: fabricPageScrollY.current,
+                            behavior: "auto",
+                          });
+                        });
+                      });
+                    }}
+                  >
+                    ← {t("home.reselectFabric")}
+                  </button>
+                  <div>
+                    <small>{t("home.currentFabric")}</small>
+                    <b>{fabricByGarment[garment]}</b>
+                  </div>
+                  {currentFabric && (
+                    <button
+                      className="fabric-confirm-thumb"
+                      onClick={() => setFabricZoom(true)}
+                      title={`${t("home.currentFabric")}：${currentFabric.name}（${currentFabric.code}）`}
+                      aria-label={`${t("home.currentFabric")} ${currentFabric.code}`}
+                    >
+                      <span
+                        className={`mini-swatch ${currentFabric.tone}`}
+                        style={{
+                          backgroundColor:
+                            STYLBIELLA_FABRIC_COLORS[currentFabric.code]?.hex,
+                        }}
+                      >
+                        {currentFabric.imageUrl ? (
+                          <img
+                            src={currentFabric.imageUrl}
+                            alt={`${currentFabric.name} ${currentFabric.code}`}
+                            onError={(event) => {
+                              event.currentTarget.style.display = "none";
+                            }}
+                          />
+                        ) : null}
+                      </span>
+                      <em>{t("home.clickZoom")}</em>
+                    </button>
+                  )}
+                  <span>{t("home.checkFabric")}</span>
+                  {currentFabric && (
+                    <em className="fabric-price">
+                      {currentFabric.code === "WC-MATCH-01"
+                        ? t("home.sameAsJacket")
+                        : `${t("home.fabricPrice")} ¥${getFabricPrice(currentFabric.code)}`}
+                    </em>
+                  )}
+                  {fabricZoom && currentFabric?.imageUrl && (
+                    <div
+                      className="fabric-preview-zoom"
+                      role="dialog"
+                      aria-modal="true"
+                      aria-label={`${currentFabric.name} ${currentFabric.code}`}
+                      onClick={() => setFabricZoom(false)}
+                    >
+                      <button
+                        aria-label={t("common.close")}
+                        onClick={() => setFabricZoom(false)}
+                      >
+                        ×
+                      </button>
+                      <img
+                        src={currentFabric.imageUrl}
+                        alt={`${currentFabric.name} ${currentFabric.code}`}
+                      />
+                      <p>
+                        {currentFabric.name} ·{" "}
+                        {fabricDisplayCode(currentFabric)}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <section className="panel">
+                  <div className="panel-head">
+                    <div>
+                      <p className="eyebrow">{active.en.toUpperCase()}</p>
+                      <h2>
+                        {tailoringTerm(active.name, loc)}
+                        {t("home.styleTab")}
+                      </h2>
+                      <p className="style-zoom-hint">{t("home.doubleClickZoom")}</p>
+                    </div>
+                  </div>
+                  <div className="styles">
+                    {groupRows
+                      ? groupRows.map((row, ri) => {
+                          const rowTotal = row.reduce(
+                            (s, t) =>
+                              s +
+                              (optionGroups.find((g) => g.title === t)?.items
+                                .length ?? 0),
+                            0,
+                          );
+                          const rowColumns = garment === "trousers" ? 10 : 8;
+                          const gBase = Math.floor(rowColumns / row.length);
+                          const gRem = rowColumns - gBase * row.length;
+                          return (
+                            <div
+                               className={`group-row ${
+                                 garment === "trousers"
+                                   ? "trousers-group-row"
+                                   : ""
+                               } ${
+                                 garment === "shirt" &&
+                                row.includes("前幅门襟")
+                                  ? "shirt-placket-row"
+                                  : ""
+                              } ${
+                                garment === "shirt" &&
+                                row.includes("侧缝工艺")
+                                  ? "shirt-optional-row"
+                                  : ""
+                              }`}
+                              key={ri}
+                            >
+                              {row.map((title, j) => {
+                                const group = optionGroups.find(
+                                  (g) => g.title === title,
+                                );
+                                return group
+                                  ? ((group) => {
+                                      const groupKey = `${garment}:${group.title}`;
+                                      const chosen = selected[groupKey];
+                                      const span =
+                                        rowTotal === rowColumns
+                                          ? group.items.length
+                                          : gBase + (j < gRem ? 1 : 0);
+                                      return (
+                                        <div
+                                          className="group"
+                                          key={group.title}
+                                          style={{ gridColumn: `span ${span}` }}
+                                        >
+                                          <div>
+                                            <h3>{tailoringTerm(group.title, loc)}</h3>
+                                          </div>
+                                          <div className="options">
+                                            {garment === "shirt" &&
+                                            group.title === "字体" ? (
+                                              <label className="embroidery-font-input">
+                                                <span>{t("home.embroideryText")}</span>
+                                                <input
+                                                  value={embroideryFont}
+                                                  onChange={(event) =>
+                                                    setEmbroideryFont(event.target.value)
+                                                  }
+                                                  placeholder={t("home.embroideryPlaceholder")}
+                                                />
+                                              </label>
+                                            ) : null}
+                                            {group.items.map((item) => {
+                                              const optImg =
+                                                garment === "shirt"
+                                                  ? shirtOptionImageUrl(
+                                                      group.title,
+                                                      item,
+                                                    )
+                                                  : suitOptionImageUrl(
+                                                      group.title,
+                                                      item,
+                                                    );
+                                              if (
+                                                garment === "shirt" &&
+                                                group.title === "字体" &&
+                                                item === "图片"
+                                              ) {
+                                                return (
+                                                  <label
+                                                    className={`embroidery-image-upload ${chosen === item ? "selected" : ""}`}
+                                                    key={item}
+                                                  >
+                                                    <span className="opt-thumb">
+                                                      {embroideryImageUrl ? (
+                                                        <img
+                                                          src={embroideryImageUrl}
+                                                          alt="刺绣图片预览"
+                                                        />
+                                                      ) : optImg ? (
+                                                        <img
+                                                          src={optImg}
+                                                          alt={item}
+                                                        />
+                                                      ) : null}
+                                                    </span>
+                                                    <b>{t("home.uploadEmbroideryImage")}</b>
+                                                    <input
+                                                      type="file"
+                                                      accept="image/*"
+                                                      onChange={(event) => {
+                                                        const file =
+                                                          event.target.files?.[0];
+                                                        if (!file) return;
+                                                        const reader = new FileReader();
+                                                        reader.onload = () => {
+                                                          setEmbroideryImageUrl(
+                                                            String(reader.result),
+                                                          );
+                                                          setSelected({
+                                                            ...selected,
+                                                            [groupKey]: "图片",
+                                                          });
+                                                        };
+                                                        reader.readAsDataURL(file);
+                                                      }}
+                                                    />
+                                                  </label>
+                                                );
+                                              }
+                                              return (
+                                                <button
+                                                  key={item}
+                                                  className={`${chosen === item ? "selected" : ""} ${OPTIONAL_SHIRT_GROUPS.has(group.title) ? "optional-choice" : ""} has-img`}
+                                                  onClick={() => {
+                                                    const next = { ...selected };
+                                                    if (
+                                                      garment === "shirt" &&
+                                                      OPTIONAL_SHIRT_GROUPS.has(
+                                                        group.title,
+                                                      ) &&
+                                                      chosen === item
+                                                    )
+                                                      delete next[groupKey];
+                                                    else next[groupKey] = item;
+                                                    setSelected(next);
+                                                  }}
+                                                  onDoubleClick={() =>
+                                                    optImg &&
+                                                    setStyleZoom({
+                                                      src: optImg,
+                                                      label: item,
+                                                    })
+                                                  }
+                                                >
+                                                  <span className="opt-thumb">
+                                                    {optImg ? (
+                                                      <img
+                                                        src={optImg}
+                                                        alt={item}
+                                                        loading="lazy"
+                                                      />
+                                                    ) : (
+                                                      <i>{t("home.noImage")}</i>
+                                                    )}
+                                                  </span>
+                                                  <b>{tailoringTerm(item, loc, group.title)}</b>
+                                                  {chosen === item && (
+                                                    <em>
+                                                      {t("home.selected")}
+                                                    </em>
+                                                  )}
+                                                </button>
+                                              );
+                                            })}
+                                          </div>
+                                        </div>
+                                      );
+                                    })(group)
+                                  : null;
+                              })}
+                            </div>
+                          );
+                        })
+                      : optionGroups.map((group) => {
+                          const groupKey = `${garment}:${group.title}`;
+                          const chosen = selected[groupKey];
+                          return (
+                            <div className="group" key={group.title}>
+                              <div>
+                                <h3>{tailoringTerm(group.title, loc)}</h3>
+                              </div>
+                              <div className="options">
+                                {group.items.map((item) => {
+                                  const optImg =
+                                    garment === "shirt"
+                                      ? shirtOptionImageUrl(group.title, item)
+                                      : suitOptionImageUrl(group.title, item);
+                                  return (
+                                    <button
+                                      key={item}
+                                      className={`${chosen === item ? "selected" : ""} has-img`}
+                                      onClick={() =>
+                                        setSelected({
+                                          ...selected,
+                                          [groupKey]: item,
+                                        })
+                                      }
+                                      onDoubleClick={() =>
+                                        optImg &&
+                                        setStyleZoom({ src: optImg, label: item })
+                                      }
+                                    >
+                                      <span className="opt-thumb">
+                                        {optImg ? (
+                                          <img
+                                            src={optImg}
+                                            alt={item}
+                                            loading="lazy"
+                                          />
+                                        ) : (
+                                          <i>{t("home.noImage")}</i>
+                                        )}
+                                      </span>
+                                      <b>{tailoringTerm(item, loc, group.title)}</b>
+                                      {chosen === item && (
+                                        <em>{t("home.selected")}</em>
+                                      )}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    <div className="styles-price">
+                      <PriceBreakdown
+                        garment={garment}
+                        fabricCode={fabricByGarment[garment]}
+                        optionGroups={optionGroups}
+                        selected={selected}
+                        optionExtra={optionExtra}
+                        shippingFee={shippingFee}
+                        orderWeight={orderWeight}
+                        total={totalPrice}
+                      />
+                    </div>
+                    <div className="notice pi-add" style={{ marginTop: 10 }}>
+                      <span>◈</span>
+                      <div>
+                        <b>{t("home.joinPiTitle")}</b>
+                        <p>
+                          {t("home.joinPiSub")}
+                          {tailoringTerm(active.name, loc)}
+                          {t("home.joinPiSub2")}
+                        </p>
+                      </div>
+                      <button onClick={addToPi}>
+                        {piMsg ?? `${t("home.joinPi")}　＋`}
+                      </button>
+                    </div>
+                  </div>
+                  {styleZoom && (
+                    <div
+                      className="fabric-preview-zoom style-option-zoom"
+                      role="dialog"
+                      aria-modal="true"
+                      aria-label={`${styleZoom.label} 放大图片`}
+                      onClick={() => setStyleZoom(null)}
+                    >
+                      <button
+                        aria-label="关闭放大图片"
+                        onClick={() => setStyleZoom(null)}
+                      >
+                        ×
+                      </button>
+                      <img src={styleZoom.src} alt={styleZoom.label} />
+                      <p>{styleZoom.label}</p>
+                    </div>
+                  )}
+                </section>
+              </>
+            )}
+            <PiPreview
+              customerName={customerName}
+              channelCode={channelCode}
+              countryLabel={selectedCountryName}
+              countryCode={country}
+              region={region}
+              city={city}
+              street={street}
+              postalCode={postalCode}
+              items={piItems}
+              onRemove={(key) =>
+                setPiItems((prev) => prev.filter((item) => item.key !== key))
+              }
+              onReselectFabric={(item) => {
+                if (!item.garmentType) return;
+                setGarment(item.garmentType);
+                setFabricEditItemKey(item.key);
+                setFabricFirst(true);
+                requestAnimationFrame(() => {
+                  requestAnimationFrame(() => {
+                    window.scrollTo({
+                      top: fabricPageScrollY.current,
+                      behavior: "smooth",
+                    });
+                  });
+                });
+              }}
+              onReselectStyle={(item) => {
+                if (!item.garmentType) return;
+                setStyleEditItemKey(item.key);
+                setGarment(item.garmentType);
+                setFabricByGarment((prev) => ({
+                  ...prev,
+                  [item.garmentType!]: item.fabricCode,
+                }));
+                setSelected((prev) => {
+                  const next = Object.fromEntries(
+                    Object.entries(prev).filter(
+                      ([key]) => !key.startsWith(`${item.garmentType}:`),
+                    ),
+                  );
+                  item.options.forEach((option) => {
+                    if (option.group !== "刺绣文字") {
+                      next[`${item.garmentType}:${option.group}`] = option.item;
+                    }
+                  });
+                  return next;
+                });
+                setEmbroideryFont(
+                  item.options.find((option) => option.group === "刺绣文字")?.item ?? "",
+                );
+                setFabricFirst(false);
+                setStep("style");
+                requestAnimationFrame(() => {
+                  document
+                    .querySelector(".chosen-fabric-bar")
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                });
+              }}
+              customerHeight={customerHeight}
+              customerWeight={customerWeight}
+              customerAvatar={avatarUrl}
+              country={country}
+              setCountry={setCountry}
+              setRegion={setRegion}
+              setCity={setCity}
+              setStreet={setStreet}
+              setPostalCode={setPostalCode}
+              orderWeight={orderWeight}
+              shippingFee={shippingFee}
+              rateLabel={rate.label}
+            />
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function Notice({
+  text,
+  sub,
+  action,
+  onClick,
+}: {
+  text: string;
+  sub: string;
+  action: string;
+  onClick: () => void;
+}) {
+  return (
+    <div className="notice">
+      <span>↻</span>
+      <div>
+        <b>{text}</b>
+        <p>{sub}</p>
+      </div>
+      <button onClick={onClick}>{action}</button>
+    </div>
+  );
+}
+
+function PriceBreakdown({
+  garment,
+  fabricCode,
+  optionGroups,
+  selected,
+  optionExtra,
+  shippingFee,
+  orderWeight,
+  total,
+}: {
+  garment: GarmentKey;
+  fabricCode?: string;
+  optionGroups: (typeof optionsByGarment)[GarmentKey];
+  selected: Record<string, string>;
+  optionExtra: number;
+  shippingFee: number;
+  orderWeight: number;
+  total: number;
+}) {
+  const { loc, t } = useLocale();
+  const extras = optionGroups.flatMap((group, groupIndex) => {
+    const item = selected[`${garment}:${group.title}`];
+    const itemIndex = group.items.indexOf(item);
+    const price =
+      itemIndex >= 0 ? optionSurcharge(garment, groupIndex, itemIndex) : 0;
+    return price ? [{ group: group.title, item, price }] : [];
+  });
+  return (
+    <section className="price-breakdown">
+      <div className="price-title">
+        <div>
+          <p className="eyebrow">{t("pi.livePrice")}</p>
+          <h3>{t("pi.currentPrice")}</h3>
+        </div>
+        <strong>¥{total}</strong>
+      </div>
+      <div className="price-lines">
+        <span>
+          <i>
+            {tailoringTerm(garments[garment].name, loc)} · {t("pi.baseCost")}
+          </i>
+          <b>¥{basePrices[garment]}</b>
+        </span>
+        <span>
+          <i>
+            {t("pi.fabric")} {fabricCode || "—"}
+          </i>
+          <b>¥{getFabricPrice(fabricCode)}</b>
+        </span>
+        {extras.map((extra) => (
+          <span key={`${extra.group}:${extra.item}`} className="extra">
+            <i>
+              {tailoringTerm(extra.group, loc)} · {tailoringTerm(extra.item, loc, extra.group)}
+            </i>
+            <b>+¥{extra.price}</b>
+          </span>
+        ))}
+        <span>
+          <i>{t("pi.extraTotal")}</i>
+          <b>¥{optionExtra}</b>
+        </span>
+        <span className="shipping-line">
+          <i>
+            {t("pi.shipping")} · {orderWeight.toFixed(1)} kg
+          </i>
+          <b>¥{shippingFee}</b>
+        </span>
+      </div>
+      <p className="price-note">{t("pi.priceNote")}</p>
+    </section>
+  );
+}
+
+function CountryRegionFields({
+  country,
+  region,
+  setCountry,
+  setRegion,
+}: {
+  country: string;
+  region: string;
+  setCountry: (value: string) => void;
+  setRegion: (value: string) => void;
+}) {
+  const { t } = useLocale();
+  const countries = Country.getAllCountries().sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
+  const selectedCountry = countries.find((item) => item.isoCode === country);
+  const countryDisplay = (item: (typeof countries)[number]) =>
+    `${item.name} (${item.isoCode})`;
+  const [countryText, setCountryText] = useState(
+    selectedCountry ? countryDisplay(selectedCountry) : "",
+  );
+  const states = country
+    ? State.getStatesOfCountry(country).sort((a, b) =>
+        a.name.localeCompare(b.name),
+      )
+    : [];
+  const selectedState = states.find(
+    (item) =>
+      `${country}-${item.isoCode}` === region ||
+      item.isoCode === region ||
+      item.name === region,
+  );
+  const stateDisplay = (item: (typeof states)[number]) =>
+    `${item.name} (${country}-${item.isoCode})`;
+  const [regionText, setRegionText] = useState(
+    selectedState ? stateDisplay(selectedState) : region || "",
+  );
+  useEffect(() => {
+    const item = countries.find((entry) => entry.isoCode === country);
+    setCountryText(item ? countryDisplay(item) : "");
+  }, [country]);
+  useEffect(() => {
+    const item = states.find(
+      (entry) =>
+        `${country}-${entry.isoCode}` === region ||
+        entry.isoCode === region ||
+        entry.name === region,
+    );
+    setRegionText(item ? stateDisplay(item) : region || "");
+  }, [country, region]);
+  const changeCountry = (value: string) => {
+    setCountryText(value);
+    const normalized = value.trim().toLowerCase();
+    const match = countries.find(
+      (item) =>
+        countryDisplay(item).toLowerCase() === normalized ||
+        item.isoCode.toLowerCase() === normalized ||
+        item.name.toLowerCase() === normalized,
+    );
+    if (match) {
+      if (match.isoCode !== country) setRegion("");
+      setCountry(match.isoCode);
+    } else {
+      setCountry("");
+      setRegion("");
+    }
+  };
+  const changeRegion = (value: string) => {
+    setRegionText(value);
+    if (!states.length) {
+      setRegion(value);
+      return;
+    }
+    const normalized = value.trim().toLowerCase();
+    const match = states.find(
+      (item) =>
+        stateDisplay(item).toLowerCase() === normalized ||
+        item.isoCode.toLowerCase() === normalized ||
+        item.name.toLowerCase() === normalized ||
+        `${country}-${item.isoCode}`.toLowerCase() === normalized,
+    );
+    setRegion(match ? `${country}-${match.isoCode}` : "");
+  };
+  return (
+    <>
+      <label>
+        <span>
+          {t("home.country")} <i>*</i>
+        </span>
+        <input
+          list="iso-country-list"
+          value={countryText}
+          onChange={(event) => changeCountry(event.target.value)}
+          placeholder={t("home.countrySearch")}
+          autoComplete="off"
+        />
+        <datalist id="iso-country-list">
+          {countries.map((item) => (
+            <option key={item.isoCode} value={countryDisplay(item)} />
+          ))}
+        </datalist>
+      </label>
+      <label>
+        <span>
+          {t("home.region")} <i>*</i>
+        </span>
+        <input
+          list="iso-region-list"
+          value={regionText}
+          onChange={(event) => changeRegion(event.target.value)}
+          placeholder={
+            country
+              ? states.length
+                ? "搜索州 / 省名称或代码"
+                : "输入州 / 省"
+              : t("home.selectCountryFirst")
+          }
+          disabled={!country}
+          autoComplete="off"
+        />
+        <datalist id="iso-region-list">
+          {states.map((item) => (
+            <option
+              key={`${country}-${item.isoCode}`}
+              value={stateDisplay(item)}
+            />
+          ))}
+        </datalist>
+      </label>
+    </>
+  );
+}
+
+function PiPreview({
+  customerName,
+  channelCode,
+  countryLabel,
+  countryCode,
+  region,
+  city,
+  street,
+  postalCode,
+  items,
+  onRemove,
+  onReselectFabric,
+  onReselectStyle,
+  customerHeight,
+  customerWeight,
+  customerAvatar,
+  country,
+  setCountry,
+  setRegion,
+  setCity,
+  setStreet,
+  setPostalCode,
+  orderWeight,
+  shippingFee,
+  rateLabel,
+}: {
+  customerName: string;
+  channelCode: string;
+  countryLabel: string;
+  countryCode: string;
+  region: string;
+  city: string;
+  street: string;
+  postalCode: string;
+  items: PiItem[];
+  onRemove: (key: string) => void;
+  onReselectFabric: (item: PiItem) => void;
+  onReselectStyle: (item: PiItem) => void;
+  customerHeight: string;
+  customerWeight: string;
+  customerAvatar?: string | null;
+  country: string;
+  setCountry: (value: string) => void;
+  setRegion: (value: string) => void;
+  setCity: (value: string) => void;
+  setStreet: (value: string) => void;
+  setPostalCode: (value: string) => void;
+  orderWeight: number;
+  shippingFee: number;
+  rateLabel: string;
+}) {
+  const { t } = useLocale();
+  const productTotal = items.reduce((sum, item) => sum + item.productPrice, 0);
+  const shippingTotal = items.reduce((sum, item) => sum + item.shippingFee, 0);
+  const total = productTotal + shippingTotal;
+  const [results, setResults] = useState<
+    Record<string, { loading: boolean; image: string | null; error: string }>
+  >({});
+  const [suiteLoading, setSuiteLoading] = useState(false);
+  const [suiteImage, setSuiteImage] = useState<string | null>(null);
+  const [suiteZoom, setSuiteZoom] = useState(false);
+  const [suiteSelect, setSuiteSelect] = useState("");
+  const hasAvatar = !!customerAvatar;
+  const buildPrompt = (item: PiItem): string => {
+    const fab = item.fabricCode
+      ? [
+          ...fabricsByGarment.jacket,
+          ...fabricsByGarment.trousers,
+          ...fabricsByGarment.waistcoat,
+          ...fabricsByGarment.shirt,
+        ].find((f) => f.code === item.fabricCode)
+      : undefined;
+    const g = (item.garmentType ?? "jacket") as GarmentKey;
+    const garmentEn = {
+      jacket: "suit jacket",
+      trousers: "dress trousers",
+      waistcoat: "waistcoat",
+      shirt: "dress shirt",
+    }[g];
+    const toneEn = TONE_EN[fab?.tone ?? ""] ?? fab?.tone ?? "fine suiting";
+    const fabricDesc = fab
+      ? `${toneEn} fabric (code ${item.fabricCode}, mill ${fab.mill || "custom"})`
+      : `fabric (code ${item.fabricCode})`;
+    const modeTxt =
+      item.kind === "fabric"
+        ? hasAvatar
+          ? `A male model presenting a folded stack of premium ${fabricDesc}`
+          : `A folded stack of premium ${fabricDesc} on a clean pure white background, flat lay, product photography, no model, no person`
+        : hasAvatar
+          ? `A male model wearing a tailored ${garmentEn} made of ${fabricDesc}`
+          : `A single ${garmentEn} made of ${fabricDesc}, displayed flat lay on a clean pure white background, product photography, no model, no person`;
+    const styleTxt = item.options.length
+      ? `, garment custom options, must match exactly: ${item.options.map((o) => `${o.group}: ${o.item}`).join("; ")}`
+      : "";
+    const sizeTxt = item.measurements.length
+      ? `, garment measurements in cm: ${item.measurements.map((m) => `${m.field} net ${m.net || "-"} / finished ${m.finished || "-"}`).join(", ")}`
+      : "";
+    const bodyTxt = hasAvatar
+      ? `, client body: height ${customerHeight || "185"}cm, weight ${customerWeight || "78"}kg, model physique should match this body proportion`
+      : "";
+    return `${modeTxt}${styleTxt}${sizeTxt}${bodyTxt}, ultra detailed, high resolution, realistic fabric texture, professional menswear photography, soft studio lighting, no text, no watermark, no logo`.trim();
+  };
+  // 西装上衣只参考正反面款式：正面款式组 + 反面（后背/开衩）款式组
+  const JACKET_FRONT_GROUPS = [
+    "正面款式",
+    "胸兜款式",
+    "下摆开角大小",
+    "肩膀样式",
+    "口袋款式",
+    "驳头款式",
+  ];
+  const JACKET_BACK_GROUPS = ["西服背面款式", "西服开衩选择"];
+  const optionRefImages = (item: PiItem): string[] => {
+    if (item.kind === "fabric") return [];
+    const g = item.garmentType ?? "jacket";
+    const list: string[] = [];
+    if (g === "jacket") {
+      const pick = (groups: string[]) => {
+        for (const group of groups) {
+          const opt = item.options.find((o) => o.group === group);
+          if (opt) {
+            const url = suitOptionImageUrl(opt.group, opt.item);
+            if (url) return url;
+          }
+        }
+        return null;
+      };
+      const front = pick(JACKET_FRONT_GROUPS);
+      const back = pick(JACKET_BACK_GROUPS);
+      if (front) list.push(front);
+      if (back) list.push(back);
+      return list;
+    }
+    for (const opt of item.options) {
+      const url =
+        g === "shirt"
+          ? shirtOptionImageUrl(opt.group, opt.item)
+          : suitOptionImageUrl(opt.group, opt.item);
+      if (url) list.push(url);
+      if (list.length >= 4) break;
+    }
+    return list;
+  };
+  const toDataUrl = async (url: string): Promise<string> => {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    return new Promise<string>((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.readAsDataURL(blob);
+    });
+  };
+  const collectRefs = async (item: PiItem): Promise<string[]> => {
+    const refs: string[] = [];
+    for (const url of optionRefImages(item)) {
+      try {
+        refs.push(await toDataUrl(url));
+      } catch {
+        /* 忽略无法读取的参考图 */
+      }
+    }
+    return refs;
+  };
+  const generateOne = async (item: PiItem) => {
+    if (!item.fabricCode) {
+      setResults((prev) => ({
+        ...prev,
+        [item.key]: { loading: false, image: null, error: "未选择面料" },
+      }));
+      return;
+    }
+    setResults((prev) => ({
+      ...prev,
+      [item.key]: { loading: true, image: null, error: "" },
+    }));
+    try {
+      const referenceImages = await collectRefs(item);
+      const data = await apiFetch<{ imageUrl: string }>(
+        `/api/generate-image?t=${Date.now()}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            garment: item.garmentType ?? "jacket",
+            prompt: buildPrompt(item),
+            style: hasAvatar ? "wear" : "flat",
+            referenceImages,
+          }),
+        },
+      );
+      setResults((prev) => ({
+        ...prev,
+        [item.key]: { loading: false, image: data.imageUrl, error: "" },
+      }));
+    } catch (e) {
+      setResults((prev) => ({
+        ...prev,
+        [item.key]: {
+          loading: false,
+          image: null,
+          error: e instanceof Error ? e.message : "生成失败",
+        },
+      }));
+    }
+  };
+  const hasGarment = items.some((item) => item.kind === "product");
+  const generateAll = async () => {
+    if (!hasGarment) {
+      alert(t("pi.garmentOnly"));
+      return;
+    }
+    // 只取尚未生成的成衣行，已生成的行不重复生成
+    const pending = items.filter(
+      (item) => item.kind === "product" && !results[item.key]?.image,
+    );
+    if (pending.length === 0) return;
+    // 立即把每一条未生成的行都标记为「生成中...」
+    const marks: Record<
+      string,
+      { loading: boolean; image: null; error: string }
+    > = {};
+    pending.forEach((item) => {
+      marks[item.key] = { loading: true, image: null, error: "" };
+    });
+    setResults((prev) => ({ ...prev, ...marks }));
+    await Promise.allSettled(pending.map((item) => generateOne(item)));
+  };
+  const generateSuite = async () => {
+    if (items.length === 0) {
+      alert(t("pi.pending"));
+      return;
+    }
+    if (!hasGarment) {
+      alert(t("pi.garmentOnly"));
+      return;
+    }
+    // 解析用户选择的序号（默认全部成衣行）
+    let selectedRows = items.map((item, idx) => ({ item, idx }));
+    if (suiteSelect.trim()) {
+      const nums = suiteSelect
+        .split(/[,，\s]+/)
+        .map((s) => parseInt(s, 10))
+        .filter((n) => Number.isInteger(n) && n >= 1 && n <= items.length);
+      if (nums.length === 0) {
+        alert(t("pi.invalidRows"));
+        return;
+      }
+      selectedRows = selectedRows.filter(({ idx }) => nums.includes(idx + 1));
+    }
+    const productSel = selectedRows.filter(
+      (row) => row.item.kind === "product",
+    );
+    // 同一部位不能重复选择（如多件西装）
+    const types = productSel.map((row) => row.item.garmentType).filter(Boolean);
+    if (new Set(types).size !== types.length) {
+      alert(t("pi.duplicateType"));
+      return;
+    }
+    if (productSel.length === 0) {
+      alert(t("pi.noGarment"));
+      return;
+    }
+    // 先补齐选中行未生成的单项效果图
+    const pending = productSel.filter((row) => !results[row.item.key]?.image);
+    if (pending.length) {
+      const marks: Record<
+        string,
+        { loading: boolean; image: null; error: string }
+      > = {};
+      pending.forEach((row) => {
+        marks[row.item.key] = { loading: true, image: null, error: "" };
+      });
+      setResults((prev) => ({ ...prev, ...marks }));
+      await Promise.allSettled(pending.map((row) => generateOne(row.item)));
+    }
+    setSuiteLoading(true);
+    setSuiteImage(null);
+    // 参考图：客户头像（如有，优先放第一张保证面容） + 选中行已生成的单项效果图
+    const referenceImages = productSel
+      .map((row) => results[row.item.key]?.image)
+      .filter(Boolean) as string[];
+    if (customerAvatar) {
+      try {
+        referenceImages.unshift(await toDataUrl(customerAvatar));
+      } catch {
+        /* 忽略头像转换失败 */
+      }
+    }
+    const parts = productSel.map(
+      (row) =>
+        ({
+          jacket: "suit jacket",
+          trousers: "dress trousers",
+          waistcoat: "waistcoat",
+          shirt: "dress shirt",
+        })[row.item.garmentType!],
+    );
+    const desc = parts.length
+      ? `A complete matching made-to-measure suit set consisting of ${[...new Set(parts)].join(", ")}`
+      : `A complete matching made-to-measure suit set consisting of suit jacket, dress trousers, waistcoat and dress shirt`;
+    const first = productSel[0].item;
+    const fab = first.fabricCode
+      ? [
+          ...fabricsByGarment.jacket,
+          ...fabricsByGarment.trousers,
+          ...fabricsByGarment.waistcoat,
+          ...fabricsByGarment.shirt,
+        ].find((f) => f.code === first.fabricCode)
+      : undefined;
+    const toneEn = TONE_EN[fab?.tone ?? ""] ?? fab?.tone ?? "fine suiting";
+    const fabricDesc = fab
+      ? `${toneEn} fabric (code ${first.fabricCode}, mill ${fab.mill || "custom"})`
+      : `fine suiting fabric`;
+    // 无头像时按客户收货国家生成对应人种的 AI 真人模特
+    const ETHNICITY: Record<string, string> = {
+      UK: "a Caucasian British man",
+      US: "a Caucasian American man",
+      CA: "a Caucasian Canadian man",
+      AU: "a Caucasian Australian man",
+      EU: "a Caucasian European man",
+      NZ: "a Caucasian New Zealander man",
+      OTHER: "a realistic adult man",
+    };
+    const modelTxt = hasAvatar
+      ? "the client from the reference portrait photo"
+      : (ETHNICITY[countryCode] ?? "a realistic adult man");
+    const modeTxt = `${desc}, all pieces made of ${fabricDesc}, worn by ${modelTxt} whose physique matches client height ${customerHeight || "185"}cm weight ${customerWeight || "78"}kg`;
+    const prompt =
+      `${modeTxt}, keep each garment identical to the reference images, matching suit set, coordinated tailoring, ultra detailed, high resolution, realistic fabric texture, professional menswear photography, soft studio lighting, no text, no watermark, no logo`.trim();
+    try {
+      const data = await apiFetch<{ imageUrl: string }>(
+        `/api/generate-image?t=${Date.now()}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            garment: "jacket",
+            prompt,
+            style: "wear",
+            referenceImages,
+          }),
+        },
+      );
+      setSuiteImage(data.imageUrl);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "生成失败");
+    } finally {
+      setSuiteLoading(false);
+    }
+  };
+  const genBusy = Object.values(results).some((r) => r.loading);
+  return (
+    <section className="pi-preview">
+      <div className="pi-head">
+        <div>
+          <p className="eyebrow">{t("pi.eyebrow")}</p>
+          <h3>{t("pi.title")}</h3>
+        </div>
+        <b className="pi-no">{channelCode || "CH"}-DD-MM-序号</b>
+      </div>
+      <section className="shipping-address">
+        <div className="address-title">
+          <div>
+            <p className="eyebrow">SHIPPING ADDRESS</p>
+            <h3>{t("home.shipAddress")}</h3>
+          </div>
+          <span>{t("home.shipForFee")}</span>
+        </div>
+        <div className="address-fields">
+          <CountryRegionFields
+            country={country}
+            region={region}
+            setCountry={setCountry}
+            setRegion={setRegion}
+          />
+          <label>
+            <span>
+              {t("home.city")} <i>*</i>
+            </span>
+            <input
+              value={city}
+              onChange={(event) => setCity(event.target.value)}
+              placeholder={t("home.city")}
+            />
+          </label>
+          <label className="street">
+            <span>
+              {t("home.street")} <i>*</i>
+            </span>
+            <input
+              value={street}
+              onChange={(event) => setStreet(event.target.value)}
+              placeholder={t("home.street")}
+            />
+          </label>
+          <label>
+            <span>
+              {t("home.postal")} <i>*</i>
+            </span>
+            <input
+              value={postalCode}
+              onChange={(event) => setPostalCode(event.target.value)}
+              placeholder={t("home.postal")}
+            />
+          </label>
+        </div>
+        <div className="shipping-estimate">
+          <span>
+            {t("home.estWeight")} <b>{orderWeight.toFixed(1)} kg</b>
+          </span>
+          <span>
+            {rateLabel}
+            {t("home.shipEst")} <b>¥{shippingFee}</b>
+          </span>
+          <small>{t("home.shipNote")}</small>
+        </div>
+      </section>
+      <div className="pi-customer">
+        <div>
+          <small>{t("pi.customer")}</small>
+          <b>{customerName || "—"}</b>
+        </div>
+        <div>
+          <small>{t("pi.address")}</small>
+          <b>
+            {[city, region, countryLabel].filter(Boolean).join(" · ") || "—"}
+          </b>
+          <p>{[street, postalCode].filter(Boolean).join(" · ") || "—"}</p>
+        </div>
+      </div>
+      <div className="pi-table">
+        <div className="pi-table-head">
+          <span>{t("pi.product")}</span>
+          <span>{t("pi.fabric")}</span>
+          <span>{t("pi.styles")}</span>
+          <span>{t("pi.aiPreview")}</span>
+          <span>{t("pi.price")}</span>
+        </div>
+        {items.map((item, idx) => (
+          <PiRow
+            key={item.key}
+            item={item}
+            onRemove={onRemove}
+            onReselectFabric={onReselectFabric}
+            onReselectStyle={onReselectStyle}
+            result={results[item.key]}
+            index={idx}
+          />
+        ))}
+        {items.length === 0 ? (
+          <div className="pi-empty">{t("pi.empty")}</div>
+        ) : (
+          <>
+            <div className="pi-shipping">
+              <span>
+                {t("pi.shipping")}（{items.length}）
+              </span>
+              <b>¥{shippingTotal}</b>
+            </div>
+            <div className="pi-total">
+              <span>{t("pi.total")}</span>
+              <b>¥{total}</b>
+            </div>
+            <div className="pi-actions">
+              <div className="pi-actions-btns">
+                <button
+                  className="pi-gen-btn"
+                  onClick={generateAll}
+                  disabled={genBusy}
+                >
+                  {genBusy ? t("pi.generating") : t("pi.generateOne")}
+                </button>
+                <button
+                  className="pi-gen-btn pi-gen-suite"
+                  onClick={generateSuite}
+                  disabled={suiteLoading}
+                >
+                  {suiteLoading ? t("pi.generatingNow") : t("pi.generateSuite")}
+                </button>
+              </div>
+              <label className="pi-suite-select">
+                <span>{t("pi.suiteRef")}</span>
+                <input
+                  value={suiteSelect}
+                  onChange={(e) => setSuiteSelect(e.target.value)}
+                  placeholder={t("pi.suiteDefault")}
+                />
+              </label>
+              {suiteImage && (
+                <div className="pi-suite">
+                  <img
+                    src={suiteImage}
+                    alt="Full Set"
+                    onClick={() => setSuiteZoom(true)}
+                    title={t("pi.zoom")}
+                  />
+                  <small>{t("pi.suite")}</small>
+                </div>
+              )}
+            </div>
+            {suiteZoom && suiteImage && (
+              <div className="ai-zoom" onClick={() => setSuiteZoom(false)}>
+                <img src={suiteImage} alt="Full Set" />
+                <span>{t("common.close")}</span>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+      <p className="pi-note">{t("pi.note")}</p>
+    </section>
+  );
+}
+
+const TONE_EN: Record<string, string> = {
+  navy: "deep navy blue",
+  charcoal: "charcoal grey",
+  bluecheck: "navy blue with subtle check pattern",
+  brown: "rich brown",
+  stripe: "navy blue with subtle stripes",
+  beige: "elegant beige",
+  herring: "charcoal herringbone",
+  ivory: "ivory white",
+  gold: "golden brown",
+  burgundy: "deep burgundy",
+  greycheck: "grey with check pattern",
+  white: "crisp white",
+  sky: "light sky blue",
+  shirtstripe: "white with fine blue stripes",
+  shirtcheck: "white with subtle check pattern",
+  pink: "soft pink",
+};
+
+function PiRow({
+  item,
+  onRemove,
+  onReselectFabric,
+  onReselectStyle,
+  result,
+  index,
+}: {
+  item: PiItem;
+  onRemove: (key: string) => void;
+  onReselectFabric: (item: PiItem) => void;
+  onReselectStyle: (item: PiItem) => void;
+  result?: { loading: boolean; image: string | null; error: string };
+  index: number;
+}) {
+  const { loc, t } = useLocale();
+  const [zoom, setZoom] = useState(false);
+  const loading = result?.loading ?? false;
+  const image = result?.image ?? null;
+  const error = result?.error ?? "";
+  const selectedFabric = [
+    ...fabricsByGarment.jacket,
+    ...fabricsByGarment.trousers,
+    ...fabricsByGarment.waistcoat,
+    ...fabricsByGarment.shirt,
+  ].find((fabric) => fabric.code === item.fabricCode);
+  const selectedFabricImage =
+    selectedFabric && "imageUrl" in selectedFabric
+      ? selectedFabric.imageUrl
+      : undefined;
+  return (
+    <div className="pi-item" key={item.key}>
+      {item.kind === "fabric" ? (
+        <>
+          <b>
+            <span className="pi-index">{index + 1}</span>
+            {item.fabricName || t("pi.fabric")}
+            <small>FABRIC ONLY · {item.fabricCode}</small>
+          </b>
+          <span>
+            <strong>{item.fabricCode}</strong>
+            <small>{item.fabricMill}</small>
+          </span>
+          <span className="pi-styles">
+            <small>
+              {t("home.fabricMeters")}：{item.meters} {t("pi.meters")} × ¥
+              {item.fabricPrice}/{t("pi.meters")}
+            </small>
+          </span>
+        </>
+      ) : (
+        <>
+          <b>
+            <span className="pi-index">{index + 1}</span>
+            {tailoringTerm(item.garmentName ?? "", loc)}
+            <small>
+              {item.garmentType ? garments[item.garmentType].en : ""}
+            </small>
+          </b>
+          <span>
+            {item.fabricCode ? (
+              <>
+                {selectedFabricImage ? (
+                  <img
+                    className="pi-fabric-thumb"
+                    src={selectedFabricImage}
+                    alt={`${item.fabricName ?? "面料"} ${item.fabricCode}`}
+                  />
+                ) : null}
+                <strong>{item.fabricCode}</strong>
+                <small>
+                  {[item.fabricMill, item.fabricName ? fabricDisplayName(item.fabricName, loc, STYLBIELLA_FABRIC_COLORS[item.fabricCode]?.color) : undefined]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </small>
+                <button
+                  type="button"
+                  className="pi-reselect-btn"
+                  onClick={() => onReselectFabric(item)}
+                >
+                  {t("pi.reselectFabric")}
+                </button>
+              </>
+            ) : (
+              "—"
+            )}
+          </span>
+          <span className="pi-styles">
+            {item.options.map((style) => (
+              <small key={`${style.group}:${style.item}`}>
+                {tailoringTerm(style.group, loc)}：{tailoringTerm(style.item, loc, style.group)}
+              </small>
+            ))}
+            <button
+              type="button"
+              className="pi-reselect-btn"
+              onClick={() => onReselectStyle(item)}
+            >
+              {t("pi.reselectStyle")}
+            </button>
+          </span>
+        </>
+      )}
+      <span className="pi-ai">
+        {loading ? (
+          <span className="pi-ai-loading">{t("pi.generatingNow")}</span>
+        ) : image ? (
+          <>
+            <img
+              className="pi-ai-thumb"
+              src={image}
+              alt="AI"
+              onClick={() => setZoom(true)}
+              title={t("pi.zoom")}
+            />
+            <small className="pi-ai-hint">{t("pi.zoom")}</small>
+          </>
+        ) : item.kind === "fabric" ? null : (
+          <span className="pi-ai-holder" />
+        )}
+      </span>
+      <strong className="pi-price">
+        {item.kind === "fabric" ? (
+          <>
+            <b>¥{item.productPrice}</b>
+            <small>
+              {t("pi.fabricPrice")} ¥{item.basePrice}
+              <br />
+              {item.meters}
+              {t("pi.meters")} × ¥{item.fabricPrice}/{t("pi.meters")}
+            </small>
+          </>
+        ) : (
+          <>
+            <b>¥{item.productPrice}</b>
+            <small>
+              {t("pi.fabricPrice")} ¥{item.fabricPrice}
+              <br />
+              {t("pi.make")} ¥{item.basePrice}
+              <br />
+              {t("pi.extra")} ¥{item.optionExtra}
+            </small>
+          </>
+        )}
+        <button
+          className="pi-remove"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove(item.key);
+          }}
+          title={t("pi.remove")}
+        >
+          ×
+        </button>
+      </strong>
+      {zoom && image && (
+        <div className="ai-zoom" onClick={() => setZoom(false)}>
+          <img src={image} alt="AI" />
+          <span>{t("common.close")}</span>
+        </div>
+      )}
+      {error && <p className="pi-ai-error">{error}</p>}
+    </div>
+  );
+}
+
+const fabricColor = (f: { name: string; color?: string }) => {
+  if (f.color) return f.color;
+  const name = f.name;
+  if (/黑/.test(name)) return "黑色";
+  if (/灰|银|炭/.test(name)) return "灰色";
+  if (/蓝|靛/.test(name)) return "蓝色";
+  if (/绿|橄榄|苔藓|鼠尾草|松柏/.test(name)) return "绿色";
+  if (/棕|褐|咖啡|巧克力|栗|核桃|貂|焦糖|烟草/.test(name)) return "棕色";
+  if (/红|勃艮第|酒红|砖红|玫瑰/.test(name)) return "红色";
+  if (/紫|梅子|丁香|茄/.test(name)) return "紫色";
+  if (/粉/.test(name)) return "粉色";
+  if (/白|象牙|奶油/.test(name)) return "白色";
+  if (/米|卡其|驼|沙|燕麦/.test(name)) return "米色/卡其";
+  if (/黄|金/.test(name)) return "黄色";
+  if (/橙|陶土/.test(name)) return "橙色";
+  return "其他";
+};
+const whiteGroundPatternColors = (name: string) => {
+  if (!/(白底|白色).*(条|格|纹)/.test(name)) return [] as string[];
+  const colors: string[] = [];
+  if (/蓝|靛/.test(name)) colors.push("蓝色");
+  if (/灰|银|炭/.test(name)) colors.push("灰色");
+  if (/绿|橄榄|苔藓/.test(name)) colors.push("绿色");
+  if (/红|酒红|勃艮第/.test(name)) colors.push("红色");
+  if (/紫/.test(name)) colors.push("紫色");
+  if (/粉/.test(name)) colors.push("粉色");
+  if (/棕|褐|咖啡/.test(name)) colors.push("棕色");
+  if (/黄|金/.test(name)) colors.push("黄色");
+  return [...new Set(colors)].slice(0, 2);
+};
+const fabricColors = (f: {
+  name: string;
+  color?: string;
+  colors?: string[];
+}) => {
+  const whiteGround = whiteGroundPatternColors(f.name);
+  return whiteGround.length
+    ? whiteGround
+    : f.colors?.length
+      ? f.colors
+      : [fabricColor(f)];
+};
+const fabricPattern = (f: { name: string; pattern?: string }) =>
+  f.pattern ||
+  (/条纹|条|stripe/i.test(f.name)
+    ? "条纹"
+    : /格纹|格|check|plaid/i.test(f.name)
+      ? "格纹"
+      : /人字|herring/i.test(f.name)
+        ? "人字纹"
+        : /点|圆点|dot/i.test(f.name)
+          ? "圆点"
+          : "素色");
+const fabricWeight = (f: { meta?: string; weight?: string }) =>
+  f.weight || f.meta?.match(/(?:^|[·\s])([0-9]{2,4})\s*g\b/i)?.[1] || "";
+const fabricComposition = (f: { meta?: string; composition?: string }) =>
+  f.composition || f.meta?.split("·")[0]?.trim() || "";
+const fabricDisplayCode = (f: { code: string; book?: string; mill: string }) =>
+  f.mill === "STYLBIELLA" && f.book ? `${f.book}·${f.code}` : f.code;
+
+function FabricFirst({
+  search,
+  setSearch,
+  onQuickSelect,
+  onContinue,
+  onFabricOnly,
+}: {
+  search: string;
+  setSearch: (value: string) => void;
+  onQuickSelect?: (code: string) => void;
+  onContinue: (key: GarmentKey, code: string) => void;
+  onFabricOnly: (code: string, meters: number) => void;
+}) {
+  const { loc, t } = useLocale();
+  const [kind, setKind] = useState<"suiting" | "shirt">("suiting");
+  const [code, setCode] = useState<string>();
+  const [meters, setMeters] = useState("2.5");
+  const [showChoose, setShowChoose] = useState(false);
+  const [showBookDetail, setShowBookDetail] = useState<string>();
+  const [showFabricZoom, setShowFabricZoom] = useState<boolean | number>(false);
+  const [mill, setMill] = useState<string>();
+  const [book, setBook] = useState<string>();
+  const [colorFilter, setColorFilter] = useState("");
+  const [patternFilter, setPatternFilter] = useState("");
+  const [weightFilter, setWeightFilter] = useState("");
+  const [compositionFilter, setCompositionFilter] = useState("");
+  const hasFabricFilters = Boolean(
+    search.trim() ||
+      colorFilter ||
+      patternFilter ||
+      weightFilter ||
+      compositionFilter,
+  );
+  const source =
+    kind === "shirt" ? fabricsByGarment.shirt : fabricsByGarment.jacket;
+  const mills = [...new Set(source.map((f) => f.mill))];
+  const filterSource = source.filter(
+    (f) => (!mill || f.mill === mill) && (!book || !f.book || f.book === book),
+  );
+  const matchesFabric = (
+    f: (typeof source)[number],
+    ignore?: "color" | "pattern" | "weight" | "composition",
+  ) => {
+    const haystack =
+      `${fabricDisplayCode(f)} ${f.code} ${f.mill} ${f.name} ${f.meta || ""} ${fabricColors(f).join(" ")} ${fabricPattern(f)} ${fabricWeight(f)} ${fabricComposition(f)}`.toLowerCase();
+    return (
+      haystack.includes(search.trim().toLowerCase()) &&
+      (ignore === "color" ||
+        !colorFilter ||
+        fabricColors(f).includes(colorFilter)) &&
+      (ignore === "pattern" ||
+        !patternFilter ||
+        fabricPattern(f) === patternFilter) &&
+      (ignore === "weight" ||
+        !weightFilter ||
+        fabricWeight(f) === weightFilter) &&
+      (ignore === "composition" ||
+        !compositionFilter ||
+        fabricComposition(f) === compositionFilter)
+    );
+  };
+  const colors = [
+    ...new Set(
+      filterSource
+        .filter((f) => matchesFabric(f, "color"))
+        .flatMap((f) => fabricColors(f))
+        .filter(Boolean),
+    ),
+  ].sort();
+  const patterns = [
+    ...new Set(
+      filterSource
+        .filter((f) => matchesFabric(f, "pattern"))
+        .map((f) => fabricPattern(f))
+        .filter(Boolean),
+    ),
+  ].sort();
+  const weights = [
+    ...new Set(
+      filterSource
+        .filter((f) => matchesFabric(f, "weight"))
+        .map((f) => fabricWeight(f))
+        .filter(Boolean),
+    ),
+  ].sort((a, b) => Number(a) - Number(b));
+  const compositions = [
+    ...new Set(
+      filterSource
+        .filter((f) => matchesFabric(f, "composition"))
+        .map((f) => fabricComposition(f))
+        .filter(Boolean),
+    ),
+  ].sort();
+  const list = filterSource.filter((f) => matchesFabric(f));
+  useEffect(() => {
+    if (colorFilter && !colors.includes(colorFilter)) setColorFilter("");
+    if (patternFilter && !patterns.includes(patternFilter))
+      setPatternFilter("");
+    if (weightFilter && !weights.includes(weightFilter)) setWeightFilter("");
+    if (compositionFilter && !compositions.includes(compositionFilter))
+      setCompositionFilter("");
+  }, [
+    colorFilter,
+    patternFilter,
+    weightFilter,
+    compositionFilter,
+    colors.join("|"),
+    patterns.join("|"),
+    weights.join("|"),
+    compositions.join("|"),
+  ]);
+  const chosen = source.find((f) => f.code === code);
+  const eligible: GarmentKey[] =
+    kind === "shirt" ? ["shirt"] : ["jacket", "trousers", "waistcoat"];
+  useEffect(() => {
+    const row = document.querySelector<HTMLElement>(".fabric-mills");
+    if (!row) return;
+    const handle = (event: Event) => {
+      const button = (event.target as HTMLElement).closest("button");
+      if (button?.classList.contains("on")) {
+        window.setTimeout(() => {
+          setMill(undefined);
+          setBook(undefined);
+          setCode(undefined);
+        }, 0);
+      }
+    };
+    row.addEventListener("click", handle);
+    return () => row.removeEventListener("click", handle);
+  }, [mill]);
+  return (
+    <section className="fabric-first panel">
+      <div className="fabric-first-title">
+        <div>
+          <p className="eyebrow">STEP 01 · FABRIC FIRST</p>
+          <h2>{t("home.fabricFirstTitle")}</h2>
+          <p>{t("home.fabricFirstSub")}</p>
+        </div>
+        <div className="fabric-kind">
+          <button
+            className={kind === "suiting" ? "on" : ""}
+            onClick={() => {
+              setKind("suiting");
+              setCode(undefined);
+              setMill(undefined);
+            }}
+          >
+            {t("home.suitingFabric")}
+          </button>
+          <button
+            className={kind === "shirt" ? "on" : ""}
+            onClick={() => {
+              setKind("shirt");
+              setCode(undefined);
+              setMill(undefined);
+            }}
+          >
+            {t("home.shirtFabric")}
+          </button>
+        </div>
+      </div>
+      <div className="fabric-picker">
+        <div className="fabric-mills">
+          <span>{t("home.selectBrand")}</span>
+          {mills.map((m) => (
+            <button
+              key={m}
+              className={mill === m ? "on" : ""}
+              onClick={() => {
+                setMill(m);
+                setBook(undefined);
+              }}
+            >
+              {m}
+            </button>
+          ))}
+        </div>
+        <div className="fabric-tools">
+          <label>
+            <span>⌕</span>
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("home.fabricSearch")}
+            />
+          </label>
+          <select
+            aria-label={t("home.colorFilter")}
+            value={colorFilter}
+            onChange={(e) => setColorFilter(e.target.value)}
+          >
+            <option value="">{t("home.colorFilter")}</option>
+            {colors.map((v) => (
+              <option key={v} value={v}>
+                {fabricTerm(v, loc)}
+              </option>
+            ))}
+          </select>
+          <select
+            aria-label={t("home.patternFilter")}
+            value={patternFilter}
+            onChange={(e) => setPatternFilter(e.target.value)}
+          >
+            <option value="">{t("home.patternFilter")}</option>
+            {patterns.map((v) => (
+              <option key={v} value={v}>
+                {fabricTerm(v, loc)}
+              </option>
+            ))}
+          </select>
+          <select
+            aria-label={t("home.weightFilter")}
+            value={weightFilter}
+            onChange={(e) => setWeightFilter(e.target.value)}
+          >
+            <option value="">{t("home.weightFilter")}</option>
+            {weights.map((v) => (
+              <option key={v} value={v}>
+                {v}g
+              </option>
+            ))}
+          </select>
+          <select
+            aria-label={t("home.compositionFilter")}
+            value={compositionFilter}
+            onChange={(e) => setCompositionFilter(e.target.value)}
+          >
+            <option value="">{t("home.compositionFilter")}</option>
+            {compositions.map((v) => (
+              <option key={v} value={v}>
+                {fabricTerm(v, loc)}
+              </option>
+            ))}
+          </select>
+        </div>
+        {mill === "STYLBIELLA" && !book && !hasFabricFilters ? (
+          <div className="fabric-books">
+            <span>{t("home.chooseBook")}</span>
+            <div className="fabric-book-grid">
+              {Object.keys(STYLBIELLA_BOOK_META)
+                .filter((b) => source.some((f) => f.book === b))
+                .map((b) => {
+                  const bm = STYLBIELLA_BOOK_META[b];
+                  const cnt = source.filter((f) => f.book === b).length;
+                  return (
+                    <button
+                      key={b}
+                      className="fabric-book-card"
+                      data-cover={t("home.fabricBookCover")}
+                      onClick={() => setBook(b)}
+                    >
+                      <em>{b}</em>
+                      <b>{bm.title}</b>
+                      <p>{bm.sub}</p>
+                      <span>{cnt} {t("home.fabricCount")}　→</span>
+                    </button>
+                  );
+                })}
+            </div>
+          </div>
+        ) : mill === "STYLBIELLA" && book ? (
+          <div className="fabric-list fabric-book-inline">
+            <div className="fabric-book-head">
+              <button className="book-back" onClick={() => setBook(undefined)}>
+                ← {t("home.backToBook")}
+              </button>
+              <b>
+                {STYLBIELLA_BOOK_META[book].title} · {book}
+              </b>
+              <span>{fabricTerm(STYLBIELLA_BOOK_META[book].meta, loc)}</span>
+            </div>
+            {FABRIC_BOOK_DETAILS[book] ? (
+              <button
+                type="button"
+                className="fabric-card fabric-book-detail-card"
+                onClick={() => setShowBookDetail(book)}
+                aria-label={`查看 ${FABRIC_BOOK_DETAILS[book].title} ${book} 完整面料本详情`}
+              >
+                <span className="swatch">
+                  <img
+                    src={`/stylbiella/books/${book}/page-02.jpg`}
+                    alt={`STYLBIELLA ${FABRIC_BOOK_DETAILS[book].title} ${book} 面料本详情`}
+                  />
+                </span>
+                <span className="fabric-copy">
+                  <small>STYLBIELLA</small>
+                  <b>{FABRIC_BOOK_DETAILS[book].title} · {book}</b>
+                  <em>{t("home.bookDetail")}</em>
+                  <p>{fabricTerm(FABRIC_BOOK_DETAILS[book].summary, loc)}</p>
+                  <strong>{t("home.viewFullBook")} →</strong>
+                </span>
+              </button>
+            ) : null}
+            {list.map((f) => (
+              <button
+                key={f.code}
+                className={`fabric-card ${code === f.code ? "selected" : ""}`}
+                onClick={() => {
+                  setCode(f.code);
+                  if (onQuickSelect) onQuickSelect(f.code);
+                  else setShowChoose(true);
+                }}
+              >
+                <span className={`swatch ${f.tone}`}>
+                  {f.imageUrl ? (
+                    <img src={f.imageUrl} alt={f.code} />
+                  ) : (
+                    <i>{code === f.code ? "✓" : ""}</i>
+                  )}
+                </span>
+                <span className="fabric-copy">
+                  <small>{f.mill}</small>
+                  <b>{fabricDisplayName(f.name, loc, STYLBIELLA_FABRIC_COLORS[f.code]?.color)}</b>
+                  <em>{fabricDisplayCode(f)}</em>
+                  <p>{fabricTerm(f.meta, loc)}</p>
+                  <em className="fabric-card-meter-price">
+                    ¥{getFabricPrice(f.code)}/{t("home.perMeter")}
+                  </em>
+                </span>
+              </button>
+            ))}
+          </div>
+        ) : mill || hasFabricFilters ? (
+          <div className="fabric-list">
+            {list.map((f) => (
+              <button
+                key={f.code}
+                className={`fabric-card ${code === f.code ? "selected" : ""}`}
+                onClick={() => {
+                  setCode(f.code);
+                  if (onQuickSelect) onQuickSelect(f.code);
+                  else setShowChoose(true);
+                }}
+              >
+                <span className={`swatch ${f.tone}`}>
+                  {f.imageUrl ? (
+                    <img src={f.imageUrl} alt={f.code} />
+                  ) : (
+                    <i>{code === f.code ? "✓" : ""}</i>
+                  )}
+                </span>
+                <span className="fabric-copy">
+                  <small>{f.mill}</small>
+                  <b>{fabricDisplayName(f.name, loc, STYLBIELLA_FABRIC_COLORS[f.code]?.color)}</b>
+                  <em>{fabricDisplayCode(f)}</em>
+                  <p>{fabricTerm(f.meta, loc)}</p>
+                  <strong
+                    className={
+                      f.stock === "库存较少"
+                        ? "low"
+                        : f.stock === "需确认"
+                          ? "check"
+                          : ""
+                    }
+                  >
+                    {fabricTerm(f.stock, loc)}
+                  </strong>
+                  <em
+                    className={
+                      f.mill === "STYLBIELLA"
+                        ? "fabric-card-meter-price"
+                        : "fabric-price"
+                    }
+                  >
+                    {f.code === "WC-MATCH-01"
+                      ? t("home.sameAsJacket")
+                      : f.mill === "STYLBIELLA"
+                        ? `¥${getFabricPrice(f.code)}/${t("home.perMeter")}`
+                        : `${t("home.fabricPrice")} ¥${getFabricPrice(f.code)}`}
+                  </em>
+                </span>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="fabric-empty">
+            <span>◈</span>
+            <div>
+              <b>{t("home.chooseBrand")}</b>
+              <p>{t("home.chooseBrandSub")}</p>
+            </div>
+          </div>
+        )}
+        {chosen && mill ? (
+          <div className="fabric-chosen-bar">
+            <span className={`mini-swatch ${chosen.tone}`}>
+              {chosen.imageUrl ? <img src={chosen.imageUrl} alt="" /> : null}
+            </span>
+            <div>
+              <small>{t("home.selectedFabric")}</small>
+              <b>
+                {fabricDisplayName(chosen.name, loc, STYLBIELLA_FABRIC_COLORS[chosen.code]?.color)} · {chosen.code}
+              </b>
+            </div>
+            <button onClick={() => setShowChoose(true)}>{t("home.nextMake")} →</button>
+          </div>
+        ) : null}
+      </div>
+      {showBookDetail ? (
+        <div
+          className="fabric-book-detail-backdrop"
+          role="presentation"
+          onClick={() => setShowBookDetail(undefined)}
+        >
+          <section
+            className="fabric-book-detail-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`STYLBIELLA ${FABRIC_BOOK_DETAILS[showBookDetail].title} ${showBookDetail} 面料本详情`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="fabric-book-detail-close"
+              aria-label={t("common.close")}
+              onClick={() => setShowBookDetail(undefined)}
+            >
+              ×
+            </button>
+            <header>
+              <p>STYLBIELLA · FABRIC MADE IN ITALY</p>
+              <h2>{FABRIC_BOOK_DETAILS[showBookDetail].title} · {showBookDetail}</h2>
+              <span>{loc === "zh" ? FABRIC_BOOK_DETAILS[showBookDetail].summary : FABRIC_BOOK_DETAILS_EN[showBookDetail].summary}</span>
+            </header>
+            <div className="fabric-book-positioning">
+              <div>
+                <h3>{t("home.bookPositioning")}</h3>
+                <p>{t("home.bookBrandIntro")}</p>
+                <p>{loc === "zh" ? FABRIC_BOOK_DETAILS[showBookDetail].positioning : FABRIC_BOOK_DETAILS_EN[showBookDetail].positioning}</p>
+              </div>
+              <dl>
+                <div><dt>{t("home.bookProducts")}</dt><dd>{loc === "zh" ? FABRIC_BOOK_DETAILS[showBookDetail].products : FABRIC_BOOK_DETAILS_EN[showBookDetail].products}</dd></div>
+                <div><dt>{t("home.bookSeason")}</dt><dd>{loc === "zh" ? FABRIC_BOOK_DETAILS[showBookDetail].season : FABRIC_BOOK_DETAILS_EN[showBookDetail].season}</dd></div>
+                <div><dt>{t("home.bookWeight")}</dt><dd>{FABRIC_BOOK_DETAILS[showBookDetail].weight}</dd></div>
+                <div><dt>{t("home.bookView")}</dt><dd>{t("home.bookViewHint")}</dd></div>
+              </dl>
+            </div>
+            <div className="fabric-book-pages">
+              {Array.from({ length: FABRIC_BOOK_DETAILS[showBookDetail].pages }, (_, index) => (
+                <figure key={index + 1}>
+                  <button type="button" onClick={() => setShowFabricZoom(index + 1)} aria-label={`放大第 ${index + 1} 页`}>
+                    <img
+                      src={`/stylbiella/books/${showBookDetail}/page-${String(index + 1).padStart(2, "0")}.jpg`}
+                      alt={`${FABRIC_BOOK_DETAILS[showBookDetail].title} ${showBookDetail} 面料本第 ${index + 1} 页`}
+                      loading={index > 1 ? "lazy" : "eager"}
+                    />
+                  </button>
+                  <figcaption>{t("home.bookPage").replace("{n}", String(index + 1))}</figcaption>
+                </figure>
+              ))}
+            </div>
+            {typeof showFabricZoom === "number" ? (
+              <div className="fabric-book-page-zoom" role="dialog" aria-modal="true" aria-label={`面料本第 ${showFabricZoom} 页放大图`} onClick={() => setShowFabricZoom(false)}>
+                <button type="button" aria-label={t("common.close")} onClick={() => setShowFabricZoom(false)}>×</button>
+                <img src={`/stylbiella/books/${showBookDetail}/page-${String(showFabricZoom).padStart(2, "0")}.jpg`} alt={`面料本第 ${showFabricZoom} 页放大图`} />
+              </div>
+            ) : null}
+          </section>
+        </div>
+      ) : null}
+      {showChoose && chosen && (
+        <div
+          className="fabric-modal-backdrop"
+          onClick={() => setShowChoose(false)}
+          role="presentation"
+        >
+          <div
+            className="fabric-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("home.nextMake")}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="fabric-modal-close"
+              onClick={() => setShowChoose(false)}
+              aria-label={t("common.close")}
+            >
+              ×
+            </button>
+            <div className="selected-fabric-line">
+              <button
+                className="modal-fabric-thumb"
+                type="button"
+                onClick={() => setShowFabricZoom(true)}
+                aria-label={`放大面料 ${chosen.code}`}
+              >
+                <span
+                  className={`mini-swatch ${chosen.tone}`}
+                  style={{
+                    backgroundColor: STYLBIELLA_FABRIC_COLORS[chosen.code]?.hex,
+                  }}
+                >
+                  {chosen.imageUrl ? (
+                    <img
+                      src={chosen.imageUrl}
+                      alt={`${chosen.name} ${chosen.code}`}
+                    />
+                  ) : null}
+                </span>
+                <i>⌕</i>
+              </button>
+              {showFabricZoom && chosen.imageUrl && (
+                <div
+                  className="fabric-preview-zoom"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={`${chosen.name} ${chosen.code}`}
+                  onClick={() => setShowFabricZoom(false)}
+                >
+                  <button
+                    aria-label={t("common.close")}
+                    onClick={() => setShowFabricZoom(false)}
+                  >
+                    ×
+                  </button>
+                  <img
+                    src={chosen.imageUrl}
+                    alt={`${chosen.name} ${chosen.code}`}
+                  />
+                  <p>
+                    {fabricDisplayName(chosen.name, loc, STYLBIELLA_FABRIC_COLORS[chosen.code]?.color)} · {fabricDisplayCode(chosen)}
+                  </p>
+                </div>
+              )}
+              <div>
+                <small>{t("home.selectedFabric")}</small>
+                <b>
+                  {fabricDisplayName(chosen.name, loc, STYLBIELLA_FABRIC_COLORS[chosen.code]?.color)} · {chosen.code}
+                </b>
+                <p>{fabricTerm(chosen.meta, loc)}</p>
+              </div>
+              <em className="fabric-price">
+                {chosen.code === "WC-MATCH-01"
+                  ? t("home.sameAsJacket")
+                  : `${t("home.fabricPrice")} ¥${getFabricPrice(chosen.code)}`}
+              </em>
+            </div>
+            <div className="choose-garment">
+              <small>{t("home.nextMake")}</small>
+              <div>
+                {eligible.map((key) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      onContinue(key, chosen.code);
+                      setShowChoose(false);
+                    }}
+                  >
+                    <i>
+                      {key === "jacket"
+                        ? "♜"
+                        : key === "trousers"
+                          ? "Ⅱ"
+                          : key === "waistcoat"
+                            ? "◇"
+                            : "⌑"}
+                    </i>
+                    <span>
+                      <b>{tailoringTerm(garments[key].name, loc)}</b>
+                      {loc === "zh" ? <em>{garments[key].en}</em> : null}
+                    </span>
+                    <strong>{t("home.choose")}　→</strong>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="fabric-only-choice">
+              <div>
+                <i>✂</i>
+                <span>
+                  <b>{t("home.fabricOnly")}</b>
+                  <em>{t("home.fabricOnlySub")}</em>
+                </span>
+              </div>
+              <label>
+                <span>{t("home.fabricMeters")}</span>
+                <div>
+                  <input
+                    inputMode="decimal"
+                    value={meters}
+                    onChange={(event) =>
+                      setMeters(event.target.value.replace(/[^0-9.]/g, ""))
+                    }
+                  />
+                  <em>{t("pi.meters")}</em>
+                </div>
+              </label>
+              <button
+                disabled={!Number(meters)}
+                onClick={() => {
+                  onFabricOnly(chosen.code, Number(meters));
+                  setShowChoose(false);
+                }}
+              >
+                {meters && Number(meters) > 0
+                  ? `${t("home.joinPi")} (${t("pi.fabric")}) →`
+                  : `${t("home.joinPi")} →`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
