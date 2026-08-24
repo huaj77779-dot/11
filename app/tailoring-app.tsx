@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { shirtOptionImageUrl } from "./shirt-option-images";
 import { suitOptionImageUrl } from "./suit-option-images";
 import { useLocale } from "./lib/i18n";
+import { useCurrency } from "./lib/currency";
 import { fabricDisplayName, fabricTerm, tailoringTerm } from "./lib/tailoring-terms";
 import { LanguageSwitcher } from "./_components/LanguageSwitcher";
 import { apiFetch, clearAuth } from "./lib/api";
@@ -668,6 +669,7 @@ const fabricsByGarment = {
 
 export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
   const { loc, t } = useLocale();
+  const { money } = useCurrency();
   const { user, ready } = useAuthGuard(false);
   const [loginReq, setLoginReq] = useState(false);
   const WHATSAPP = "8613800000000";
@@ -2019,7 +2021,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                     <em className="fabric-price">
                       {currentFabric.code === "WC-MATCH-01"
                         ? t("home.sameAsJacket")
-                        : `${t("home.fabricPrice")} ¥${getFabricPrice(currentFabric.code)}`}
+                        : `${t("home.fabricPrice")} ${money(getFabricPrice(currentFabric.code))}`}
                     </em>
                   )}
                   {fabricZoom && currentFabric?.imageUrl && (
@@ -2458,6 +2460,7 @@ function PriceBreakdown({
   total: number;
 }) {
   const { loc, t } = useLocale();
+  const { money, updatedAt, source } = useCurrency();
   const extras = optionGroups.flatMap((group, groupIndex) => {
     const item = selected[`${garment}:${group.title}`];
     const itemIndex = group.items.indexOf(item);
@@ -2472,40 +2475,43 @@ function PriceBreakdown({
           <p className="eyebrow">{t("pi.livePrice")}</p>
           <h3>{t("pi.currentPrice")}</h3>
         </div>
-        <strong>¥{total}</strong>
+        <strong>{money(total)}</strong>
       </div>
       <div className="price-lines">
         <span>
           <i>
             {tailoringTerm(garments[garment].name, loc)} · {t("pi.baseCost")}
           </i>
-          <b>¥{basePrices[garment]}</b>
+          <b>{money(basePrices[garment])}</b>
         </span>
         <span>
           <i>
             {t("pi.fabric")} {fabricCode || "—"}
           </i>
-          <b>¥{getFabricPrice(fabricCode)}</b>
+          <b>{money(getFabricPrice(fabricCode))}</b>
         </span>
         {extras.map((extra) => (
           <span key={`${extra.group}:${extra.item}`} className="extra">
             <i>
               {tailoringTerm(extra.group, loc)} · {tailoringTerm(extra.item, loc, extra.group)}
             </i>
-            <b>+¥{extra.price}</b>
+            <b>+{money(extra.price)}</b>
           </span>
         ))}
         <span>
           <i>{t("pi.extraTotal")}</i>
-          <b>¥{optionExtra}</b>
+          <b>{money(optionExtra)}</b>
         </span>
         <span className="shipping-line">
           <i>
             {t("pi.shipping")} · {orderWeight.toFixed(1)} kg
           </i>
-          <b>¥{shippingFee}</b>
+          <b>{money(shippingFee)}</b>
         </span>
       </div>
+      <small className="fx-rate-note">
+        {updatedAt ? `${t("currency.latestRate")} · ${new Date(updatedAt).toLocaleDateString(loc)} · ${source}` : t("currency.loadingRate")}
+      </small>
       <p className="price-note">{t("pi.priceNote")}</p>
     </section>
   );
@@ -2696,6 +2702,7 @@ function PiPreview({
   rateLabel: string;
 }) {
   const { loc, t } = useLocale();
+  const { currency, money } = useCurrency();
   const currentItems = items.map(normalizePiItem);
   const productTotal = currentItems.reduce(
     (sum, item) => sum + item.productPrice,
@@ -2733,11 +2740,11 @@ function PiPreview({
           <td>${spreadsheetEscape(garmentLabel)}</td>
           <td>${spreadsheetEscape(fabricLabel)}</td>
           <td class="details">${styles || "—"}</td>
-          <td class="money">${item.basePrice}</td>
-          <td class="money">${item.fabricPrice}</td>
-          <td class="money">${item.optionExtra}</td>
-          <td class="money">${item.shippingFee}</td>
-          <td class="money total-cell">${item.productPrice + item.shippingFee}</td>
+          <td class="money">${spreadsheetEscape(money(item.basePrice))}</td>
+          <td class="money">${spreadsheetEscape(money(item.fabricPrice))}</td>
+          <td class="money">${spreadsheetEscape(money(item.optionExtra))}</td>
+          <td class="money">${spreadsheetEscape(money(item.shippingFee))}</td>
+          <td class="money total-cell">${spreadsheetEscape(money(item.productPrice + item.shippingFee))}</td>
         </tr>`;
       })
       .join("");
@@ -2747,7 +2754,7 @@ function PiPreview({
       .title{font-family:Georgia,serif;font-size:26px;color:#563b2a}.meta td{border:1px solid #cbbba8;padding:8px}
       .items th{background:#5b4030;color:#fff;border:1px solid #5b4030;padding:9px;text-align:left}
       .items td{border:1px solid #cbbba8;padding:8px;vertical-align:top}.details{min-width:320px;line-height:1.6}
-      .money{mso-number-format:'¥'#,##0;text-align:right}.total-cell{font-weight:bold}.grand td{background:#efe7dc;font-weight:bold;font-size:16px}
+      .money{text-align:right}.total-cell{font-weight:bold}.grand td{background:#efe7dc;font-weight:bold;font-size:16px}
       .note{color:#756657;font-size:11px;padding-top:12px}
     </style></head><body>
       <table class="meta">
@@ -2757,9 +2764,9 @@ function PiPreview({
       </table><br>
       <table class="items">
         <thead><tr><th>#</th><th>${spreadsheetEscape(t("pi.product"))}</th><th>${spreadsheetEscape(t("pi.fabric"))}</th><th>${spreadsheetEscape(t("pi.styles"))}</th><th>${spreadsheetEscape(t("pi.make"))}</th><th>${spreadsheetEscape(t("pi.fabricPrice"))}</th><th>${spreadsheetEscape(t("pi.extra"))}</th><th>${spreadsheetEscape(t("pi.shipping"))}</th><th>${spreadsheetEscape(t("pi.price"))}</th></tr></thead>
-        <tbody>${rows}<tr class="grand"><td colspan="8">${spreadsheetEscape(t("pi.total"))}</td><td class="money">${total}</td></tr></tbody>
+        <tbody>${rows}<tr class="grand"><td colspan="8">${spreadsheetEscape(t("pi.total"))}</td><td class="money">${spreadsheetEscape(money(total))}</td></tr></tbody>
       </table>
-      <div class="note">Currency: CNY · Generated by TailorSupply OS</div>
+      <div class="note">Currency: ${currency} · Generated by TailorSupply OS</div>
     </body></html>`;
     const blob = new Blob(["\ufeff", html], {
       type: "application/vnd.ms-excel;charset=utf-8",
@@ -3133,7 +3140,7 @@ function PiPreview({
           </span>
           <span>
             {rateLabel}
-            {t("home.shipEst")} <b>¥{shippingFee}</b>
+            {t("home.shipEst")} <b>{money(shippingFee)}</b>
           </span>
           <small>{t("home.shipNote")}</small>
         </div>
@@ -3178,11 +3185,11 @@ function PiPreview({
               <span>
                 {t("pi.shipping")}（{currentItems.length}）
               </span>
-              <b>¥{shippingTotal}</b>
+              <b>{money(shippingTotal)}</b>
             </div>
             <div className="pi-total">
               <span>{t("pi.total")}</span>
-              <b>¥{total}</b>
+              <b>{money(total)}</b>
             </div>
             <div className="pi-actions">
               <div className="pi-actions-btns">
@@ -3277,6 +3284,7 @@ function PiRow({
   index: number;
 }) {
   const { loc, t } = useLocale();
+  const { money } = useCurrency();
   const [zoom, setZoom] = useState(false);
   const loading = result?.loading ?? false;
   const image = result?.image ?? null;
@@ -3307,8 +3315,7 @@ function PiRow({
           </span>
           <span className="pi-styles">
             <small>
-              {t("home.fabricMeters")}：{item.meters} {t("pi.meters")} × ¥
-              {item.fabricPrice}/{t("pi.meters")}
+              {t("home.fabricMeters")}：{item.meters} {t("pi.meters")} × {money(item.fabricPrice)}/{t("pi.meters")}
             </small>
           </span>
         </>
@@ -3386,23 +3393,23 @@ function PiRow({
       <strong className="pi-price">
         {item.kind === "fabric" ? (
           <>
-            <b>¥{item.productPrice}</b>
+            <b>{money(item.productPrice)}</b>
             <small>
-              {t("pi.fabricPrice")} ¥{item.basePrice}
+              {t("pi.fabricPrice")} {money(item.basePrice)}
               <br />
               {item.meters}
-              {t("pi.meters")} × ¥{item.fabricPrice}/{t("pi.meters")}
+              {t("pi.meters")} × {money(item.fabricPrice)}/{t("pi.meters")}
             </small>
           </>
         ) : (
           <>
-            <b>¥{item.productPrice}</b>
+            <b>{money(item.productPrice)}</b>
             <small>
-              {t("pi.fabricPrice")} ¥{item.fabricPrice}
+              {t("pi.fabricPrice")} {money(item.fabricPrice)}
               <br />
-              {t("pi.make")} ¥{item.basePrice}
+              {t("pi.make")} {money(item.basePrice)}
               <br />
-              {t("pi.extra")} ¥{item.optionExtra}
+              {t("pi.extra")} {money(item.optionExtra)}
             </small>
           </>
         )}
@@ -3502,6 +3509,7 @@ function FabricFirst({
   onFabricOnly: (code: string, meters: number) => void;
 }) {
   const { loc, t } = useLocale();
+  const { money } = useCurrency();
   const [kind, setKind] = useState<"suiting" | "shirt">("suiting");
   const [code, setCode] = useState<string>();
   const [meters, setMeters] = useState("2.5");
@@ -3804,7 +3812,7 @@ function FabricFirst({
                   <em>{fabricDisplayCode(f)}</em>
                   <p>{fabricTerm(f.meta, loc)}</p>
                   <em className="fabric-card-meter-price">
-                    ¥{getFabricPrice(f.code)}/{t("home.perMeter")}
+                    {money(getFabricPrice(f.code))}/{t("home.perMeter")}
                   </em>
                 </span>
               </button>
@@ -3855,8 +3863,8 @@ function FabricFirst({
                     {f.code === "WC-MATCH-01"
                       ? t("home.sameAsJacket")
                       : f.mill === "STYLBIELLA"
-                        ? `¥${getFabricPrice(f.code)}/${t("home.perMeter")}`
-                        : `${t("home.fabricPrice")} ¥${getFabricPrice(f.code)}`}
+                        ? `${money(getFabricPrice(f.code))}/${t("home.perMeter")}`
+                        : `${t("home.fabricPrice")} ${money(getFabricPrice(f.code))}`}
                   </em>
                 </span>
               </button>
@@ -4023,7 +4031,7 @@ function FabricFirst({
               <em className="fabric-price">
                 {chosen.code === "WC-MATCH-01"
                   ? t("home.sameAsJacket")
-                  : `${t("home.fabricPrice")} ¥${getFabricPrice(chosen.code)}`}
+                  : `${t("home.fabricPrice")} ${money(getFabricPrice(chosen.code))}`}
               </em>
             </div>
             <div className="choose-garment">

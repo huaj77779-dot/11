@@ -127,6 +127,8 @@ const rows: Record<string, Record<EuropeanLocale, string>> = {
   "pi.shipping": { fr: "Livraison", it: "Spedizione", es: "Envío", pt: "Envio", nl: "Verzending", pl: "Wysyłka", sv: "Frakt", da: "Forsendelse", no: "Frakt", cs: "Doprava" },
   "pi.total": { fr: "Total PI", it: "Totale PI", es: "Total PI", pt: "Total PI", nl: "PI-totaal", pl: "Suma PI", sv: "PI totalt", da: "PI i alt", no: "PI totalt", cs: "PI celkem" },
   "pi.exportTable": { fr: "Exporter le tableau PI", it: "Esporta tabella PI", es: "Exportar tabla PI", pt: "Exportar tabela PI", nl: "PI-tabel exporteren", pl: "Eksportuj tabelę PI", sv: "Exportera PI-tabell", da: "Eksportér PI-tabel", no: "Eksporter PI-tabell", cs: "Exportovat tabulku PI" },
+  "currency.latestRate": { fr: "Dernier taux de référence", it: "Ultimo tasso di riferimento", es: "Último tipo de referencia", pt: "Taxa de referência mais recente", nl: "Actuele referentiekoers", pl: "Najnowszy kurs referencyjny", sv: "Senaste referenskurs", da: "Seneste referencekurs", no: "Siste referansekurs", cs: "Nejnovější referenční kurz" },
+  "currency.loadingRate": { fr: "Mise à jour du taux", it: "Aggiornamento del cambio", es: "Actualizando el tipo de cambio", pt: "A atualizar a taxa de câmbio", nl: "Wisselkoers bijwerken", pl: "Aktualizowanie kursu", sv: "Uppdaterar växelkurs", da: "Opdaterer valutakurs", no: "Oppdaterer valutakurs", cs: "Aktualizace směnného kurzu" },
 };
 
 export function europeanTranslation(locale: Locale, key: string): string | undefined {

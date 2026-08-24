@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useLocale } from "../lib/i18n";
+import { useCurrency } from "../lib/currency";
 import { LanguageSwitcher } from "../_components/LanguageSwitcher";
 import { apiFetch, clearAuth } from "../lib/api";
 import { useAuthGuard } from "../lib/useAuthGuard";
@@ -82,6 +83,7 @@ function countryName(code: string): string {
 
 export default function CustomersPage() {
   const { loc, t } = useLocale();
+  const { money } = useCurrency();
   const { user, ready } = useAuthGuard();
   const [rows, setRows] = useState<CustomerRow[]>([]);
   const [q, setQ] = useState("");
@@ -189,7 +191,7 @@ export default function CustomersPage() {
                 {t("cust.orders")}<b>{totalOrders}</b>
               </span>
               <span>
-                {t("cust.spent")}<b>¥{totalSpent.toLocaleString("zh-CN", { maximumFractionDigits: 0 })}</b>
+                {t("cust.spent")}<b>{money(totalSpent)}</b>
               </span>
             </div>
           </div>
@@ -248,7 +250,7 @@ export default function CustomersPage() {
                       <b>{row.totalOrders}</b>
                       <small className="muted"> 单</small>
                     </td>
-                    <td className="money">¥{Number(row.totalSpent ?? 0).toLocaleString("zh-CN", { maximumFractionDigits: 0 })}</td>
+                    <td className="money">{money(Number(row.totalSpent ?? 0))}</td>
                     <td className="muted">{formatDateTime(row.lastOrderAt ?? row.updatedAt)}</td>
                     <td onClick={(e) => e.stopPropagation()}>
                       <button
@@ -355,6 +357,7 @@ function CustomerDrawer({
   deletingCustomer: boolean;
 }) {
   const { t } = useLocale();
+  const { money } = useCurrency();
   const { customer, orders } = detail;
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<Record<string, string>>({
@@ -500,7 +503,7 @@ function CustomerDrawer({
                 </span>
                 <span>
                   <i>{t("cust.spent")}</i>
-                  <b>¥{Number(customer.totalSpent ?? 0).toLocaleString("zh-CN", { maximumFractionDigits: 0 })}</b>
+                  <b>{money(Number(customer.totalSpent ?? 0))}</b>
                 </span>
                 <span className="full">
                   <i>{t("pi.address")}</i>
@@ -563,7 +566,7 @@ function CustomerDrawer({
               <div className="mgmt-order-meta">
                 {order.garmentName} · {order.fabricName || order.fabricCode || "面料未记录"}
                 <br />
-                <em>¥{Number(order.totalPrice).toFixed(0)}</em> · {formatDateTime(order.createdAt)}
+                <em>{money(Number(order.totalPrice))}</em> · {formatDateTime(order.createdAt)}
                 <span style={{ float: "right", color: "#2c6a58", cursor: "pointer" }}>
                   {expandedOrder === order.id ? "收起 ▲" : "明细 ▼"}
                 </span>

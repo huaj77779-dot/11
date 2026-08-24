@@ -1,6 +1,7 @@
 "use client";
 
 import { getLocale, useLocale, type Locale } from "../lib/i18n";
+import { useCurrency } from "../lib/currency";
 
 export type OrderDetailRow = {
   id: number;
@@ -71,6 +72,7 @@ export function formatDateTime(value?: string): string {
 
 export function OrderDetailBlock({ order }: { order: OrderDetailRow }) {
   const { t } = useLocale();
+  const { money } = useCurrency();
   const snapshot = order.customerSnapshot ?? {};
   const address = order.shippingAddress ?? {};
   const options = order.options ?? [];
@@ -155,16 +157,16 @@ export function OrderDetailBlock({ order }: { order: OrderDetailRow }) {
         <span>
           <i>{t("order.itemAmount")}</i>
           <b>
-            ¥{((order.basePrice ?? 0) + (order.fabricPrice ?? 0) + (order.optionExtra ?? 0)).toFixed(0)}
+            {money((order.basePrice ?? 0) + (order.fabricPrice ?? 0) + (order.optionExtra ?? 0))}
           </b>
         </span>
         <span>
           <i>{t("pi.shipping")}</i>
-          <b>¥{(order.shippingFee ?? 0).toFixed(0)}</b>
+          <b>{money(order.shippingFee ?? 0)}</b>
         </span>
         <span className="total">
           <i>{t("order.madeTotal")}</i>
-          <b>¥{Number(order.totalPrice).toFixed(0)}</b>
+          <b>{money(Number(order.totalPrice))}</b>
         </span>
       </div>
     </div>

@@ -443,6 +443,8 @@ export const T: Dict = {
   "landing.news4Title": { zh: "下一期海外展会与拜访计划公布", en: "Next overseas exhibitions & visit plan", de: "", ja: "" },
   "landing.news4Excerpt": { zh: "计划参加下一季度欧洲男装展,并开放合作门店到厂参观预约。", en: "Attending next season's European menswear fair; factory visit slots available.", de: "", ja: "" },
   "pi.exportTable": { zh: "导出 PI 表格", en: "Export PI Spreadsheet", de: "PI-Tabelle exportieren", ja: "PI表をエクスポート" },
+  "currency.latestRate": { zh: "最新参考汇率", en: "Latest reference rate", de: "Aktueller Referenzkurs", ja: "最新参考為替レート" },
+  "currency.loadingRate": { zh: "正在更新汇率", en: "Updating exchange rate", de: "Wechselkurs wird aktualisiert", ja: "為替レートを更新中" },
 };
 
 export function translate(key: string, locale?: Locale): string {

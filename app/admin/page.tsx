@@ -126,7 +126,7 @@ function FabricsPanel() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th>编码</th><th>名称</th><th>产地</th><th>色系</th><th>价格 ¥</th>
+              <th>编码</th><th>名称</th><th>产地</th><th>色系</th><th>基础价格 CNY</th>
               <th>产品</th><th>状态</th><th>图片</th><th>操作</th>
             </tr>
           </thead>
@@ -191,7 +191,7 @@ function StylesPanel() {
     if (!groupTitle) return;
     const item = prompt("选项名称（如：标准领）");
     if (!item) return;
-    const surcharge = Number(prompt("加价（¥，无则 0）") ?? 0) || 0;
+    const surcharge = Number(prompt("加价（CNY，无则 0）") ?? 0) || 0;
     await apiFetch("/api/admin/styles", { method: "POST", body: JSON.stringify([{ garmentType, groupTitle, item, surcharge }]) });
     load(garmentType);
     setMsg(`已添加 ${groupTitle}：${item}`);
@@ -216,7 +216,7 @@ function StylesPanel() {
                   <input type="checkbox" checked={s.active} onChange={(e) => patch(s, { active: e.target.checked })} />
                 </label>
                 <input className="admin-item-name" defaultValue={s.item} onBlur={(e) => e.target.value !== s.item && patch(s, { item: e.target.value })} />
-                <input type="number" className="admin-price" defaultValue={s.surcharge} onBlur={(e) => Number(e.target.value) !== s.surcharge && patch(s, { surcharge: Number(e.target.value) })} title="加价 ¥" />
+                <input type="number" className="admin-price" defaultValue={s.surcharge} onBlur={(e) => Number(e.target.value) !== s.surcharge && patch(s, { surcharge: Number(e.target.value) })} title="加价 CNY" />
                 <input className="admin-img" defaultValue={s.imageUrl ?? ""} placeholder="款式图片 URL（或 dataURL）" onBlur={(e) => e.target.value !== (s.imageUrl ?? "") && patch(s, { imageUrl: e.target.value || null })} />
                 {s.imageUrl && <img className="admin-opt-img" src={s.imageUrl} alt={s.item} />}
                 <button className="admin-del" onClick={() => remove(s)}>删除</button>
@@ -295,7 +295,7 @@ function AccountsPanel() {
                 <td>{u.storeName}</td>
                 <td>{u.customerCount}</td>
                 <td>{u.orderCount}</td>
-                <td>¥{Number(u.totalSpent ?? 0).toLocaleString("zh-CN", { maximumFractionDigits: 0 })}</td>
+                <td>CNY {Number(u.totalSpent ?? 0).toLocaleString("zh-CN", { maximumFractionDigits: 0 })}</td>
                 <td>
                   {u.role === "store" && (
                     <>

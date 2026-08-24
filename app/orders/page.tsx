@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocale } from "../lib/i18n";
+import { useCurrency } from "../lib/currency";
 import { LanguageSwitcher } from "../_components/LanguageSwitcher";
 import { apiFetch, clearAuth } from "../lib/api";
 import { useAuthGuard } from "../lib/useAuthGuard";
@@ -17,6 +18,7 @@ import { PaymentModal } from "../_components/PaymentModal";
 
 export default function OrdersPage() {
   const { t } = useLocale();
+  const { money } = useCurrency();
   const { user, ready } = useAuthGuard();
   const [orders, setOrders] = useState<OrderDetailRow[]>([]);
   const [q, setQ] = useState("");
@@ -114,13 +116,13 @@ export default function OrdersPage() {
                 {t("order.count")}<b>{orders.length}</b>
               </span>
               <span>
-                {t("order.amount")}<b>¥{totalAmount.toLocaleString("zh-CN", { maximumFractionDigits: 0 })}</b>
+                {t("order.amount")}<b>{money(totalAmount)}</b>
               </span>
               <span>
                 {t("order.pending")}<b>{pendingCount}</b>
               </span>
               <span>
-                {t("order.unpaid")}<b>¥{unpaidAmount.toLocaleString("zh-CN", { maximumFractionDigits: 0 })}</b>
+                {t("order.unpaid")}<b>{money(unpaidAmount)}</b>
               </span>
             </div>
           </div>
@@ -210,6 +212,7 @@ function OrderRow({
   onCollect: (id: number) => void;
 }) {
   const { t } = useLocale();
+  const { money } = useCurrency();
   const isPaid = order.paymentStatus === "paid";
   return (
     <>
@@ -225,7 +228,7 @@ function OrderRow({
         </td>
         <td>{order.garmentName || "—"}</td>
         <td className="muted">{order.fabricName || order.fabricCode || "—"}</td>
-        <td className="money">¥{Number(order.totalPrice ?? 0).toLocaleString("zh-CN", { maximumFractionDigits: 0 })}</td>
+        <td className="money">{money(Number(order.totalPrice ?? 0))}</td>
         <td>
           <span className={`status-pill status-${order.status}`}>{statusPill(order.status)}</span>
         </td>

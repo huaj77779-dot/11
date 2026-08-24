@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale } from "../lib/i18n";
+import { useCurrency } from "../lib/currency";
 import { apiFetch } from "../lib/api";
 import type { OrderDetailRow } from "./OrderDetail";
 
@@ -25,6 +26,7 @@ export function PaymentModal({
   onPaid: () => void;
 }) {
   const { t } = useLocale();
+  const { money } = useCurrency();
   const [status, setStatus] = useState<PaymentStatusResp | null>(null);
   const [error, setError] = useState("");
   const [paid, setPaid] = useState(false);
@@ -93,7 +95,7 @@ export function PaymentModal({
               {t("order.orderNo")} <b>{order.orderNo}</b>
             </span>
             <span>
-              {t("pay.amount")} <b>¥{amount.toLocaleString("zh-CN", { maximumFractionDigits: 0 })}</b>
+              {t("pay.amount")} <b>{money(amount)}</b>
             </span>
           </div>
 
