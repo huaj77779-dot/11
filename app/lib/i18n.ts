@@ -445,6 +445,7 @@ export const T: Dict = {
   "pi.exportTable": { zh: "导出 PI 表格", en: "Export PI Spreadsheet", de: "PI-Tabelle exportieren", ja: "PI表をエクスポート" },
   "currency.latestRate": { zh: "最新参考汇率", en: "Latest reference rate", de: "Aktueller Referenzkurs", ja: "最新参考為替レート" },
   "currency.loadingRate": { zh: "正在更新汇率", en: "Updating exchange rate", de: "Wechselkurs wird aktualisiert", ja: "為替レートを更新中" },
+  "home.styleNotePlaceholder": { zh: "请填写本件产品的特殊要求、制作说明或其他备注（选填）", en: "Add special requests, making instructions or other notes for this item (optional)", de: "Sonderwünsche, Fertigungshinweise oder weitere Notizen zu diesem Artikel (optional)", ja: "この商品の特別なご要望、縫製指示、その他の備考をご記入ください（任意）" },
 };
 
 export function translate(key: string, locale?: Locale): string {

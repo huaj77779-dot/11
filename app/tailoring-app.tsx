@@ -357,6 +357,7 @@ function validPiOptions(item: Pick<PiItem, "garmentType" | "options">) {
   }>;
   return item.options.filter((option) => {
     if (option.group === "刺绣文字") return item.garmentType === "shirt";
+    if (option.group === "备注") return true;
     const group = groups.find((candidate) => candidate.title === option.group);
     return Boolean(group?.items.includes(option.item));
   });
@@ -701,6 +702,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
   const [styleZoom, setStyleZoom] = useState<{ src: string; label: string } | null>(null);
   const [embroideryFont, setEmbroideryFont] = useState("");
   const [embroideryImageUrl, setEmbroideryImageUrl] = useState<string>();
+  const [styleNotes, setStyleNotes] = useState<Partial<Record<GarmentKey, string>>>({});
   const [garment, setGarment] = useState<GarmentKey>("jacket");
   const [step, setStep] = useState<"measure" | "style">("style");
   const [fabricFirst, setFabricFirst] = useState(true);
@@ -1012,6 +1014,10 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
     });
     if (garment === "shirt" && embroideryFont.trim()) {
       options.push({ group: "刺绣文字", item: embroideryFont.trim(), price: 0 });
+    }
+    const styleNote = styleNotes[garment]?.trim();
+    if (styleNote) {
+      options.push({ group: "备注", item: styleNote, price: 0 });
     }
     const measurementRows = active.fields.map((field, index) => {
       const [net, finished] = measurements[`${garment}:${field}`] ?? [
@@ -1447,6 +1453,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                         setStreet("");
                         setPostalCode("");
                         setAvatarUrl(undefined);
+                        setStyleNotes({});
                       }}
                     >
                       <i>＋</i>
@@ -2290,6 +2297,22 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                             </div>
                           );
                         })}
+                    <label className="style-note-field">
+                      <span>{t("cust.notes")}</span>
+                      <textarea
+                        value={styleNotes[garment] ?? ""}
+                        onChange={(event) =>
+                          setStyleNotes((prev) => ({
+                            ...prev,
+                            [garment]: event.target.value,
+                          }))
+                        }
+                        maxLength={1000}
+                        rows={4}
+                        placeholder={t("home.styleNotePlaceholder")}
+                      />
+                      <small>{(styleNotes[garment] ?? "").length}/1000</small>
+                    </label>
                     <div className="styles-price">
                       <PriceBreakdown
                         garment={garment}
@@ -2380,7 +2403,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                     ),
                   );
                   validPiOptions(item).forEach((option) => {
-                    if (option.group !== "刺绣文字") {
+                    if (option.group !== "刺绣文字" && option.group !== "备注") {
                       next[`${item.garmentType}:${option.group}`] = option.item;
                     }
                   });
@@ -2389,6 +2412,11 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                 setEmbroideryFont(
                   validPiOptions(item).find((option) => option.group === "刺绣文字")?.item ?? "",
                 );
+                setStyleNotes((prev) => ({
+                  ...prev,
+                  [item.garmentType!]:
+                    validPiOptions(item).find((option) => option.group === "备注")?.item ?? "",
+                }));
                 setFabricFirst(false);
                 setStep("style");
                 requestAnimationFrame(() => {
@@ -2732,7 +2760,7 @@ function PiPreview({
         const styles = validPiOptions(item)
           .map(
             (option) =>
-              `${tailoringTerm(option.group, loc)}: ${tailoringTerm(option.item, loc, option.group)}`,
+              `${option.group === "备注" ? t("cust.notes") : tailoringTerm(option.group, loc)}: ${option.group === "备注" ? option.item : tailoringTerm(option.item, loc, option.group)}`,
           )
           .join("<br>");
         return `<tr>
@@ -3359,7 +3387,7 @@ function PiRow({
           <span className="pi-styles">
             {currentOptions.map((style) => (
               <small key={`${style.group}:${style.item}`}>
-                {tailoringTerm(style.group, loc)}：{tailoringTerm(style.item, loc, style.group)}
+                {style.group === "备注" ? t("cust.notes") : tailoringTerm(style.group, loc)}：{style.group === "备注" ? style.item : tailoringTerm(style.item, loc, style.group)}
               </small>
             ))}
             <button

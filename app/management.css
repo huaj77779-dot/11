@@ -302,6 +302,11 @@
 .pi-actions-btns{display:flex;gap:10px;flex-wrap:wrap}
 .pi-export-btn{background:#76533d;border-color:#76533d;color:#fff}
 .fx-rate-note{display:block;margin-top:8px;color:#7d6c5d;font-size:11px;text-align:right}
+.style-note-field{display:block;margin:14px 0 16px;padding:18px 20px;border:1px solid #dfd0bd;border-radius:14px;background:#fbf7f1;position:relative}
+.style-note-field>span{display:block;margin-bottom:9px;font-size:13px;font-weight:700;color:#51392a}
+.style-note-field textarea{display:block;width:100%;min-height:92px;resize:vertical;border:1px solid #d7c4ad;border-radius:10px;background:#fffdf9;color:#2f251e;padding:12px 14px;font:inherit;line-height:1.65;outline:none;box-sizing:border-box}
+.style-note-field textarea:focus{border-color:#9a7353;box-shadow:0 0 0 3px rgba(154,115,83,.10)}
+.style-note-field>small{display:block;margin-top:6px;text-align:right;color:#9a8878;font-size:10px}
 .pi-gen-btn{border:1px solid #bcd9cd;background:#fff;color:#1f6b52;border-radius:8px;padding:9px 18px;font-size:12px;font-weight:600;transition:all .14s;box-shadow:0 2px 8px rgba(16,45,39,.08)}
 .pi-gen-btn:hover{background:#eef7f3;border-color:#7fa597}
 .pi-gen-btn:disabled{opacity:.6;cursor:default}
