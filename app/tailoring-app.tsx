@@ -182,7 +182,6 @@ const optionsByGarment = {
       items: ["全里布", "二分之一里布", "三分之一里布", "四分之一里布"],
     },
     { title: "驳头款式", items: ["平驳领", "青果领", "戗驳领"] },
-    { title: "驳头眼位置", items: ["左侧", "双侧", "无", "右侧"] },
     { title: "袖叉款式", items: ["假扣眼", "无扣眼", "真扣眼"] },
   ],
   trousers: [
@@ -344,6 +343,35 @@ type PiItem = {
   options: Array<{ group: string; item: string; price: number }>;
   measurements: Array<{ field: string; net: string; finished: string }>;
 };
+
+/**
+ * Keep PI data in sync with the option catalogue. This also cleans stale PI
+ * rows created before an option group or an individual choice was removed.
+ */
+function validPiOptions(item: Pick<PiItem, "garmentType" | "options">) {
+  if (!item.garmentType) return [];
+  const groups = optionsByGarment[item.garmentType] as Array<{
+    title: string;
+    items: string[];
+  }>;
+  return item.options.filter((option) => {
+    if (option.group === "刺绣文字") return item.garmentType === "shirt";
+    const group = groups.find((candidate) => candidate.title === option.group);
+    return Boolean(group?.items.includes(option.item));
+  });
+}
+
+function normalizePiItem(item: PiItem): PiItem {
+  if (item.kind === "fabric") return { ...item, options: [], optionExtra: 0 };
+  const options = validPiOptions(item);
+  const optionExtra = options.reduce((sum, option) => sum + option.price, 0);
+  return {
+    ...item,
+    options,
+    optionExtra,
+    productPrice: item.basePrice + item.fabricPrice + optionExtra,
+  };
+}
 const basePrices: Record<GarmentKey, number> = {
   jacket: 1880,
   trousers: 780,
@@ -713,15 +741,24 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                 ["文字位置"],
               ]
             : null;
+  const visibleGroupTitles = new Set<string>(
+    groupRows?.flat() ?? optionGroups.map((group) => group.title),
+  );
+  const visibleOptionGroups = optionGroups.filter((group) =>
+    visibleGroupTitles.has(group.title),
+  );
   const currentFabric = [
     ...fabricsByGarment.jacket,
     ...fabricsByGarment.trousers,
     ...fabricsByGarment.waistcoat,
     ...fabricsByGarment.shirt,
   ].find((f) => f.code === fabricByGarment[garment]);
-  const optionExtra = optionGroups.reduce((sum, group, groupIndex) => {
+  const optionExtra = visibleOptionGroups.reduce((sum, group) => {
     const item = selected[`${garment}:${group.title}`];
     const itemIndex = group.items.indexOf(item);
+    const groupIndex = optionGroups.findIndex(
+      (candidate) => candidate.title === group.title,
+    );
     return (
       sum +
       (itemIndex >= 0 ? optionSurcharge(garment, groupIndex, itemIndex) : 0)
@@ -947,9 +984,12 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
     return Number.isFinite(n) ? (n / 2.20462).toFixed(2) : "";
   };
   const buildItem = (): PiItem => {
-    const options = optionGroups.flatMap((group, groupIndex) => {
+    const options = visibleOptionGroups.flatMap((group) => {
       const item = selected[`${garment}:${group.title}`];
       const itemIndex = group.items.indexOf(item);
+      const groupIndex = optionGroups.findIndex(
+        (candidate) => candidate.title === group.title,
+      );
       return item
         ? [
             {
@@ -1085,7 +1125,9 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
       alert(t("home.pleaseFabric"));
       return;
     }
-    const submitItems = piItems.length ? piItems : [buildItem()];
+    const submitItems = (piItems.length ? piItems : [buildItem()]).map(
+      normalizePiItem,
+    );
     const items = submitItems.map((item) =>
       item.kind === "fabric"
         ? {
@@ -1101,7 +1143,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
             totalPrice: item.productPrice + item.shippingFee,
             currency: "CNY",
             weightKg: item.weightKg,
-            options: item.options,
+            options: [],
             measurements: [],
             shippingAddress: {
               country: selectedCountryName,
@@ -1124,7 +1166,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
             totalPrice: item.productPrice + item.shippingFee,
             currency: "CNY",
             weightKg: item.weightKg,
-            options: item.options,
+            options: validPiOptions(item),
             measurements: item.measurements,
             shippingAddress: {
               country: selectedCountryName,
@@ -2242,7 +2284,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                       <PriceBreakdown
                         garment={garment}
                         fabricCode={fabricByGarment[garment]}
-                        optionGroups={optionGroups}
+                        optionGroups={visibleOptionGroups}
                         selected={selected}
                         optionExtra={optionExtra}
                         shippingFee={shippingFee}
@@ -2327,7 +2369,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                       ([key]) => !key.startsWith(`${item.garmentType}:`),
                     ),
                   );
-                  item.options.forEach((option) => {
+                  validPiOptions(item).forEach((option) => {
                     if (option.group !== "刺绣文字") {
                       next[`${item.garmentType}:${option.group}`] = option.item;
                     }
@@ -2335,7 +2377,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                   return next;
                 });
                 setEmbroideryFont(
-                  item.options.find((option) => option.group === "刺绣文字")?.item ?? "",
+                  validPiOptions(item).find((option) => option.group === "刺绣文字")?.item ?? "",
                 );
                 setFabricFirst(false);
                 setStep("style");
@@ -2646,8 +2688,15 @@ function PiPreview({
   rateLabel: string;
 }) {
   const { t } = useLocale();
-  const productTotal = items.reduce((sum, item) => sum + item.productPrice, 0);
-  const shippingTotal = items.reduce((sum, item) => sum + item.shippingFee, 0);
+  const currentItems = items.map(normalizePiItem);
+  const productTotal = currentItems.reduce(
+    (sum, item) => sum + item.productPrice,
+    0,
+  );
+  const shippingTotal = currentItems.reduce(
+    (sum, item) => sum + item.shippingFee,
+    0,
+  );
   const total = productTotal + shippingTotal;
   const [results, setResults] = useState<
     Record<string, { loading: boolean; image: string | null; error: string }>
@@ -2685,8 +2734,9 @@ function PiPreview({
         : hasAvatar
           ? `A male model wearing a tailored ${garmentEn} made of ${fabricDesc}`
           : `A single ${garmentEn} made of ${fabricDesc}, displayed flat lay on a clean pure white background, product photography, no model, no person`;
-    const styleTxt = item.options.length
-      ? `, garment custom options, must match exactly: ${item.options.map((o) => `${o.group}: ${o.item}`).join("; ")}`
+    const currentOptions = validPiOptions(item);
+    const styleTxt = currentOptions.length
+      ? `, garment custom options, must match exactly: ${currentOptions.map((o) => `${o.group}: ${o.item}`).join("; ")}`
       : "";
     const sizeTxt = item.measurements.length
       ? `, garment measurements in cm: ${item.measurements.map((m) => `${m.field} net ${m.net || "-"} / finished ${m.finished || "-"}`).join(", ")}`
@@ -2709,11 +2759,12 @@ function PiPreview({
   const optionRefImages = (item: PiItem): string[] => {
     if (item.kind === "fabric") return [];
     const g = item.garmentType ?? "jacket";
+    const currentOptions = validPiOptions(item);
     const list: string[] = [];
     if (g === "jacket") {
       const pick = (groups: string[]) => {
         for (const group of groups) {
-          const opt = item.options.find((o) => o.group === group);
+          const opt = currentOptions.find((o) => o.group === group);
           if (opt) {
             const url = suitOptionImageUrl(opt.group, opt.item);
             if (url) return url;
@@ -2727,7 +2778,7 @@ function PiPreview({
       if (back) list.push(back);
       return list;
     }
-    for (const opt of item.options) {
+    for (const opt of currentOptions) {
       const url =
         g === "shirt"
           ? shirtOptionImageUrl(opt.group, opt.item)
@@ -2798,14 +2849,14 @@ function PiPreview({
       }));
     }
   };
-  const hasGarment = items.some((item) => item.kind === "product");
+  const hasGarment = currentItems.some((item) => item.kind === "product");
   const generateAll = async () => {
     if (!hasGarment) {
       alert(t("pi.garmentOnly"));
       return;
     }
     // 只取尚未生成的成衣行，已生成的行不重复生成
-    const pending = items.filter(
+    const pending = currentItems.filter(
       (item) => item.kind === "product" && !results[item.key]?.image,
     );
     if (pending.length === 0) return;
@@ -2821,7 +2872,7 @@ function PiPreview({
     await Promise.allSettled(pending.map((item) => generateOne(item)));
   };
   const generateSuite = async () => {
-    if (items.length === 0) {
+    if (currentItems.length === 0) {
       alert(t("pi.pending"));
       return;
     }
@@ -2830,12 +2881,12 @@ function PiPreview({
       return;
     }
     // 解析用户选择的序号（默认全部成衣行）
-    let selectedRows = items.map((item, idx) => ({ item, idx }));
+    let selectedRows = currentItems.map((item, idx) => ({ item, idx }));
     if (suiteSelect.trim()) {
       const nums = suiteSelect
         .split(/[,，\s]+/)
         .map((s) => parseInt(s, 10))
-        .filter((n) => Number.isInteger(n) && n >= 1 && n <= items.length);
+        .filter((n) => Number.isInteger(n) && n >= 1 && n <= currentItems.length);
       if (nums.length === 0) {
         alert(t("pi.invalidRows"));
         return;
@@ -3030,7 +3081,7 @@ function PiPreview({
           <span>{t("pi.aiPreview")}</span>
           <span>{t("pi.price")}</span>
         </div>
-        {items.map((item, idx) => (
+        {currentItems.map((item, idx) => (
           <PiRow
             key={item.key}
             item={item}
@@ -3041,13 +3092,13 @@ function PiPreview({
             index={idx}
           />
         ))}
-        {items.length === 0 ? (
+        {currentItems.length === 0 ? (
           <div className="pi-empty">{t("pi.empty")}</div>
         ) : (
           <>
             <div className="pi-shipping">
               <span>
-                {t("pi.shipping")}（{items.length}）
+                {t("pi.shipping")}（{currentItems.length}）
               </span>
               <b>¥{shippingTotal}</b>
             </div>
@@ -3145,6 +3196,7 @@ function PiRow({
   const loading = result?.loading ?? false;
   const image = result?.image ?? null;
   const error = result?.error ?? "";
+  const currentOptions = validPiOptions(item);
   const selectedFabric = [
     ...fabricsByGarment.jacket,
     ...fabricsByGarment.trousers,
@@ -3213,7 +3265,7 @@ function PiRow({
             )}
           </span>
           <span className="pi-styles">
-            {item.options.map((style) => (
+            {currentOptions.map((style) => (
               <small key={`${style.group}:${style.item}`}>
                 {tailoringTerm(style.group, loc)}：{tailoringTerm(style.item, loc, style.group)}
               </small>
