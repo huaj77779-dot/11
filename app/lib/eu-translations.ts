@@ -126,6 +126,7 @@ const rows: Record<string, Record<EuropeanLocale, string>> = {
   "pi.price": { fr: "Prix", it: "Prezzo", es: "Precio", pt: "Preço", nl: "Prijs", pl: "Cena", sv: "Pris", da: "Pris", no: "Pris", cs: "Cena" },
   "pi.shipping": { fr: "Livraison", it: "Spedizione", es: "Envío", pt: "Envio", nl: "Verzending", pl: "Wysyłka", sv: "Frakt", da: "Forsendelse", no: "Frakt", cs: "Doprava" },
   "pi.total": { fr: "Total PI", it: "Totale PI", es: "Total PI", pt: "Total PI", nl: "PI-totaal", pl: "Suma PI", sv: "PI totalt", da: "PI i alt", no: "PI totalt", cs: "PI celkem" },
+  "pi.exportTable": { fr: "Exporter le tableau PI", it: "Esporta tabella PI", es: "Exportar tabla PI", pt: "Exportar tabela PI", nl: "PI-tabel exporteren", pl: "Eksportuj tabelę PI", sv: "Exportera PI-tabell", da: "Eksportér PI-tabel", no: "Eksporter PI-tabell", cs: "Exportovat tabulku PI" },
 };
 
 export function europeanTranslation(locale: Locale, key: string): string | undefined {

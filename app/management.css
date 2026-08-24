@@ -299,7 +299,8 @@
 .pi-remove{top:6px;right:6px}
 /* 结算区生成按钮 */
 .pi-actions{display:flex;gap:12px;justify-content:space-between;align-items:flex-end;padding:12px 2px 4px;flex-wrap:wrap}
-.pi-actions-btns{display:flex;gap:10px}
+.pi-actions-btns{display:flex;gap:10px;flex-wrap:wrap}
+.pi-export-btn{background:#76533d;border-color:#76533d;color:#fff}
 .pi-gen-btn{border:1px solid #bcd9cd;background:#fff;color:#1f6b52;border-radius:8px;padding:9px 18px;font-size:12px;font-weight:600;transition:all .14s;box-shadow:0 2px 8px rgba(16,45,39,.08)}
 .pi-gen-btn:hover{background:#eef7f3;border-color:#7fa597}
 .pi-gen-btn:disabled{opacity:.6;cursor:default}

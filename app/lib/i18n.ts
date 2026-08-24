@@ -442,6 +442,7 @@ export const T: Dict = {
   "landing.news4Tag": { zh: "展会计划", en: "Exhibition", de: "", ja: "" },
   "landing.news4Title": { zh: "下一期海外展会与拜访计划公布", en: "Next overseas exhibitions & visit plan", de: "", ja: "" },
   "landing.news4Excerpt": { zh: "计划参加下一季度欧洲男装展,并开放合作门店到厂参观预约。", en: "Attending next season's European menswear fair; factory visit slots available.", de: "", ja: "" },
+  "pi.exportTable": { zh: "导出 PI 表格", en: "Export PI Spreadsheet", de: "PI-Tabelle exportieren", ja: "PI表をエクスポート" },
 };
 
 export function translate(key: string, locale?: Locale): string {
