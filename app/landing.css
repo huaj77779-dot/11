@@ -288,3 +288,46 @@
   .landing-hero-badges { gap: 12px; }
   .landing-footer-inner { flex-direction: column; align-items: flex-start; }
 }
+
+/* TailorSupply OS — warm heritage / old-money visual system */
+.landing {
+  --ld-green: #261811;
+  --ld-green-2: #4b2f20;
+  --ld-gold: #b7854f;
+  --ld-gold-light: #d8b07d;
+  --ld-ivory: #f7f1e8;
+  --ld-paper: #eee3d5;
+  --ld-ink: #2b1c14;
+  --ld-muted: #77685d;
+  --ld-line: #d8c8b7;
+  background: #f7f1e8;
+}
+.landing-nav{height:72px;background:rgba(35,21,14,.96);border-color:rgba(216,176,125,.28)}
+.landing-brand>i{width:38px;height:38px;font-size:12px;letter-spacing:.04em;border-color:#c99a64}
+.landing-brand b{font-size:13px;letter-spacing:.16em}.landing-brand small{color:#b6a18e}
+.landing-nav-links a,.landing-link{color:#d8cdc2}.landing-account{border-color:rgba(216,176,125,.55);color:#e2bd8b}
+.landing .lang-switcher-compact{color:#d8cdc2}
+.landing-hero{min-height:calc(100vh - 72px);background:#24160f;color:#fff;overflow:hidden}
+.landing-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(26,15,10,.97) 0%,rgba(31,19,13,.82) 42%,rgba(31,19,13,.08) 72%);pointer-events:none}
+.landing-hero-inner{position:relative;z-index:2;max-width:none;min-height:660px;padding:78px 7vw 54px;grid-template-columns:.9fr 1.1fr;gap:54px}
+.landing-hero-copy h1{font-size:clamp(46px,5vw,76px);line-height:1.06;max-width:760px;letter-spacing:-.015em}
+.landing-hero-copy h1 em{color:#d7aa72}.landing-hero-sub{max-width:620px;font-size:16px;color:#d8cdc1}
+.landing-hero-visual{position:absolute;inset:0 0 0 39%;z-index:-1}.hero-frame{max-width:none;width:100%;height:100%}.hero-frame::before{display:none}.hero-frame img{width:100%;height:100%;object-fit:cover;box-shadow:none}
+.hero-frame-tag{left:auto;right:4vw;bottom:36px;background:rgba(247,241,232,.94);border-left-color:#a8733e;padding:15px 18px}
+.landing-stats{position:relative;z-index:3;background:#1f130d;border-color:rgba(255,255,255,.1)}
+.landing-stats span{padding:20px 7vw}.landing-stats b{color:#d7aa72}
+.landing-cta{border-radius:0;background:#bd8b51;border-color:#bd8b51;color:#24150e;padding:14px 24px}.landing-cta.ghost{background:rgba(255,255,255,.03)}
+.atelier-story{padding:110px 36px 120px;background:#f7f1e8}
+.atelier-story-head{display:grid;grid-template-columns:1.15fr .85fr;gap:80px;align-items:end;margin-bottom:54px}
+.atelier-story-head h2,.custom-advantages h2{font:clamp(36px,4vw,58px)/1.08 Georgia,"Songti SC",serif;margin:0;color:#2d1c13;letter-spacing:-.01em}
+.atelier-story-head>p{font-size:16px;line-height:1.9;color:#6d5c4f;margin:0}
+.factory-collage{display:grid;grid-template-columns:1.35fr .85fr;grid-template-rows:430px 230px;gap:18px}
+.factory-collage figure{position:relative;margin:0;overflow:hidden;background:#2a1a12}.factory-collage img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s ease}.factory-collage figure:hover img{transform:scale(1.025)}
+.factory-main{grid-row:1/3}.factory-collage figcaption{position:absolute;left:0;right:0;bottom:0;display:flex;gap:18px;align-items:center;padding:22px 25px;background:linear-gradient(0deg,rgba(31,18,12,.94),rgba(31,18,12,.05));color:#fff}.factory-collage figcaption>span{font:30px Georgia,serif;color:#d6a66f}.factory-collage figcaption b,.factory-collage figcaption small{display:block}.factory-collage figcaption b{font:20px Georgia,serif}.factory-collage figcaption small{margin-top:5px;color:#d3c5b8}
+.factory-quote{padding:30px 36px;background:#3b2418;color:#f6eee4;display:flex;flex-direction:column;justify-content:center}.factory-quote>p{font:54px/1 Georgia,serif;color:#c89459;margin:0}.factory-quote h3{font:26px/1.25 Georgia,"Songti SC",serif;margin:4px 0 24px}.factory-quote a{font-size:12px;letter-spacing:.08em;color:#d7b184}
+.custom-advantages{padding:100px 36px;background:#2a1911;color:#f7f0e7}.custom-advantages .landing-section-head{max-width:850px}.custom-advantages h2{color:#fff}.advantage-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(216,176,125,.3);border-bottom:1px solid rgba(216,176,125,.3)}
+.advantage-grid article{min-height:250px;padding:34px 28px;border-left:1px solid rgba(216,176,125,.22)}.advantage-grid article:first-child{border-left:0}.advantage-grid span{font:13px Georgia,serif;color:#d4a56f}.advantage-grid h3{font:25px Georgia,"Songti SC",serif;margin:42px 0 14px}.advantage-grid p{font-size:13.5px;line-height:1.8;color:#c7b9ac}
+.landing-contact{background:#eee3d5}.contact-info>span,.contact-form{background:#faf6ef;border-color:#d5c1ab}.contact-info i{background:#4b2f20}.contact-form input,.contact-form textarea{background:#f5ede3}
+.landing-footer{background:#1d110c}.landing-socials{background:rgba(247,241,232,.94);border-color:#d8c8b7}
+@media(max-width:1080px){.landing-hero-inner{grid-template-columns:1fr}.landing-hero-visual{display:block;left:30%;opacity:.42}.landing-hero::after{background:linear-gradient(90deg,rgba(28,16,11,.97),rgba(28,16,11,.68))}.atelier-story-head{grid-template-columns:1fr;gap:28px}.factory-collage{grid-template-columns:1fr;grid-template-rows:460px 360px auto}.factory-main{grid-row:auto}.advantage-grid{grid-template-columns:repeat(2,1fr)}.advantage-grid article:nth-child(3){border-left:0;border-top:1px solid rgba(216,176,125,.22)}.advantage-grid article:nth-child(4){border-top:1px solid rgba(216,176,125,.22)}}
+@media(max-width:700px){.landing-hero{min-height:auto}.landing-hero-inner{min-height:600px;padding:70px 20px 45px}.landing-hero-visual{inset:0;opacity:.35}.landing-hero-copy h1{font-size:42px}.landing-stats span{padding:18px 20px}.atelier-story,.custom-advantages{padding:70px 18px}.factory-collage{grid-template-rows:320px 300px auto}.advantage-grid{grid-template-columns:1fr}.advantage-grid article{border-left:0!important;border-top:1px solid rgba(216,176,125,.22);min-height:0}.advantage-grid article:first-child{border-top:0}.hero-frame-tag{display:none}}

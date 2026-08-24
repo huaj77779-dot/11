@@ -22,7 +22,8 @@ const SOCIAL_LINKS = [
 ];
 
 export default function LandingPage() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const zh = locale === "zh-CN";
   const { user, ready } = useAuthGuard(false);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -65,7 +66,7 @@ export default function LandingPage() {
       {/* ===== 顶部导航 ===== */}
       <header className="landing-nav">
         <a className="landing-brand" href="#top">
-          <i>A</i>
+          <i>TS</i>
           <span>
             <b>TAILORSUPPLY OS</b>
             <small>MADE-TO-MEASURE SUPPLY</small>
@@ -76,6 +77,7 @@ export default function LandingPage() {
           <a href="/company">{t("landing.navCompany")}</a>
           <a href="/quality">{t("landing.navQuality")}</a>
           <a href="/news">{t("landing.navNews")}</a>
+          <a href="/client-stories">{zh ? "合作流程" : "Client Journey"}</a>
           <a href="#contact">{t("landing.navContact")}</a>
           <a href="/customize">{t("landing.navCustomize")}</a>
         </nav>
@@ -125,7 +127,7 @@ export default function LandingPage() {
           </div>
           <div className="landing-hero-visual">
             <div className="hero-frame">
-              <img src="/ai-previews/jacket.png" alt="Made-to-measure suit" />
+              <img src="/brand/tailorsupply-workshop-hero.png" alt="TailorSupply OS made-to-measure workshop" />
               <div className="hero-frame-tag">
                 <small>VBC · STYLBIELLA</small>
                 <b>意大利面料直采</b>
@@ -142,6 +144,28 @@ export default function LandingPage() {
       </section>
 
       {/* ===== 公司简介 ===== */}
+      <section className="atelier-story">
+        <div className="landing-wrap atelier-story-head">
+          <div><p className="eyebrow">DESIGNED FOR INDEPENDENT TAILORS</p><h2>{zh ? "不是成衣批发，而是为每一位客户建立一件产品" : "Not wholesale stock. One product built for one customer."}</h2></div>
+          <p>{zh ? "TailorSupply OS 把门店的量体、面料和款式选择，转化成工厂可以稳定执行的订单。客户看到的是你的品牌，背后由可追踪的定制生产体系完成。" : "TailorSupply OS turns your store's measurements, fabric and style decisions into a production-ready order. Your customer sees your brand; a traceable made-to-measure workflow operates behind it."}</p>
+        </div>
+        <div className="landing-wrap factory-collage">
+          <figure className="factory-main"><img src="/brand/custom-cutting-process.png" alt="Custom suit paper pattern aligned on wool fabric"/><figcaption><span>01</span><div><b>{zh ? "单件裁剪" : "Single-order cutting"}</b><small>{zh ? "面料编号、量体和纸样逐单对应" : "Fabric code, measurements and pattern matched order by order"}</small></div></figcaption></figure>
+          <figure className="factory-side"><img src="/brand/jacket-quality-control.png" alt="Tailor inspecting a custom brown jacket"/><figcaption><span>02</span><div><b>{zh ? "成衣质检" : "Garment quality control"}</b><small>{zh ? "核对驳头、对称、工艺和外观" : "Lapel roll, symmetry, craft and finish inspected"}</small></div></figcaption></figure>
+          <aside className="factory-quote"><p>“</p><h3>{zh ? "数字系统负责准确，工匠负责质感。" : "The system protects accuracy. Craft gives it character."}</h3><a href="/client-stories">{zh ? "查看完整合作流程 →" : "See the complete client journey →"}</a></aside>
+        </div>
+      </section>
+
+      <section className="custom-advantages"><div className="landing-wrap">
+        <div className="landing-section-head"><p className="eyebrow">OUR CUSTOMISATION ADVANTAGE</p><h2>{zh ? "让门店能卖得更专业，也能下单得更简单" : "More freedom for your client. Less friction for your store."}</h2></div>
+        <div className="advantage-grid">
+          <article><span>01</span><h3>{zh ? "一件起订" : "One-piece MOQ"}</h3><p>{zh ? "西装上衣、西裤、马甲和衬衫均可按客户单独下单，降低库存压力。" : "Order jackets, trousers, waistcoats and shirts for individual clients without stocking finished garments."}</p></article>
+          <article><span>02</span><h3>{zh ? "四维定制" : "Four layers of customisation"}</h3><p>{zh ? "面料、量体、体态和款式工艺形成完整订单，不靠聊天记录猜测。" : "Fabric, measurements, posture and style details become one complete, reviewable order."}</p></article>
+          <article><span>03</span><h3>{zh ? "门店白牌" : "Store-first white label"}</h3><p>{zh ? "客户界面与交付过程突出门店品牌，工厂信息不干扰客户关系。" : "Your store remains customer-facing while production operates quietly behind your brand."}</p></article>
+          <article><span>04</span><h3>{zh ? "档案复购" : "Reorder-ready records"}</h3><p>{zh ? "保存每次量体、体态、款式和修改时间，为复购建立可靠依据。" : "Dated measurement, posture and style records create a dependable base for repeat orders."}</p></article>
+        </div>
+      </div></section>
+
       {false && <section id="company" className="landing-section">
         <div className="landing-wrap">
           <div className="landing-section-head">
@@ -287,7 +311,7 @@ export default function LandingPage() {
       <footer className="landing-footer">
         <div className="landing-wrap landing-footer-inner">
           <a className="landing-brand" href="#top">
-            <i>A</i>
+            <i>TS</i>
             <span><b>TAILORSUPPLY OS</b><small>MADE-TO-MEASURE SUPPLY</small></span>
           </a>
           <nav>
@@ -297,6 +321,7 @@ export default function LandingPage() {
             <a href="/company">{t("landing.navCompany")}</a>
             <a href="/quality">{t("landing.navQuality")}</a>
             <a href="/news">{t("landing.navNews")}</a>
+            <a href="/client-stories">{zh ? "合作流程" : "Client Journey"}</a>
             <a href="#contact">{t("landing.navContact")}</a>
             <a href="/customize">{t("landing.navCustomize")}</a>
           </nav>
