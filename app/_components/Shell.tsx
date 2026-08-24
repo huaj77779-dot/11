@@ -9,7 +9,7 @@ export function Shell({ active }: { active: "new" | "customers" | "orders" }) {
       <div className="brand">
         <i>A</i>
         <div>
-          <b>ATELIER OS</b>
+          <b>TAILORSUPPLY OS</b>
           <small>WHITE-LABEL PORTAL</small>
         </div>
       </div>

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "B2B made-to-measure suit supply for boutiques and tailors, combining measurement profiles, Italian fabrics, style configuration and repeat ordering.",
   alternates: { canonical: "/made-to-measure-suits" },
   openGraph: {
-    title: "Made-to-Measure Suit Manufacturer & Supplier | Atelier OS",
+    title: "Made-to-Measure Suit Manufacturer & Supplier | TailorSupply OS",
     description: "A structured B2B workflow from client measurements and fabric selection to production-ready suit orders.",
     url: "/made-to-measure-suits",
   },
@@ -17,7 +17,7 @@ export default function MadeToMeasureSuitsPage() {
     eyebrow="B2B MADE-TO-MEASURE SUITS"
     title="A clearer way to order made-to-measure clothing for your clients."
     intro="Bring fabric selection, body measurements, finished measurements and garment styling into one professional workflow built for tailoring appointments and repeat business."
-    summary="Made-to-measure ordering has many small decisions. Atelier OS organises them into a customer profile, fabric record, garment specification and PI summary, helping the shop verify what was selected before the order is confirmed."
+    summary="Made-to-measure ordering has many small decisions. TailorSupply OS organises them into a customer profile, fabric record, garment specification and PI summary, helping the shop verify what was selected before the order is confirmed."
     audience={["Tailors serving private clients", "Premium menswear stores", "Wedding and occasionwear shops", "Image consultants", "Corporate wardrobe providers", "Appointment-based online tailors"]}
     capabilities={[
       { title: "Body and garment measurements", text: "Record both net body measurements and finished-garment measurements, using metric or imperial units." },

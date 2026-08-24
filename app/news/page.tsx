@@ -1,18 +1,25 @@
 "use client";
+
 import { LandingSubpage } from "../_components/LandingSubpage";
+import { SEO_ARTICLES } from "../lib/articles";
 import { useLocale } from "../lib/i18n";
 
-const NEWS = [
-  { dateKey:"landing.news1Date",tagKey:"landing.news1Tag",titleKey:"landing.news1Title",excerptKey:"landing.news1Excerpt",tone:"navy" },
-  { dateKey:"landing.news2Date",tagKey:"landing.news2Tag",titleKey:"landing.news2Title",excerptKey:"landing.news2Excerpt",tone:"gold" },
-  { dateKey:"landing.news3Date",tagKey:"landing.news3Tag",titleKey:"landing.news3Title",excerptKey:"landing.news3Excerpt",tone:"green" },
-  { dateKey:"landing.news4Date",tagKey:"landing.news4Tag",titleKey:"landing.news4Title",excerptKey:"landing.news4Excerpt",tone:"charcoal" },
-];
-
 export default function NewsPage() {
-  const { t } = useLocale();
-  return <LandingSubpage><section className="landing-section landing-subpage"><div className="landing-wrap">
-    <div className="landing-section-head"><p className="eyebrow">{t("landing.secNewsEyebrow")}</p><h1>{t("landing.secNewsTitle")}</h1></div>
-    <div className="landing-news-grid">{NEWS.map(item => <article className="news-card" key={item.titleKey}><div className={`news-thumb ${item.tone}`}><span className={`mini-swatch ${item.tone}`} /></div><div className="news-meta"><time>{t(item.dateKey)}</time><em>{t(item.tagKey)}</em></div><h3>{t(item.titleKey)}</h3><p>{t(item.excerptKey)}</p><a href="/news">{t("landing.readMore")}</a></article>)}</div>
-  </div></section></LandingSubpage>;
+  const { locale } = useLocale();
+  const zh = locale === "zh-CN";
+  return <LandingSubpage>
+    <section className="content-hero"><div className="landing-wrap">
+      <p className="eyebrow">TAILORSUPPLY OS · INSIGHTS</p>
+      <h1>{zh ? "定制男装供应与门店增长指南" : "Practical Guides for Tailoring Businesses"}</h1>
+      <p>{zh ? "围绕私牌生产、低起订、面料采购、量体复购、质检和国际交付的真实运营内容。" : "Evidence-led guidance on private-label production, low-MOQ ordering, fabric sourcing, measurements, quality control and international delivery."}</p>
+    </div></section>
+    <section className="content-section"><div className="landing-wrap article-grid">
+      {SEO_ARTICLES.map(article => <article className="article-card" key={article.slug}>
+        <div className="article-card-meta"><span>{article.category}</span><time>{article.published}</time></div>
+        <h2><a href={`/news/${article.slug}`}>{zh ? article.titleZh : article.title}</a></h2>
+        <p>{zh ? article.descriptionZh : article.description}</p>
+        <div className="article-card-foot"><small>{article.readingTime}</small><a href={`/news/${article.slug}`}>{zh ? "阅读全文 →" : "Read guide →"}</a></div>
+      </article>)}
+    </div></section>
+  </LandingSubpage>;
 }

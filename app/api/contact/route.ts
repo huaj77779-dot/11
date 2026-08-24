@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     if (!webhookUrl) return Response.json({ error: "微信通知接口尚未配置" }, { status: 503 });
 
     const content = [
-      "【Atelier OS 新合作需求】",
+      "【TailorSupply OS 新合作需求】",
       `公司/门店：${name}`,
       `联系方式：${contact}`,
       `合作需求：${message || "未填写"}`,

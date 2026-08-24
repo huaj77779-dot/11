@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LOCALES, getLocale, setLocale, subscribeLocale, type Locale } from "../lib/i18n";
+import { DEFAULT_LOCALE, LOCALES, getLocale, setLocale, subscribeLocale, type Locale } from "../lib/i18n";
 
 const SHORT_LABELS: Record<Locale, string> = {
   zh: "中文",
@@ -21,7 +21,7 @@ const SHORT_LABELS: Record<Locale, string> = {
 };
 
 export function LanguageSwitcher() {
-  const [loc, setLoc] = useState<Locale>("zh");
+  const [loc, setLoc] = useState<Locale>(DEFAULT_LOCALE);
   useEffect(() => {
     const cookieLocale = document.cookie.match(/(?:^|; )atelier_locale=([^;]+)/)?.[1] as Locale | undefined;
     const saved = (window.localStorage.getItem("locale") as Locale | null) ?? cookieLocale ?? null;
@@ -34,11 +34,11 @@ export function LanguageSwitcher() {
   return <label className="lang-switcher-compact" title="更换语言">
     <select className="lang-select" value={loc} onChange={(e) => {
       const next = e.target.value as Locale;
-      window.localStorage.setItem("locale", next);
-      document.cookie = `atelier_locale=${next}; path=/; max-age=31536000; samesite=lax`;
       setLocale(next);
     }} aria-label="更换语言">
-      {LOCALES.map((item) => <option key={item.code} value={item.code}>{SHORT_LABELS[item.code]}</option>)}
+      {[...LOCALES]
+        .sort((a, b) => a.code === DEFAULT_LOCALE ? -1 : b.code === DEFAULT_LOCALE ? 1 : 0)
+        .map((item) => <option key={item.code} value={item.code}>{SHORT_LABELS[item.code]}</option>)}
     </select>
   </label>;
 }

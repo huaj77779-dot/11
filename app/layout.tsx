@@ -16,12 +16,13 @@ import "./fabric-only.css";
 import "./management.css";
 import "./landing.css";
 import "./seo-pages.css";
+import "./content-pages.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_ORIGIN),
   title: {
-    default: "Private Label Made-to-Measure Suit Manufacturer | Atelier OS",
-    template: "%s | Atelier OS",
+    default: "Private Label Made-to-Measure Suit Manufacturer | TailorSupply OS",
+    template: "%s | TailorSupply OS",
   },
   description:
     "Private label made-to-measure suits, trousers, waistcoats and shirts for tailoring shops and menswear boutiques, with Italian fabrics and digital ordering.",
@@ -39,20 +40,20 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/",
     siteName: SITE_NAME,
-    title: "Private Label Made-to-Measure Suit Manufacturer | Atelier OS",
+    title: "Private Label Made-to-Measure Suit Manufacturer | TailorSupply OS",
     description: SITE_TAGLINE,
     images: [
       {
         url: "/ai-previews/jacket.png",
         width: 1024,
         height: 1536,
-        alt: "Atelier OS private label made-to-measure navy suit",
+        alt: "TailorSupply OS private-label made-to-measure navy suit",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Private Label Made-to-Measure Suit Manufacturer | Atelier OS",
+    title: "Private Label Made-to-Measure Suit Manufacturer | TailorSupply OS",
     description: SITE_TAGLINE,
     images: ["/ai-previews/jacket.png"],
   },
@@ -91,12 +92,12 @@ const websiteJsonLd = {
   name: SITE_NAME,
   url: SITE_ORIGIN,
   description: SITE_TAGLINE,
-  inLanguage: ["zh-CN", "en", "de", "fr", "it", "es", "pt", "nl", "pl", "sv", "da", "no", "cs", "ja"],
+  inLanguage: ["en", "zh-CN", "de", "fr", "it", "es", "pt", "nl", "pl", "sv", "da", "no", "cs", "ja"],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="en">
       <body>
         {children}
         <script

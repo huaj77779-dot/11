@@ -67,7 +67,7 @@ export default function LandingPage() {
         <a className="landing-brand" href="#top">
           <i>A</i>
           <span>
-            <b>ATELIER OS</b>
+            <b>TAILORSUPPLY OS</b>
             <small>MADE-TO-MEASURE SUPPLY</small>
           </span>
         </a>
@@ -246,7 +246,7 @@ export default function LandingPage() {
           </div>
           <div className="landing-contact-grid">
             <div className="contact-info">
-              <span><i>✉</i><div><small>{t("landing.contactEmailLabel")}</small><b>sales@atelier-os.example</b></div></span>
+              <span><i>✉</i><div><small>{t("landing.contactEmailLabel")}</small><b>sales@tailorsupplyos.com</b></div></span>
               <span><i>✆</i><div><small>{t("landing.contactWaLabel")}</small><b>+86 138 0000 0000</b></div></span>
               <span><i>◈</i><div><small>{t("landing.contactAddrLabel")}</small><b>{t("landing.contactAddr")}</b></div></span>
               <span><i>◷</i><div><small>{t("landing.contactHoursLabel")}</small><b>{t("landing.contactHours")}</b></div></span>
@@ -257,7 +257,7 @@ export default function LandingPage() {
                 <div className="contact-done">
                   <b>{t("landing.contactDone")}</b>
                   <pre>{summary || "—"}</pre>
-                  <a className="landing-cta sm" href={`mailto:sales@atelier-os.example?subject=${encodeURIComponent("合作需求 · " + (form.name || "新客户"))}&body=${encodeURIComponent(summary || "")}`}>
+                  <a className="landing-cta sm" href={`mailto:sales@tailorsupplyos.com?subject=${encodeURIComponent("合作需求 · " + (form.name || "新客户"))}&body=${encodeURIComponent(summary || "")}`}>
                     ✉ 通过邮箱发送
                   </a>
                 </div>
@@ -288,7 +288,7 @@ export default function LandingPage() {
         <div className="landing-wrap landing-footer-inner">
           <a className="landing-brand" href="#top">
             <i>A</i>
-            <span><b>ATELIER OS</b><small>MADE-TO-MEASURE SUPPLY</small></span>
+            <span><b>TAILORSUPPLY OS</b><small>MADE-TO-MEASURE SUPPLY</small></span>
           </a>
           <nav>
             <a href="/private-label-suits">Private Label Suits</a>

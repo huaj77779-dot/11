@@ -19,6 +19,8 @@ export type Locale =
   | "no"
   | "cs";
 
+export const DEFAULT_LOCALE: Locale = "en";
+
 export const LOCALES: { code: Locale; label: string }[] = [
   { code: "zh", label: "简体中文" },
   { code: "en", label: "English" },
@@ -42,7 +44,7 @@ const store: {
 } = {
   // Keep the server and the first client render identical. The stored locale is
   // restored after mount to avoid hydration mismatches.
-  locale: "zh",
+  locale: DEFAULT_LOCALE,
   listeners: new Set(),
 };
 
@@ -52,7 +54,11 @@ export function getLocale(): Locale {
 
 export function setLocale(locale: Locale): void {
   store.locale = locale;
-  if (typeof window !== "undefined") window.localStorage.setItem("locale", locale);
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem("locale", locale);
+    document.cookie = `atelier_locale=${locale}; path=/; max-age=31536000; samesite=lax`;
+    document.documentElement.lang = locale === "zh" ? "zh-CN" : locale;
+  }
   store.listeners.forEach((fn) => fn());
   if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("atelier-locale-change", { detail: locale }));
 }
@@ -419,7 +425,7 @@ export const T: Dict = {
   "landing.heroBadge1": { zh: "全品类定制", en: "Full-category MTM", de: "", ja: "" },
   "landing.heroBadge2": { zh: "小单快返", en: "Low MOQ & fast reorder", de: "", ja: "" },
   "landing.heroBadge3": { zh: "国际物流直达", en: "Global shipping", de: "", ja: "" },
-  "landing.footRights": { zh: "© 2026 Atelier OS · 定制西装供应链平台", en: "© 2026 Atelier OS · Made-to-measure supply platform", de: "", ja: "" },
+  "landing.footRights": { zh: "© 2026 TailorSupply OS · 定制西装供应链平台", en: "© 2026 TailorSupply OS · Made-to-measure supply platform", de: "", ja: "" },
   "landing.news1Date": { zh: "2026-08-05", en: "2026-08-05", de: "", ja: "" },
   "landing.news1Tag": { zh: "面料动态", en: "Fabric", de: "", ja: "" },
   "landing.news1Title": { zh: "2026 秋冬西服面料册更新", en: "2026 Autumn/Winter suiting book updated", de: "", ja: "" },
@@ -449,7 +455,7 @@ export function translate(key: string, locale?: Locale): string {
 
 /** 客户端 hook：响应语言切换 */
 export function useLocale(): { loc: Locale; t: (key: string) => string } {
-  const [loc, setLocState] = useState<Locale>("zh");
+  const [loc, setLocState] = useState<Locale>(DEFAULT_LOCALE);
   useEffect(() => {
     const cookieLocale = typeof document !== "undefined" ? document.cookie.match(/(?:^|; )atelier_locale=([^;]+)/)?.[1] as Locale | undefined : undefined;
     const saved = typeof window !== "undefined" ? ((window.localStorage.getItem("locale") as Locale | null) ?? cookieLocale ?? null) : null;

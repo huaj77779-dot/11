@@ -1204,7 +1204,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
         <div className="brand">
           <i>A</i>
           <div>
-            <b>ATELIER OS</b>
+            <b>TAILORSUPPLY OS</b>
             <small>WHITE-LABEL PORTAL</small>
           </div>
         </div>

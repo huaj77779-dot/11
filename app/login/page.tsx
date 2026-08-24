@@ -36,7 +36,7 @@ export default function LoginPage() {
         <div className="login-brand">
           <i>A</i>
           <div>
-            <b>ATELIER OS</b>
+            <b>TAILORSUPPLY OS</b>
             <small>MADE-TO-MEASURE PORTAL</small>
           </div>
         </div>
