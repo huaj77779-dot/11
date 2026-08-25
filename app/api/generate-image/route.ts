@@ -42,6 +42,7 @@ export async function POST(request: Request) {
     };
     const garment = payload.garment ?? "jacket";
     const prompt = (payload.prompt ?? "").trim();
+    const faceSafePrompt = `${prompt}, privacy-safe product presentation: never show a face or facial features; if a person is present, compose the image strictly from the neck down with the entire head outside the frame; do not generate portraits, reflections of faces, or background faces`;
     const style = payload.style === "flat" ? "flat" : "wear";
     const referenceImages = (payload.referenceImages ?? []).slice(0, 4);
 
@@ -79,7 +80,7 @@ export async function POST(request: Request) {
         const bytes = await referenceToBytes(ref);
         form.append("image", new Blob([bytes], { type: "image/png" }), "ref.png");
       }
-      form.append("prompt", prompt);
+      form.append("prompt", faceSafePrompt);
       form.append("response_format", "url");
       res = await fetch(`${baseUrl}/images/edits`, {
         method: "POST",
@@ -95,7 +96,7 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           model,
-          prompt,
+          prompt: faceSafePrompt,
           n: 1,
           size: style === "flat" ? "1024x1024" : "1024x1536",
           response_format: "url",

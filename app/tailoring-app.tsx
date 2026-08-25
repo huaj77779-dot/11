@@ -2841,11 +2841,9 @@ function PiPreview({
       : `fabric (code ${item.fabricCode})`;
     const modeTxt =
       item.kind === "fabric"
-        ? hasAvatar
-          ? `A male model presenting a folded stack of premium ${fabricDesc}`
-          : `A folded stack of premium ${fabricDesc} on a clean pure white background, flat lay, product photography, no model, no person`
+        ? `A folded stack of premium ${fabricDesc} on a clean pure white background, flat lay, product photography, no model, no person`
         : hasAvatar
-          ? `A male model wearing a tailored ${garmentEn} made of ${fabricDesc}`
+          ? `A male model wearing a tailored ${garmentEn} made of ${fabricDesc}, photographed strictly from the neck down, with the entire head and face outside the frame`
           : `A single ${garmentEn} made of ${fabricDesc}, displayed flat lay on a clean pure white background, product photography, no model, no person`;
     const currentOptions = validPiOptions(item);
     const styleTxt = currentOptions.length
@@ -2857,7 +2855,7 @@ function PiPreview({
     const bodyTxt = hasAvatar
       ? `, client body: height ${customerHeight || "185"}cm, weight ${customerWeight || "78"}kg, model physique should match this body proportion`
       : "";
-    return `${modeTxt}${styleTxt}${sizeTxt}${bodyTxt}, ultra detailed, high resolution, realistic fabric texture, professional menswear photography, soft studio lighting, no text, no watermark, no logo`.trim();
+    return `${modeTxt}${styleTxt}${sizeTxt}${bodyTxt}, ultra detailed, high resolution, realistic fabric texture, professional menswear photography, soft studio lighting, no visible face, no facial features, no head in frame, no text, no watermark, no logo`.trim();
   };
   // 西装上衣只参考正反面款式：正面款式组 + 反面（后背/开衩）款式组
   const JACKET_FRONT_GROUPS = [
@@ -3038,13 +3036,6 @@ function PiPreview({
     const referenceImages = productSel
       .map((row) => results[row.item.key]?.image)
       .filter(Boolean) as string[];
-    if (customerAvatar) {
-      try {
-        referenceImages.unshift(await toDataUrl(customerAvatar));
-      } catch {
-        /* 忽略头像转换失败 */
-      }
-    }
     const parts = productSel.map(
       (row) =>
         ({
@@ -3080,12 +3071,10 @@ function PiPreview({
       NZ: "a Caucasian New Zealander man",
       OTHER: "a realistic adult man",
     };
-    const modelTxt = hasAvatar
-      ? "the client from the reference portrait photo"
-      : (ETHNICITY[countryCode] ?? "a realistic adult man");
-    const modeTxt = `${desc}, all pieces made of ${fabricDesc}, worn by ${modelTxt} whose physique matches client height ${customerHeight || "185"}cm weight ${customerWeight || "78"}kg`;
+    const modelTxt = ETHNICITY[countryCode] ?? "a realistic adult man";
+    const modeTxt = `${desc}, all pieces made of ${fabricDesc}, worn by ${modelTxt} whose physique matches client height ${customerHeight || "185"}cm weight ${customerWeight || "78"}kg, photographed strictly from the neck down with the entire head and face outside the frame`;
     const prompt =
-      `${modeTxt}, keep each garment identical to the reference images, matching suit set, coordinated tailoring, ultra detailed, high resolution, realistic fabric texture, professional menswear photography, soft studio lighting, no text, no watermark, no logo`.trim();
+      `${modeTxt}, keep each garment identical to the reference images, matching suit set, coordinated tailoring, ultra detailed, high resolution, realistic fabric texture, professional menswear photography, soft studio lighting, no visible face, no facial features, no head in frame, no text, no watermark, no logo`.trim();
     try {
       const data = await apiFetch<{ imageUrl: string }>(
         `/api/generate-image?t=${Date.now()}`,
