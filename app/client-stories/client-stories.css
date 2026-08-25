@@ -1,0 +1,35 @@
+.proof-slot.proof-filled {
+  position: relative;
+  justify-content: flex-start;
+  background: #2b1c15;
+  border-style: solid;
+}
+
+.proof-slot.proof-filled img {
+  display: block;
+  width: 100%;
+  height: clamp(250px, 28vw, 390px);
+  object-fit: cover;
+  object-position: center;
+}
+
+.proof-slot.proof-filled .illustration-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  margin: 0;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(42, 25, 16, 0.82);
+  color: #fff7ed;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.proof-slot.proof-filled figcaption {
+  width: 100%;
+  box-sizing: border-box;
+  background: #f8f1e8;
+  color: #67584d;
+  line-height: 1.5;
+}
