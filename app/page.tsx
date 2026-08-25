@@ -127,7 +127,7 @@ export default function LandingPage() {
           </div>
           <div className="landing-hero-visual">
             <div className="hero-frame">
-              <img src="/brand/tailorsupply-workshop-hero.png" alt="TailorSupply OS made-to-measure workshop" />
+              <img src="/brand/tailorsupply-workshop-hero.webp" alt="Faceless master tailor marking a bespoke pattern on navy wool" />
               <div className="hero-frame-tag">
                 <small>VBC · STYLBIELLA</small>
                 <b>意大利面料直采</b>
@@ -151,7 +151,7 @@ export default function LandingPage() {
         </div>
         <div className="landing-wrap factory-collage">
           <figure className="factory-main"><img src="/brand/custom-cutting-process.png" alt="Custom suit paper pattern aligned on wool fabric"/><figcaption><span>01</span><div><b>{zh ? "单件裁剪" : "Single-order cutting"}</b><small>{zh ? "面料编号、量体和纸样逐单对应" : "Fabric code, measurements and pattern matched order by order"}</small></div></figcaption></figure>
-          <figure className="factory-side"><img src="/brand/jacket-quality-control.png" alt="Tailor inspecting a custom brown jacket"/><figcaption><span>02</span><div><b>{zh ? "成衣质检" : "Garment quality control"}</b><small>{zh ? "核对驳头、对称、工艺和外观" : "Lapel roll, symmetry, craft and finish inspected"}</small></div></figcaption></figure>
+          <figure className="factory-side"><img src="/brand/jacket-quality-control.webp" alt="Faceless artisan inspecting the lapel and handwork of a brown jacket"/><figcaption><span>02</span><div><b>{zh ? "成衣质检" : "Garment quality control"}</b><small>{zh ? "核对驳头、对称、工艺和外观" : "Lapel roll, symmetry, craft and finish inspected"}</small></div></figcaption></figure>
           <aside className="factory-quote"><p>“</p><h3>{zh ? "数字系统负责准确，工匠负责质感。" : "The system protects accuracy. Craft gives it character."}</h3><a href="/client-stories">{zh ? "查看完整合作流程 →" : "See the complete client journey →"}</a></aside>
         </div>
       </section>
