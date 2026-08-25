@@ -159,27 +159,27 @@
 .landing .swatch.green { background: linear-gradient(135deg, #2f6b54, #143f35); }
 
 /* -------- 工厂品质(深色) -------- */
-.landing-dark { background: linear-gradient(165deg, #0d241f, #0a1b17); color: #fff; }
+.landing-dark { background: linear-gradient(165deg, #2b1a12 0%, #1c100b 58%, #120a07 100%); color: #fff; }
 .landing-dark .eyebrow { color: var(--ld-gold-light); }
 .landing-quality-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 .quality-card {
-  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+  background: rgba(107,70,44,.16); border: 1px solid rgba(221,183,135,.18);
   border-top: 2px solid var(--ld-gold); border-radius: 6px; padding: 26px 22px;
   transition: background .2s ease;
 }
-.quality-card:hover { background: rgba(255,255,255,.07); }
+.quality-card:hover { background: rgba(145,96,58,.24); }
 .quality-card i { font-style: normal; font-family: Georgia, serif; color: var(--ld-gold-light); font-size: 13px; }
 .quality-card h3 { font-size: 18px; margin: 14px 0 10px; font-weight: 500; color: #fff; }
-.quality-card p { font-size: 13px; line-height: 1.8; color: #a7b8b2; margin: 0; }
+.quality-card p { font-size: 13px; line-height: 1.8; color: #cbb9a8; margin: 0; }
 .landing-certs {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 34px;
 }
 .landing-certs span {
   display: flex; align-items: center; gap: 14px;
-  border: 1px dashed rgba(255,255,255,.22); border-radius: 6px; padding: 16px 18px;
+  border: 1px dashed rgba(221,183,135,.28); border-radius: 6px; padding: 16px 18px;
 }
 .landing-certs b { font-family: Georgia, serif; font-size: 17px; color: var(--ld-gold-light); white-space: nowrap; }
-.landing-certs small { font-size: 11px; color: #93a8a1; }
+.landing-certs small { font-size: 11px; color: #bca895; }
 
 /* -------- 公司动态 -------- */
 .landing-news-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
