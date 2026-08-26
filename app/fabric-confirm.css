@@ -1,0 +1,5 @@
+.chosen-fabric-bar .fabric-confirm-thumb{position:relative;width:76px;height:54px;flex:0 0 76px;padding:0;border:2px solid #fff;border-radius:7px;overflow:hidden;background:#e7ece9;box-shadow:0 0 0 1px #bdcec6,0 3px 9px #173b311c;cursor:zoom-in}
+.chosen-fabric-bar .fabric-confirm-thumb .mini-swatch{position:absolute;inset:0;width:100%;height:100%;margin:0;border:0;border-radius:0}
+.chosen-fabric-bar .fabric-confirm-thumb em{position:absolute;right:0;bottom:0;left:0;padding:12px 3px 3px;background:linear-gradient(transparent,#102b237d);color:#fff;font-size:7px;font-style:normal;letter-spacing:.04em;opacity:0;transition:opacity .15s ease}
+.chosen-fabric-bar .fabric-confirm-thumb:hover em,.chosen-fabric-bar .fabric-confirm-thumb:focus-visible em{opacity:1}
+@media(max-width:700px){.chosen-fabric-bar .fabric-confirm-thumb{width:64px;height:48px;flex-basis:64px}}

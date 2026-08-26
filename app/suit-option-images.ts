@@ -1,0 +1,98 @@
+/**
+ * 西服格式正式表参考图映射：西装上衣 / 西裤 / 马甲 的款式选项 → public/garment-options/ 分类目录下的图片。
+ * 图片来源：门店「西服格式正式表图片」扫描件，人工核对选项与图名对应关系。
+ * key 格式为 `${配置组}:${选项}`，避免不同组的同名选项（如「双牙兜」「标准兜」）冲突。
+ */
+export const suitOptionImages: Record<string, string> = {
+  // ===== 西装上衣（Jacket）=====
+  "正面款式:单排两粒扣": "style-options/jacket/front-style/single-breasted-two-button.jpeg",
+  "正面款式:单排一粒扣": "style-options/jacket/front-style/single-breasted-one-button.jpeg",
+  "正面款式:单排三粒扣": "style-options/jacket/front-style/single-breasted-three-button.jpeg",
+  "正面款式:单排四粒扣": "style-options/jacket/front-style/single-breasted-four-button.jpeg",
+  "正面款式:双排四扣四": "style-options/jacket/front-style/double-breasted-four-button-four-fastening.jpeg",
+  "正面款式:双排四扣二": "style-options/jacket/front-style/double-breasted-four-button-two-fastening.jpeg",
+  "正面款式:双排六扣四": "style-options/jacket/front-style/double-breasted-six-button-four-fastening.jpeg",
+  "正面款式:双排六扣二": "style-options/jacket/front-style/double-breasted-six-button-two-fastening.jpeg",
+  "胸兜款式:直兜": "style-options/jacket/breast-pocket-style/straight-breast-pocket.png",
+  "胸兜款式:双牙兜": "style-options/jacket/breast-pocket-style/double-welt-pocket.png",
+  "胸兜款式:弧形兜": "style-options/jacket/breast-pocket-style/curved-breast-pocket.png",
+  "下摆开角大小:标准下摆": "style-options/jacket/hem-opening/standard-hem.jpeg",
+  "下摆开角大小:大开角下摆": "style-options/jacket/hem-opening/wide-open-quarter-hem.jpeg",
+  "下摆开角大小:小开角下摆": "style-options/jacket/hem-opening/narrow-open-quarter-hem.jpeg",
+  "肩膀样式:自然肩": "style-options/jacket/shoulder-style/natural-shoulder.jpeg",
+  "肩膀样式:法式翘肩": "style-options/jacket/shoulder-style/french-roped-shoulder.jpeg",
+  "口袋款式:标准兜": "style-options/jacket/pocket-style/flap-pocket.gif",
+  "口袋款式:标准兜票据兜": "style-options/jacket/pocket-style/flap-pocket-with-ticket-pocket.gif",
+  "口袋款式:明贴兜": "style-options/jacket/pocket-style/patch-pocket.gif",
+  "口袋款式:双牙兜": "style-options/jacket/pocket-style/double-welt-pocket.png",
+  "口袋款式:双牙兜票据兜": "style-options/jacket/pocket-style/double-welt-pocket-with-ticket-pocket.gif",
+  "口袋款式:双牙斜兜票据兜": "style-options/jacket/pocket-style/slanted-double-welt-pocket-with-ticket-pocket.gif",
+  "口袋款式:斜兜": "style-options/jacket/pocket-style/slanted-pocket.gif",
+  "口袋款式:斜兜票据兜": "style-options/jacket/pocket-style/slanted-pocket-with-ticket-pocket.gif",
+  "西服背面款式:常规后背": "style-options/jacket/back-style/plain-back.png",
+  "西服背面款式:T型后背": "style-options/jacket/back-style/t-shaped-back.jpeg",
+  "西服背面款式:后腰带捏褶": "style-options/jacket/back-style/pleated-back-belt.jpeg",
+  "西服背面款式:后腰固定腰带": "style-options/jacket/back-style/fixed-back-belt.jpeg",
+  "西服开衩选择:双开衩": "style-options/jacket/vents/double-side-vents.jpeg",
+  "西服开衩选择:不开衩": "style-options/jacket/vents/ventless.jpeg",
+  "西服开衩选择:单开衩": "style-options/jacket/vents/single-center-vent.jpeg",
+  "毛衬:粘合衬": "style-options/jacket/canvas-construction/fused-construction.jpeg",
+  "毛衬:半麻衬": "style-options/jacket/canvas-construction/half-canvas.jpeg",
+  "毛衬:全麻衬": "style-options/jacket/canvas-construction/full-canvas.jpeg",
+  "里布位置:全里布": "style-options/jacket/lining/fully-lined.jpeg",
+  "里布位置:二分之一里布": "style-options/jacket/lining/half-lined.jpeg",
+  "里布位置:三分之一里布": "style-options/jacket/lining/one-third-lined.jpeg",
+  "里布位置:四分之一里布": "style-options/jacket/lining/quarter-lined.jpeg",
+  "驳头款式:平驳领": "style-options/jacket/lapel-style/notch-lapel.jpeg",
+  "驳头款式:青果领": "style-options/jacket/lapel-style/shawl-lapel.jpeg",
+  "驳头款式:戗驳领": "style-options/jacket/lapel-style/peak-lapel.jpeg",
+  "袖叉款式:假扣眼": "style-options/jacket/sleeve-buttonholes/non-functional-buttonholes.jpeg",
+  "袖叉款式:无扣眼": "style-options/jacket/sleeve-buttonholes/no-buttonholes.jpeg",
+  "袖叉款式:真扣眼": "style-options/jacket/sleeve-buttonholes/functional-buttonholes.jpeg",
+  // ===== 西裤（Trousers）=====
+  "扣型:双扣意式腰头": "style-options/trousers/waistband-style/double-button-italian-waistband.jpg",
+  "扣型:圆腰头": "style-options/trousers/waistband-style/rounded-waistband.jpg",
+  "扣型:好莱坞腰头": "style-options/trousers/waistband-style/hollywood-waistband.jpg",
+  "扣型:宝剑头": "style-options/trousers/waistband-style/pointed-extended-waistband.jpg",
+  "扣型:平腰头": "style-options/trousers/waistband-style/plain-waistband.jpg",
+  "扣型:廓尔格腰头": "style-options/trousers/waistband-style/gurkha-waistband.jpg",
+  "褶皱:三褶皱": "style-options/trousers/pleats/triple-pleat.jpeg",
+  "褶皱:无褶皱": "style-options/trousers/pleats/flat-front.jpeg",
+  "褶皱:单褶皱": "style-options/trousers/pleats/single-pleat.jpeg",
+  "褶皱:双褶皱": "style-options/trousers/pleats/double-pleat.jpeg",
+  "裤脚:毛边": "style-options/trousers/trouser-hem/unfinished-hem.jpeg",
+  "裤脚:裤脚口内折边": "style-options/trousers/trouser-hem/plain-hem.jpeg",
+  "裤脚:裤脚口外翻翘": "style-options/trousers/trouser-hem/turn-up-cuff.jpeg",
+  "裤脚:靴裤脚口": "style-options/trousers/trouser-hem/bootcut-hem.jpeg",
+  "裤型:喇叭裤型": "style-options/trousers/trouser-cut/flared-leg.jpeg",
+  "裤型:锥状裤型": "style-options/trousers/trouser-cut/tapered-leg.jpeg",
+  "裤型:标准裤型": "style-options/trousers/trouser-cut/regular-fit.jpeg",
+  "裤型:直筒裤型": "style-options/trousers/trouser-cut/straight-leg.jpeg",
+  "裤脚口:裤脚口打开": "style-options/trousers/hem-opening/open-hem.jpeg",
+  "裤脚口:裤脚口三角开口": "style-options/trousers/hem-opening/triangular-split-hem.jpeg",
+  // ===== 马甲（Waistcoat）=====
+  "马甲款式:标准五粒扣": "style-options/waistcoat/waistcoat-style/classic-five-button.jpeg",
+  "马甲款式:圆形三粒扣": "style-options/waistcoat/waistcoat-style/rounded-three-button.jpeg",
+  "马甲款式:双排六扣三": "style-options/waistcoat/waistcoat-style/double-breasted-six-button-three-fastening.jpeg",
+  "马甲款式:青果领三粒扣": "style-options/waistcoat/waistcoat-style/three-button-shawl-lapel.jpeg",
+  "马甲款式:平驳领五粒扣": "style-options/waistcoat/waistcoat-style/five-button-notch-lapel.jpeg",
+  "马甲款式:平驳领六扣三": "style-options/waistcoat/waistcoat-style/six-button-three-fastening-notch-lapel.jpeg",
+  "马甲款式:戗驳领五粒扣": "style-options/waistcoat/waistcoat-style/five-button-peak-lapel.jpeg",
+  "马甲款式:戗驳领六扣三": "style-options/waistcoat/waistcoat-style/six-button-three-fastening-peak-lapel.jpeg",
+  "马甲口袋数量:无胸兜": "style-options/waistcoat/pocket-count/no-breast-pockets.jpeg",
+  "马甲口袋数量:单胸兜": "style-options/waistcoat/pocket-count/single-breast-pocket.jpeg",
+  "马甲口袋数量:双胸兜": "style-options/waistcoat/pocket-count/double-breast-pockets.jpeg",
+  "马甲口袋款式:标准兜": "style-options/waistcoat/pocket-style/welt-pocket.jpeg",
+  "马甲口袋款式:带兜盖": "style-options/waistcoat/pocket-style/flap-pocket.jpeg",
+  "马甲口袋款式:双牙兜": "style-options/waistcoat/pocket-style/double-welt-pocket.jpeg",
+  "马甲下摆:平摆": "style-options/waistcoat/hem-style/straight-hem.jpeg",
+  "马甲下摆:尖摆": "style-options/waistcoat/hem-style/pointed-hem.jpeg",
+};
+
+/** 取西装上衣 / 西裤 / 马甲 某配置组下某选项的参考图 URL（无图返回 null） */
+export function suitOptionImageUrl(group: string, item: string): string | null {
+  const file = suitOptionImages[`${group}:${item}`];
+  if (!file) return null;
+  const encoded = file.split("/").map(encodeURIComponent).join("/");
+  return file.startsWith("style-options/") ? `/${encoded}` : `/garment-options/${encoded}`;
+}
