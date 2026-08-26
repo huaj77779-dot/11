@@ -11,7 +11,7 @@
 |---|---|---|---|---|
 | 面料主数据 | `app/lib/stylbiella-fabrics.ts` | 下单系统面料库（code/名称/面料本/图/价） | `app/tailoring-app.tsx`（选料、计价） | 改 TS 数组 |
 | 面料颜色映射 | `app/lib/stylbiella-fabric-colors.ts` | code → 色系/主色 hex（自动生成） | `tailoring-app.tsx`（色卡、筛选） | 跑 `scripts/analyze_fabric_colors.py` |
-| 面料图 | `public/stylbiella/{code}.png` | 面料缩略图（630 张） | 下单系统 / 展示页 | 按 code.png 命名放入 |
+| 面料图 | `public/stylbiella/{code}.webp` | 面料缩略图（630 张） | 下单系统 / 展示页 | 按 code.png 命名放入 |
 | 款式术语 | `app/lib/tailoring-terms.ts` | 中文术语 → 14 语种翻译 + 面料名翻译 | `tailoring-app.tsx`、`customers/page.tsx` | 改 TS 字典 |
 | UI 翻译（主） | `app/lib/i18n.ts` | zh/en/de/ja 界面文案 | 全局 `useLocale` | 改 TS 字典 |
 | UI 翻译（欧系） | `app/lib/eu-translations.ts` | fr/it/es/pt/nl/pl/sv/da/no/cs 界面文案 | 同上 | 改 TS 字典 |
@@ -83,7 +83,7 @@ export type StylbiellaFabric = {
   code: string;      // 货号，全局唯一，如 "34561"
   name: string;      // 中文名（非中文语种经 tailoring-terms 翻译）
   book: string;      // 面料本编号：6401/6402/6403/6410–6416
-  imageUrl: string;  // /stylbiella/{code}.png
+  imageUrl: string;  // /stylbiella/{code}.webp
   price: number;     // 单价（元），面料本定价：见下
 };
 ```
@@ -92,7 +92,7 @@ export type StylbiellaFabric = {
 
 **新增面料流程**：
 1. 确认 code 未被占用（`audit_content_assets.py` 会报重复）
-2. 图放入 `public/stylbiella/{code}.png`（必须与 code 同名）
+2. 图放入 `public/stylbiella/{code}.webp`（必须与 code 同名）
 3. 颜色映射无需手动维护——`scripts/analyze_fabric_colors.py` 可从大图重新生成
 4. 在数组中按 book 追加
 
@@ -141,7 +141,7 @@ python scripts/generate_fabric_name_en.py
 ## 6. 数据守则
 
 1. **code 即身份**：面料以 code 为准，名称只是展示；跨册可同名，同册尽量不重名。
-2. **图片命名 = code**：`public/stylbiella/{code}.png`，与 `imageUrl` 严格一致；审计脚本会报缺图/孤儿图。
+2. **图片命名 = code**：`public/stylbiella/{code}.webp`，与 `imageUrl` 严格一致；审计脚本会报缺图/孤儿图。
 3. **颜色映射只由脚本生成**：不要手改 `stylbiella-fabric-colors.ts`，改完重跑生成器。
 4. **面料名翻译统一进 `fabricEnglish`**：不要散落各处硬编码；新名字必须补词典（否则非中文语种退化为泛化标签）。
 5. **静态库与 DB 面料表是两套源**：上架走管理端 API，选料走静态库；改动前先确认改哪一套。

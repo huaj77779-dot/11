@@ -40,7 +40,7 @@
 
 ### 1.3 颜色与图片体系
 
-- 630 条面料 ↔ 630 条颜色映射（`stylbiella-fabric-colors.ts`：`code → {color 色系, colors[], hex 色值}`，由脚本从实物大图自动提取）↔ 630 张图（`public/stylbiella/{code}.png`），**三套数据 100% 对齐**
+- 630 条面料 ↔ 630 条颜色映射（`stylbiella-fabric-colors.ts`：`code → {color 色系, colors[], hex 色值}`，由脚本从实物大图自动提取）↔ 630 张图（`public/stylbiella/{code}.webp`），**三套数据 100% 对齐**
 - 颜色映射支持"一料双色系"（混色纱线），每条可属两个色族
 - 面料名：中文存储（如"深炭蓝藏青"），非中文语种经 `fabricEnglish` 词典翻译，未覆盖时回退为"颜色 · 纹理"泛化标签（当前覆盖 289/422，见《面料英文名词典》）
 
