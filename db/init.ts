@@ -94,7 +94,7 @@ const DDL_STATEMENTS = [
 ];
 
 /** Password hashing and legacy verification (server-side, no external dependency). */
-const PASSWORD_ITERATIONS = 150_000;
+const PASSWORD_ITERATIONS = 100_000;
 const PASSWORD_PREFIX = "pbkdf2-sha256";
 
 function toHex(bytes: Uint8Array): string {
