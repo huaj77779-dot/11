@@ -92,7 +92,7 @@ export default function CustomersPage() {
   const [selected, setSelected] = useState<CustomerDetail | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  const logout = async () => { try { await fetch("/api/auth/logout", { method: "POST", headers: { Authorization: `Bearer ${localStorage.getItem("token") ?? ""}` } }); } catch { /* ignore */ } clearAuth(); window.location.href = "/login"; };
+  const logout = async () => { try { await fetch("/api/auth/logout", { method: "POST" }); } catch { /* ignore */ } clearAuth(); window.location.href = "/login"; };
 
   const load = useCallback(async (query: string) => {
     setLoading(true);

@@ -676,12 +676,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
   const WHATSAPP = "8613800000000";
   const logout = async () => {
     try {
-      await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token") ?? ""}`,
-        },
-      });
+      await fetch("/api/auth/logout", { method: "POST" });
     } catch {}
     clearAuth();
     window.location.href = "/login";

@@ -40,7 +40,7 @@ export default function AdminPage() {
     );
   }
 
-  const logout = () => { void fetch("/api/auth/logout", { method: "POST", headers: { Authorization: `Bearer ${localStorage.getItem("token") ?? ""}` } }); clearAuth(); window.location.href = "/login"; };
+  const logout = () => { void fetch("/api/auth/logout", { method: "POST" }); clearAuth(); window.location.href = "/login"; };
 
   return (
     <main className="admin-page">

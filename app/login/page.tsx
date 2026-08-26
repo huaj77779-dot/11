@@ -21,7 +21,7 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "登录失败");
-      setAuth(data.token, data.user);
+      setAuth(data.user);
       window.location.href = data.user.role === "master" ? "/admin" : "/customize";
     } catch (err) {
       setError(err instanceof Error ? err.message : "登录失败");

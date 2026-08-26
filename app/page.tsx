@@ -31,10 +31,7 @@ export default function LandingPage() {
   const [form, setForm] = useState({ name: "", contact: "", message: "" });
 
   const logout = () => {
-    void fetch("/api/auth/logout", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${localStorage.getItem("token") ?? ""}` },
-    }).catch(() => undefined);
+    void fetch("/api/auth/logout", { method: "POST" }).catch(() => undefined);
     clearAuth();
     window.location.href = "/";
   };
@@ -150,8 +147,8 @@ export default function LandingPage() {
           <p>{zh ? "TailorSupply OS 把门店的量体、面料和款式选择，转化成工厂可以稳定执行的订单。客户看到的是你的品牌，背后由可追踪的定制生产体系完成。" : "TailorSupply OS turns your store's measurements, fabric and style decisions into a production-ready order. Your customer sees your brand; a traceable made-to-measure workflow operates behind it."}</p>
         </div>
         <div className="landing-wrap factory-collage">
-          <figure className="factory-main"><img src="/brand/custom-cutting-process.png" alt="Custom suit paper pattern aligned on wool fabric"/><figcaption><span>01</span><div><b>{zh ? "单件裁剪" : "Single-order cutting"}</b><small>{zh ? "面料编号、量体和纸样逐单对应" : "Fabric code, measurements and pattern matched order by order"}</small></div></figcaption></figure>
-          <figure className="factory-side"><img src="/brand/jacket-quality-control.webp" alt="Faceless artisan inspecting the lapel and handwork of a brown jacket"/><figcaption><span>02</span><div><b>{zh ? "成衣质检" : "Garment quality control"}</b><small>{zh ? "核对驳头、对称、工艺和外观" : "Lapel roll, symmetry, craft and finish inspected"}</small></div></figcaption></figure>
+          <figure className="factory-main"><img src="/brand/custom-cutting-process.png" alt="Custom suit paper pattern aligned on wool fabric" loading="lazy" decoding="async"/><figcaption><span>01</span><div><b>{zh ? "单件裁剪" : "Single-order cutting"}</b><small>{zh ? "面料编号、量体和纸样逐单对应" : "Fabric code, measurements and pattern matched order by order"}</small></div></figcaption></figure>
+          <figure className="factory-side"><img src="/brand/jacket-quality-control.webp" alt="Faceless artisan inspecting the lapel and handwork of a brown jacket" loading="lazy" decoding="async"/><figcaption><span>02</span><div><b>{zh ? "成衣质检" : "Garment quality control"}</b><small>{zh ? "核对驳头、对称、工艺和外观" : "Lapel roll, symmetry, craft and finish inspected"}</small></div></figcaption></figure>
           <aside className="factory-quote"><p>“</p><h3>{zh ? "数字系统负责准确，工匠负责质感。" : "The system protects accuracy. Craft gives it character."}</h3><a href="/client-stories">{zh ? "查看完整合作流程 →" : "See the complete client journey →"}</a></aside>
         </div>
       </section>

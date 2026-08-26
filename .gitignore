@@ -43,6 +43,8 @@ yarn-error.log*
 *.log
 .build-*.txt
 tsconfig.tsbuildinfo
+.cwd-marker.txt
+.next-config-loaded-marker.txt
 
 # cloudflare local secrets
 .dev.vars

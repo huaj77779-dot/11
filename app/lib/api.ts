@@ -1,19 +1,15 @@
 "use client";
 
-/** 从 localStorage 取 token 并构造鉴权头 */
+/** Authentication is carried by a same-site HttpOnly cookie. */
 export function authHeaders(): Record<string, string> {
-  if (typeof localStorage === "undefined") return {};
-  const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  return {};
 }
 
-export function setAuth(token: string, user: { id: number; username: string; role: string; storeName: string }): void {
-  localStorage.setItem("token", token);
+export function setAuth(user: { id: number; username: string; role: string; storeName: string }): void {
   localStorage.setItem("user", JSON.stringify(user));
 }
 
 export function clearAuth(): void {
-  localStorage.removeItem("token");
   localStorage.removeItem("user");
 }
 

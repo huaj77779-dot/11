@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
+import { env } from "cloudflare:workers";
 import * as schema from "./schema";
 
 export type Db = DrizzleD1Database<typeof schema>;
@@ -92,17 +93,90 @@ const DDL_STATEMENTS = [
   )`,
 ];
 
-/** SHA-256 密码哈希（服务端用，无外部依赖） */
-export async function hashPassword(password: string): Promise<string> {
-  const data = new TextEncoder().encode(`atelier::${password}`);
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+/** Password hashing and legacy verification (server-side, no external dependency). */
+const PASSWORD_ITERATIONS = 150_000;
+const PASSWORD_PREFIX = "pbkdf2-sha256";
+
+function toHex(bytes: Uint8Array): string {
+  return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-/** 确保数据表存在。幂等，可在每次请求开头安全调用。 */
+function fromHex(value: string): Uint8Array {
+  if (!/^[0-9a-f]+$/i.test(value) || value.length % 2 !== 0) throw new Error("Invalid hex");
+  return new Uint8Array(value.match(/.{2}/g)!.map((part) => Number.parseInt(part, 16)));
+}
+
+function timingSafeEqual(a: Uint8Array, b: Uint8Array): boolean {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i += 1) result |= a[i] ^ b[i];
+  return result === 0;
+}
+
+export async function hashPassword(password: string): Promise<string> {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt, iterations: PASSWORD_ITERATIONS }, key, 256);
+  return `${PASSWORD_PREFIX}$${PASSWORD_ITERATIONS}$${toHex(salt)}$${toHex(new Uint8Array(bits))}`;
+}
+
+async function legacyHashPassword(password: string): Promise<string> {
+  const data = new TextEncoder().encode(`atelier::${password}`);
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  return toHex(new Uint8Array(digest));
+}
+
+export async function verifyPassword(password: string, stored: string): Promise<{ valid: boolean; needsUpgrade: boolean }> {
+  if (!stored.startsWith(`${PASSWORD_PREFIX}$`)) {
+    return { valid: timingSafeEqual(fromHex(await legacyHashPassword(password)), fromHex(stored)), needsUpgrade: true };
+  }
+  const [, iterationsRaw, saltHex, expectedHex] = stored.split("$");
+  const iterations = Number.parseInt(iterationsRaw, 10);
+  if (!Number.isSafeInteger(iterations) || iterations < 100_000) return { valid: false, needsUpgrade: false };
+  const saltBytes = fromHex(saltHex);
+  const salt = new ArrayBuffer(saltBytes.length);
+  new Uint8Array(salt).set(saltBytes);
+  const expected = fromHex(expectedHex);
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt, iterations }, key, expected.length * 8);
+  return { valid: timingSafeEqual(new Uint8Array(bits), expected), needsUpgrade: iterations < PASSWORD_ITERATIONS };
+}
+
+/**
+ * 确保数据表存在。幂等，可在每次请求开头安全调用。
+ *
+ * 性能：DDL 检查只需执行一次（建表/补列/初始化账号均为幂等操作）。
+ * dev 模式下 D1 每查询约 100ms，ensureSchema 全量 13+ 次查询约 1.3s，
+ * 且 vinext dev 用隔离上下文执行路由（内存缓存跨请求不可靠）。
+ * 因此用「meta 表落库标记」做持久化快速路径：
+ * 已初始化后每次请求只查 1 次标记（≈100ms），跳过全部 DDL。
+ *
+ * SCHEMA_VERSION：修改 DDL_STATEMENTS / ensureColumn 清单后必须 +1，
+ * 否则已有库会因标记命中而跳过新迁移。
+ */
+const SCHEMA_VERSION = 3;
+const SCHEMA_META = "schema_meta";
+const SCHEMA_FLAG_KEY = "schema_initialized_v" + SCHEMA_VERSION;
+const SCHEMA_KEY = "__tailorsupply_schema_ready_v" + SCHEMA_VERSION;
+type G = typeof globalThis & { [SCHEMA_KEY]?: boolean };
+
 export async function ensureSchema(db: Db): Promise<void> {
+  const g = globalThis as G;
+  if (g[SCHEMA_KEY]) return;
+
+  // 持久化快速路径：meta 表存在性 + 标记（2 次查询；比全量 13+ 次便宜得多）
+  await db.run(sql.raw(`CREATE TABLE IF NOT EXISTS ${SCHEMA_META} (key TEXT PRIMARY KEY, value TEXT NOT NULL)`));
+  const rows = await db.all<{ value: string }>(
+    sql`SELECT value FROM ${sql.raw(SCHEMA_META)} WHERE key = ${SCHEMA_FLAG_KEY}`
+  );
+  if (rows.length === 0) {
+    await doEnsureSchema(db);
+    await db.run(sql.raw(`INSERT OR REPLACE INTO ${SCHEMA_META} (key, value) VALUES ('${SCHEMA_FLAG_KEY}', '1')`));
+  }
+  g[SCHEMA_KEY] = true;
+}
+
+async function doEnsureSchema(db: Db): Promise<void> {
   for (const ddl of DDL_STATEMENTS) {
     await db.run(sql.raw(ddl));
   }
@@ -113,19 +187,24 @@ export async function ensureSchema(db: Db): Promise<void> {
   await ensureColumn(db, "customers", "measurements_saved_at", "TEXT");
   await ensureColumn(db, "orders", "owner_id", "INTEGER NOT NULL DEFAULT 0");
   await ensureColumn(db, "fabrics", "book", "TEXT NOT NULL DEFAULT ''");
-  // 初始化默认主账号 admin / admin123
+  // Bootstrap or secure the master account from a deployment secret.
   const [master] = await db
-    .select({ id: sql<number>`id` })
+    .select()
     .from(schema.users)
     .where(sql`role = 'master'`)
     .limit(1);
-  if (!master) {
+  const initialPassword = (env as Record<string, string | undefined>).INITIAL_ADMIN_PASSWORD;
+  if (!master && initialPassword && initialPassword.length >= 12) {
     await db.insert(schema.users).values({
       username: "admin",
-      passwordHash: await hashPassword("admin123"),
+      passwordHash: await hashPassword(initialPassword),
       role: "master",
       storeName: "总部管理账号",
     });
+  } else if (master && initialPassword && initialPassword.length >= 12 && master.username === "admin" && master.passwordHash === await legacyHashPassword("admin123")) {
+    await db.update(schema.users)
+      .set({ passwordHash: await hashPassword(initialPassword), token: null, tokenExpiresAt: null })
+      .where(sql`id = ${master.id}`);
   }
 }
 

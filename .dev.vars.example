@@ -1,2 +1,5 @@
-# 企业微信群机器人 Webhook。复制本文件为 .dev.vars 后填入真实地址。
-WECHAT_WEBHOOK_URL="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=替换为你的机器人key"
+# 企业微信群机器人 Webhook
+WECHAT_WEBHOOK_URL="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=replace-with-your-key"
+
+# 首次部署或替换旧版默认管理员密码；至少 12 个字符
+INITIAL_ADMIN_PASSWORD="replace-with-a-unique-password-at-least-12-characters"
