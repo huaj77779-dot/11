@@ -7,6 +7,9 @@ import { useLocale } from "../lib/i18n";
 export default function NewsPage() {
   const { locale } = useLocale();
   const zh = locale === "zh-CN";
+  const formatDate = (date: string) => new Intl.DateTimeFormat(zh ? "zh-CN" : "en-US", {
+    year: "numeric", month: "long", day: "numeric", timeZone: "UTC",
+  }).format(new Date(`${date}T00:00:00Z`));
   return <LandingSubpage>
     <section className="content-hero"><div className="landing-wrap">
       <p className="eyebrow">TAILORSUPPLY OS · INSIGHTS</p>
@@ -18,7 +21,7 @@ export default function NewsPage() {
         {article.images?.[0] && <a className="article-card-image" href={`/news/${article.slug}`} aria-label={zh ? article.titleZh : article.title}>
           <img src={article.images[0].src} alt={article.images[0].alt} width="1200" height="1600" loading="lazy" decoding="async" />
         </a>}
-        <div className="article-card-meta"><span>{article.category}</span><time>{article.published}</time></div>
+        <div className="article-card-meta"><span>{article.category}</span><time dateTime={article.published}>{formatDate(article.published)}</time></div>
         <h2><a href={`/news/${article.slug}`}>{zh ? article.titleZh : article.title}</a></h2>
         <p>{zh ? article.descriptionZh : article.description}</p>
         <div className="article-card-foot"><small>{article.readingTime}</small><a href={`/news/${article.slug}`}>{zh ? "阅读全文 →" : "Read guide →"}</a></div>

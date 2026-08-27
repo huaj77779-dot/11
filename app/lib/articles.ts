@@ -4,6 +4,12 @@ export type ArticleSection = {
   bullets?: string[];
 };
 
+export type ArticleImage = {
+  src: string;
+  alt: string;
+  caption: string;
+};
+
 export type SeoArticle = {
   slug: string;
   title: string;
@@ -15,15 +21,231 @@ export type SeoArticle = {
   updated: string;
   readingTime: string;
   primaryKeyword: string;
-  images?: {
-    src: string;
-    alt: string;
-    caption: string;
-  }[];
+  images?: ArticleImage[];
   sections: ArticleSection[];
 };
 
 export const SEO_ARTICLES: SeoArticle[] = [
+  {
+    slug: "summer-wool-linen-silk-trousers",
+    title: "Wool, Linen and Silk Trousers for Summer Tailoring",
+    titleZh: "夏季毛麻丝西裤：轻盈面料与定制细节展示",
+    description: "A close look at grey wool-linen-silk trousers designed for warm-weather tailoring, with a clean back pocket and adjustable waistband details.",
+    descriptionZh: "灰色毛麻丝夏季西裤成品展示，重点呈现轻盈表面、后袋、腰头与侧调节细节。",
+    category: "Finished Garment",
+    published: "2026-06-18",
+    updated: "2026-06-18",
+    readingTime: "4 min read",
+    primaryKeyword: "wool linen silk trousers",
+    images: [
+      { src: "/news/summer-wool-linen-silk-trousers/grey-summer-trousers-full-view.webp", alt: "Grey wool linen silk summer trousers shown on a hanger", caption: "The completed grey trousers show a restrained surface texture and a clean tailored silhouette for summer wardrobes." },
+      { src: "/news/summer-wool-linen-silk-trousers/grey-trousers-side-adjuster-detail.webp", alt: "Side adjuster and back pocket detail on grey summer trousers", caption: "The side adjuster, rear welt pocket and waistband finishing give the trousers a precise tailored character without relying on a belt." },
+    ],
+    sections: [
+      { heading: "A summer trouser built around material balance", paragraphs: ["Wool, linen and silk trousers bring together three fibres with different roles. In this finished grey pair, the objective is not to make an exaggerated statement but to create a refined warm-weather trouser with visible texture, controlled drape and a polished appearance.", "For tailoring stores, a blended summer cloth can offer a useful alternative between crisp pure linen and conventional business suiting. The exact performance still depends on the selected cloth weight, weave and composition, so those specifications should be confirmed for each order."] },
+      { heading: "Tailored details that remain visually quiet", paragraphs: ["The back welt pocket, button closure and side adjustment are integrated into a clean waistband. These details let the fabric remain the main visual feature while giving the wearer a practical way to refine the fit at the waist.", "The images document the completed garment and its external construction. They do not replace a technical specification: waistband height, rise, pleat choice, hem and pocket treatment should still be written into the approved order before production."] },
+      { heading: "How stores can specify a summer trouser", paragraphs: ["A useful order brief should identify the fabric reference, intended climate, preferred rise, waistband system, pocket layout and finished hem. Retailers can then connect the material story to decisions that customers can see and feel, rather than relying on broad claims such as lightweight or luxurious.", "For repeat orders, save the accepted finished measurements and the exact cloth reference together. This makes it easier to reproduce the balance of comfort, drape and appearance in a later pair."] },
+    ],
+  },
+  {
+    slug: "customer-fit-tailored-trousers",
+    title: "Tailored Trousers on the Customer: Fit and Silhouette Review",
+    titleZh: "西裤客户上身效果：腰位、褶量与裤型观察",
+    description: "Three customer-fit views showing how high-rise pleated trousers and side adjusters influence balance, ease and leg line.",
+    descriptionZh: "通过三张客户上身图，展示高腰、前褶、侧调节袢以及不同裤型的实际轮廓。",
+    category: "Fit Review",
+    published: "2026-05-28",
+    updated: "2026-05-28",
+    readingTime: "5 min read",
+    primaryKeyword: "tailored trousers fit",
+    images: [
+      { src: "/news/customer-fit-tailored-trousers/grey-pleated-trousers-customer-fit.webp", alt: "Customer wearing grey high-rise pleated tailored trousers", caption: "The grey pair combines a higher waist, extended closure and front pleats with a relaxed straight leg." },
+      { src: "/news/customer-fit-tailored-trousers/navy-pinstripe-trousers-customer-fit.webp", alt: "Customer wearing navy pinstripe pleated trousers", caption: "The navy pinstripe pair shows how a darker cloth and vertical stripe reinforce the long line of the trouser." },
+      { src: "/news/customer-fit-tailored-trousers/blue-grey-trousers-front-fit.webp", alt: "Front fit of blue grey high-rise trousers with side adjusters", caption: "A front view makes the waistband position, pleat opening and balance through the leg easier to evaluate." },
+    ],
+    sections: [
+      { heading: "Fit is read from the whole silhouette", paragraphs: ["A trouser can look neat when folded and still behave differently on the body. These customer-fit images show why waist position, seat allowance, front rise, pleat direction and leg width must be considered together. The grey and navy examples use related tailored details but create different visual effects through cloth, stripe and proportion.", "The photographs are useful evidence of overall balance. Final fit decisions should still be based on measurements and the customer's comfort feedback, not on a single camera angle."] },
+      { heading: "What the front pleats are doing", paragraphs: ["Pleats provide controlled room at the front of the trouser and can help the cloth fall cleanly from a higher waistband. Their success depends on sufficient rise and seat allowance. If the upper block is too tight, pleats may pull open; if it is too loose, the front can lose definition.", "Side adjusters keep the waistband visually clean and allow small fit changes. They are not a substitute for correct sizing, but they can fine-tune the waist without interrupting the line with a belt."] },
+      { heading: "How a retailer should review a fitting", paragraphs: ["Review the waistband level, front closure, pleat behaviour, pocket opening, side seam, back balance and hem at the same time. Ask the wearer to stand naturally and walk before approving the result. A static pose can hide tension or excess cloth that becomes visible in movement.", "Fit feedback should be recorded against the exact order and measurement version. That turns these observations into useful data for the next pair rather than leaving them as informal comments."] },
+    ],
+  },
+  {
+    slug: "unstructured-unlined-canvas-jacket",
+    title: "An Unstructured, Unlined Jacket with Full Canvas Construction",
+    titleZh: "平驳领无结构西装：无里布与全麻无粘衬工艺",
+    description: "A grey checked custom jacket combining notch lapels, an unlined interior, natural shoulders and full-canvas construction without fusible interlining.",
+    descriptionZh: "灰色格纹定制上衣采用平驳领、自然肩、贴袋、无里布与全麻无粘衬结构。",
+    category: "Craftsmanship",
+    published: "2025-10-16",
+    updated: "2025-10-16",
+    readingTime: "5 min read",
+    primaryKeyword: "custom tailored suits",
+    images: [
+      { src: "/news/unstructured-unlined-canvas-jacket/grey-check-unstructured-jacket-front.webp", alt: "Grey checked unstructured custom jacket with notch lapels", caption: "The completed jacket uses notch lapels, patch pockets and a softly defined front." },
+      { src: "/news/unstructured-unlined-canvas-jacket/notch-lapel-and-patch-pocket-detail.webp", alt: "Notch lapel and patch pocket on an unlined checked jacket", caption: "A closer view of the lapel, chest area and patch pocket shows the relaxed construction language." },
+      { src: "/news/unstructured-unlined-canvas-jacket/natural-shoulder-unlined-jacket-side.webp", alt: "Natural shoulder profile on an unstructured unlined jacket", caption: "The side view highlights the natural shoulder and the restrained amount of internal build-up." },
+    ],
+    sections: [
+      { heading: "Soft appearance does not mean no construction", paragraphs: ["This grey checked jacket was specified with notch lapels, an unstructured expression, no full lining and a full-canvas front without fusible interlining. The result is visually relaxed, but it still requires careful internal control to support the lapel and front edge.", "For custom tailored suits, terms such as unstructured, unlined and full canvas must be recorded separately. They describe different decisions and should not be treated as interchangeable labels."] },
+      { heading: "Why the exterior details suit the concept", paragraphs: ["Patch pockets and a natural shoulder reinforce the lighter character of the jacket. The checked cloth remains prominent, while the lapel and front retain enough definition to read as tailoring rather than an overshirt.", "Pattern matching, edge control and pressing become especially visible on an unlined garment because there is less internal material to conceal the construction. The inside should therefore be discussed and approved as part of the design."] },
+      { heading: "Specification points for an unlined order", paragraphs: ["A retailer should confirm shoulder treatment, canvas extent, seam finishing, internal pockets, sleeve lining, vent construction and label placement. Full canvas without fusible interlining is a specific production request and should appear clearly on the PI or technical sheet.", "The final choice should match climate, cloth and the customer's expectations. A soft jacket can be comfortable and expressive, but it is not automatically suitable for every fabric or use case."] },
+    ],
+  },
+  {
+    slug: "lp-fabric-suit-hanging-shipping-box",
+    title: "How a Full-Lined LP Fabric Suit Is Packed for Dispatch",
+    titleZh: "LP 面料全衬西装发货：立体挂装包装展示",
+    description: "A factory dispatch view of a blue pinstripe full-lined suit secured on a hanger inside a structured garment shipping box.",
+    descriptionZh: "蓝色条纹 LP 面料全衬西装采用衣架固定与立体纸箱挂装方式，减少运输中的折叠。",
+    category: "Shipping",
+    published: "2025-11-20",
+    updated: "2025-11-20",
+    readingTime: "4 min read",
+    primaryKeyword: "custom suits",
+    images: [
+      { src: "/news/lp-fabric-suit-hanging-shipping-box/blue-pinstripe-suit-hanging-shipping-box.webp", alt: "Blue pinstripe full-lined custom suit in a hanging shipping box", caption: "The finished suit is supported on a hanger inside a structured carton before final closure and dispatch." },
+    ],
+    sections: [
+      { heading: "Packaging is part of the finished product", paragraphs: ["This blue pinstripe suit in LP fabric was completed with a full lining and prepared for dispatch in a structured hanging box. The jacket remains on its hanger rather than being tightly folded into a flat parcel, helping the garment retain its shape during handling.", "The photograph records the packaging style at the factory. Final protection, outer closure and carrier labels still need to follow the destination and shipping method."] },
+      { heading: "Why a hanging carton is useful", paragraphs: ["A tailored jacket contains shaped areas at the shoulder, chest and lapel. Reducing hard folds can lower the amount of pressing needed when the order reaches the store. The carton also keeps the garment position more predictable than loose packing.", "Packaging cannot eliminate every transit risk. Moisture protection, internal movement, carton strength and carrier handling remain important, especially for international routes."] },
+      { heading: "What retailers should confirm before shipping", paragraphs: ["The order record should connect the garment, customer, destination, package count and tracking number. Retailers should also agree whether suits travel individually, as a consolidated store shipment or with additional branded packaging.", "On receipt, photograph the carton if there is visible damage, inspect the garment before customer delivery and allow time for light steaming or pressing where required."] },
+    ],
+  },
+  {
+    slug: "neapolitan-linen-summer-shorts",
+    title: "Neapolitan Linen Shorts for a Tailored Summer Wardrobe",
+    titleZh: "夏季那不勒斯亚麻短裤：双褶与侧调节细节",
+    description: "Striped linen shorts in two colourways with double pleats, extended waistbands, side adjusters and turned cuffs.",
+    descriptionZh: "两种条纹配色的那不勒斯风格亚麻短裤，展示双褶、延长腰头、侧调节袢与翻边裤脚。",
+    category: "Summer Tailoring",
+    published: "2026-06-05",
+    updated: "2026-06-05",
+    readingTime: "5 min read",
+    primaryKeyword: "men's linen shorts",
+    images: [
+      { src: "/news/neapolitan-linen-summer-shorts/striped-linen-shorts-two-colourways.webp", alt: "Two colourways of striped Neapolitan linen shorts", caption: "Beige and blue striped versions show how the same tailored specification can support different summer palettes." },
+      { src: "/news/neapolitan-linen-summer-shorts/beige-striped-linen-shorts-inner-waist.webp", alt: "Interior waistband and extended closure on beige striped linen shorts", caption: "The opened waistband shows the extended closure, internal finishing and front pleat construction." },
+      { src: "/news/neapolitan-linen-summer-shorts/blue-striped-linen-shorts-back-detail.webp", alt: "Back pocket and side adjuster on blue striped linen shorts", caption: "The blue colourway combines a rear welt pocket, button closure and metal side adjuster." },
+    ],
+    sections: [
+      { heading: "Shorts treated as tailoring", paragraphs: ["These men's linen shorts use the vocabulary of tailored trousers rather than casual sportswear. Double pleats, an extended waistband, side adjusters, rear welt pockets and turned cuffs create a composed shape while preserving the relaxed purpose of a summer garment.", "The two striped cloths demonstrate how proportion and construction can remain consistent while colour changes the character of the finished piece."] },
+      { heading: "The waistband carries much of the design", paragraphs: ["The extended front closure creates a clean line across the waist, while side adjusters reduce the need for a belt. Inside, the waistband and fastening components should be finished to remain comfortable against lightweight summer clothing.", "Pleats add room through the front and help the cloth fall away from the body. Their depth and direction should be specified together with rise and hip allowance."] },
+      { heading: "Ordering linen shorts for a collection", paragraphs: ["For a retail programme, confirm fabric weight, transparency, stripe direction, pocketing, waistband style, finished inseam and cuff depth. Linen naturally develops character in wear, so product descriptions should set realistic expectations rather than promising a permanently crease-free surface.", "A small run in coordinated colourways can extend a tailoring offer into summer without abandoning the construction details customers already recognise."] },
+    ],
+  },
+  {
+    slug: "cmt-handmade-trousers-premium-trims",
+    title: "CMT Handmade Trousers with Premium Trims: A 25-Day Production Case",
+    titleZh: "手工西裤来料加工：25 天工期与高规格辅料配置",
+    description: "A CMT handmade trouser case using a Riri zip, cotton herringbone pocketing, shirt-cloth waistband, premium buttons and plated side adjusters.",
+    descriptionZh: "手工西裤来料加工案例，记录 25 天工期以及 Riri 拉链、全棉鱼纹布、高支衬衫布腰里等辅料。",
+    category: "CMT Production",
+    published: "2026-04-24",
+    updated: "2026-04-24",
+    readingTime: "6 min read",
+    primaryKeyword: "CMT handmade trousers",
+    images: [
+      { src: "/news/cmt-handmade-trousers-premium-trims/riri-metal-zip-trouser-detail.webp", alt: "Riri metal zip installed in handmade grey trousers", caption: "The metal zip is one of several customer-specified components documented for this CMT trouser order." },
+      { src: "/news/cmt-handmade-trousers-premium-trims/grey-handmade-trousers-back-view.webp", alt: "Grey handmade trousers with rear pocket and side adjuster", caption: "The completed back view shows the rear welt pocket, button and plated waist adjuster." },
+      { src: "/news/cmt-handmade-trousers-premium-trims/shirt-fabric-waistband-and-pocketing.webp", alt: "High-count striped shirt cloth used inside a trouser waistband", caption: "The inner waistband uses high-count shirt cloth, paired with cotton pocketing and the specified fastening system." },
+      { src: "/news/cmt-handmade-trousers-premium-trims/handmade-trouser-back-pocket-details.webp", alt: "Back pocket finishing on two grey handmade trousers", caption: "A paired view helps check pocket alignment, button placement and consistency between garments." },
+    ],
+    sections: [
+      { heading: "CMT begins with a complete material responsibility list", paragraphs: ["This handmade trouser project was handled as a customer-material CMT order with a stated 25-day production period. The specification included a Riri zip, all-cotton herringbone pocketing, high-count shirting at the waistband, shell or horn buttons, plated metal side adjusters, a YKK trouser hook and Bemberg cupro lining.", "The 25-day period describes this production case, not a universal promise. Timing should be reconfirmed after materials, quantities and technical details are complete."] },
+      { heading: "Premium components need production control", paragraphs: ["Named trims matter only when the correct items are received, identified and installed in the approved positions. The factory record should distinguish customer-supplied cloth, factory-supplied components and any approved substitutes.", "Photographs of the zip, waistband, adjuster and pockets create a useful pre-dispatch record, while the PI or technical sheet remains the formal source of truth."] },
+      { heading: "How to approve a repeatable trouser standard", paragraphs: ["Before bulk work begins, confirm a representative sample with the final waistband, pocketing, buttons, hooks and adjusters. Measure the agreed control points and record visible workmanship standards such as welt width, button placement and seam appearance.", "For repeat orders, keep component codes and accepted garment measurements together. This prevents a premium trim list from becoming disconnected from the fit and construction it was intended to support."] },
+    ],
+  },
+  {
+    slug: "linen-trousers-italian-store-order",
+    title: "A Batch of Linen Trousers Made for an Italian Retail Store",
+    titleZh: "为意大利门店制作的一批亚麻长裤",
+    description: "A production batch of neutral-colour linen trousers prepared for an Italian retail client, with varied colours and finishing details.",
+    descriptionZh: "为意大利门店客户制作的亚麻长裤批次，包含米白、浅灰、奶油色、浅棕与条纹款。",
+    category: "Retail Order",
+    published: "2026-05-15",
+    updated: "2026-05-15",
+    readingTime: "5 min read",
+    primaryKeyword: "linen trousers for men",
+    images: [
+      { src: "/news/linen-trousers-italian-store-order/italian-store-linen-trousers-production.webp", alt: "Batch of neutral linen trousers made for an Italian retail store", caption: "The store order brings together several light neutral tones and one striped option within a coordinated summer assortment." },
+      { src: "/news/linen-trousers-italian-store-order/neutral-linen-trousers-batch.webp", alt: "Cream grey and beige linen trousers hanging after production", caption: "Hanging the completed trousers together supports a visual check of colour range, length and overall consistency before dispatch." },
+    ],
+    sections: [
+      { heading: "A coordinated order rather than one repeated colour", paragraphs: ["This batch of linen trousers was produced for an Italian retail store. The assortment includes cream, off-white, light grey, beige and striped options, allowing the store to present a summer palette while maintaining a related product language.", "For B2B production, variation should be planned rather than improvised. Each colour and style needs its own fabric reference and approved specification even when the garments belong to one collection."] },
+      { heading: "What can be checked at batch level", paragraphs: ["A hanging review makes it easier to compare overall length, colour grouping, cloth appearance and visible finishing. It can also reveal whether pieces have been mixed between customer orders before packing.", "Detailed quality control still happens garment by garment. Waist measurements, pocket construction, closures and customer-specific options cannot be approved from a group photograph alone."] },
+      { heading: "Planning linen trousers for a retail season", paragraphs: ["Retailers should work backward from the intended selling window and allow time for cloth confirmation, production, international transport and store preparation. Linen demand is seasonal, so late approval can reduce the useful selling period even when sewing is completed correctly.", "Saving accepted specifications by colourway makes reorders more reliable and helps the store expand successful tones without rebuilding the programme from memory."] },
+    ],
+  },
+  {
+    slug: "tailored-trouser-construction-details",
+    title: "Tailored Trouser Details: Fabric, Waistband, Pockets and Hem",
+    titleZh: "长裤西裤细节展示：面料、腰头、口袋与裤脚",
+    description: "A detailed view of blue-grey tailored trousers, including cloth texture, extended waistband, zip fly, side adjuster, back pocket and hem.",
+    descriptionZh: "蓝灰色定制西裤细节展示，覆盖面料纹理、延长腰头、拉链门襟、侧调节袢、后袋与裤脚。",
+    category: "Detail Review",
+    published: "2026-06-26",
+    updated: "2026-06-26",
+    readingTime: "5 min read",
+    primaryKeyword: "tailored trouser details",
+    images: [
+      { src: "/news/tailored-trouser-construction-details/blue-grey-trouser-fabric-texture.webp", alt: "Close-up texture of blue-grey tailored trouser fabric", caption: "The close-up records the fine surface and edge finishing of the blue-grey cloth." },
+      { src: "/news/tailored-trouser-construction-details/extended-waistband-and-zip-detail.webp", alt: "Extended waistband zip fly and inner waist on blue-grey trousers", caption: "The opened front shows the extended closure, zip fly, internal waistband and fastening details." },
+      { src: "/news/tailored-trouser-construction-details/blue-grey-trousers-complete-view.webp", alt: "Complete blue-grey trousers with side adjuster and plain hem", caption: "A full view connects the waistband, rear pocket, leg line and finished hem." },
+      { src: "/news/tailored-trouser-construction-details/single-button-back-pocket-detail.webp", alt: "Single-button rear welt pocket on tailored trousers", caption: "The rear welt pocket uses a narrow button tab and aligned stitching for a restrained finish." },
+    ],
+    sections: [
+      { heading: "Start with the cloth and edge quality", paragraphs: ["Close-up photographs show details that disappear in a full-garment image: yarn texture, seam edges, pressing and the way folded layers meet. This blue-grey cloth has a fine, understated surface that supports a clean tailored presentation.", "A photograph cannot establish fibre content or weight, so those facts should come from the fabric record rather than visual guesswork."] },
+      { heading: "The waistband is a system", paragraphs: ["The extended waistband, internal closure, zip fly and side adjustment work together. Their spacing affects comfort and appearance, while the internal materials influence how the waist keeps its shape through wear.", "For production approval, specify waistband height, extension length, hook position, adjuster finish and internal cloth. Small changes in any one item can alter the final balance."] },
+      { heading: "Pockets and hems complete the inspection", paragraphs: ["The rear welt pocket should be checked for level placement, consistent width, secure buttoning and clean ends. At the leg opening, the chosen hem must match the order and sit evenly on both legs.", "A useful detail set combines one full-garment image with focused views of the cloth, waistband and pockets. This creates better evidence for retailers than a group of similar beauty shots."] },
+    ],
+  },
+  {
+    slug: "neapolitan-double-pleat-trousers",
+    title: "Neapolitan Double-Pleat Trousers: A Construction Detail Study",
+    titleZh: "那不勒斯双褶西裤：从褶量到内腰的细节展示",
+    description: "Beige Neapolitan-style trousers with double pleats, a broad waistband, extended fastening, side pocket and clean internal finishing.",
+    descriptionZh: "米灰色那不勒斯风格双褶西裤，展示加宽腰头、延长扣袢、侧袋、后袋与内部结构。",
+    category: "Detail Review",
+    published: "2026-05-08",
+    updated: "2026-05-08",
+    readingTime: "5 min read",
+    primaryKeyword: "Neapolitan pleated trousers",
+    images: [
+      { src: "/news/neapolitan-double-pleat-trousers/beige-double-pleat-trousers-full-view.webp", alt: "Beige Neapolitan double-pleat trousers with broad waistband", caption: "The full view shows the double pleats, broad waistband, rear pocket and straight tailored leg." },
+      { src: "/news/neapolitan-double-pleat-trousers/beige-trouser-fabric-and-seam-detail.webp", alt: "Close-up of beige trouser fabric and folded seam edges", caption: "A macro view records the cloth texture and the consistency of folded and stitched edges." },
+      { src: "/news/neapolitan-double-pleat-trousers/double-pleat-and-side-pocket-detail.webp", alt: "Double pleats and side pocket on beige Neapolitan trousers", caption: "The double pleats open from the broad waistband beside a cleanly finished side pocket." },
+      { src: "/news/neapolitan-double-pleat-trousers/extended-waist-tab-and-inner-finish.webp", alt: "Extended waist tab and interior finishing on beige trousers", caption: "The opened waist shows the long adjustment tab, zip, pocketing and internal waistband treatment." },
+    ],
+    sections: [
+      { heading: "The Neapolitan influence is expressed through ease", paragraphs: ["These beige trousers use a broad waistband and double pleats to create room and visual rhythm through the upper block. The result is tailored but not rigid, with the pleats helping the leg fall cleanly below the waist.", "The supplied Chinese fabric name requires confirmation before any brand attribution, so this article describes only the construction and visible cloth characteristics."] },
+      { heading: "Pleats, pockets and cloth must work together", paragraphs: ["The double pleats need enough rise and hip allowance to remain composed. Beside them, the side pocket opening is kept narrow and clean so that it does not compete with the front structure.", "The close-up views also show why cloth choice matters. A fabric must accept folding, pressing and seam construction without losing the intended soft appearance."] },
+      { heading: "Inside finishing supports the outside line", paragraphs: ["The extended waist tab, zip fly, pocketing and internal waistband are part of the fit system. Their materials and positions affect comfort, fastening security and how the waist sits when worn.", "Retailers should approve these internal choices with the same care as the visible pleats. A complete trouser specification includes both the photographed exterior and the hidden construction that supports it."] },
+    ],
+  },
+  {
+    slug: "handmade-flannel-trousers-premium-trims",
+    title: "Handmade Flannel Trousers with Riri Zip and Premium Internal Trims",
+    titleZh: "手工法兰绒西裤：Riri 拉链与高规格内部辅料",
+    description: "Grey handmade flannel trousers shown inside and out, with double pleats, side adjusters, striped waistband cloth and premium specified trims.",
+    descriptionZh: "灰色手工法兰绒西裤内外细节展示，包含双褶、侧调节扣、条纹腰里与指定高规格辅料。",
+    category: "CMT Production",
+    published: "2025-12-11",
+    updated: "2025-12-11",
+    readingTime: "6 min read",
+    primaryKeyword: "handmade flannel trousers",
+    images: [
+      { src: "/news/handmade-flannel-trousers-premium-trims/grey-flannel-trousers-back-view.webp", alt: "Grey handmade flannel trousers with rear pocket and cuffed hem", caption: "The completed back view shows the soft flannel surface, rear pocket, side adjuster and cuffed hem." },
+      { src: "/news/handmade-flannel-trousers-premium-trims/grey-flannel-front-pleat-adjuster.webp", alt: "Front pleat and black side adjuster on grey flannel trousers", caption: "A close view highlights the front pleat, shaped waistband and dark plated adjustment buckle." },
+      { src: "/news/handmade-flannel-trousers-premium-trims/grey-flannel-trousers-inner-construction.webp", alt: "Interior construction of grey flannel trousers with metal zip", caption: "The opened garment documents the zip fly, waistband extension, pocketing and internal construction." },
+      { src: "/news/handmade-flannel-trousers-premium-trims/striped-waistband-riri-zip-interior.webp", alt: "Striped shirt-cloth waistband and metal zip inside handmade trousers", caption: "Striped high-count shirt cloth gives the inner waistband a clean, distinctive finish beside the specified metal zip." },
+    ],
+    sections: [
+      { heading: "A second CMT example with a different visual focus", paragraphs: ["This handmade trouser order uses the same premium component standard recorded for the CMT programme: Riri zip, all-cotton herringbone pocketing, high-count shirting at the waist, shell or horn buttons, plated adjusters, YKK trouser hook and Bemberg cupro lining. The stated production period for the order was 25 days.", "Here the grey flannel cloth changes the emphasis. Its soft surface makes pressing, pleat definition and edge control especially visible."] },
+      { heading: "The exterior combines softness with structure", paragraphs: ["Double pleats create room through the front, while the shaped waistband and side adjusters keep the upper block controlled. At the back, a single-button welt pocket provides a restrained finish. The cuffed hem adds visual weight at the bottom of the leg.", "Because flannel can mark under aggressive handling, pressing and packaging should preserve the surface rather than flattening it excessively."] },
+      { heading: "Internal trims are documented, not hidden", paragraphs: ["The interior images show the striped waistband cloth, zip, closures and pocketing as a connected system. This is useful for store clients who need confidence that specified components are present rather than relying only on an external beauty shot.", "For future production, component brands and material descriptions should remain attached to the approved sample record. The 25-day timing should be reconfirmed for each quantity and material delivery schedule."] },
+    ],
+  },
   {
     slug: "150-custom-linen-trousers-bulk-order-completed",
     title: "150 Custom Linen Trousers Completed for a Bulk Order",
@@ -241,7 +463,7 @@ export const SEO_ARTICLES: SeoArticle[] = [
       { heading: "Improve from the first ten orders", paragraphs: ["Review each completed order for data errors, fit corrections, communication delays and customer questions. Turn repeated questions into website guidance and repeated errors into required fields. The result is a private-label operation that becomes easier to scale because learning is captured in the system."] },
     ],
   },
-];
+].filter((article) => article.images && article.images.length > 0);
 
 export function getArticle(slug: string) {
   return SEO_ARTICLES.find((article) => article.slug === slug);
