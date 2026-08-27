@@ -66,16 +66,19 @@ async function loadRates(): Promise<FxPayload | null> {
 export function useCurrency() {
   const { loc } = useLocale();
   const currency = CURRENCY_BY_LOCALE[loc];
-  const [payload, setPayload] = useState<FxPayload | null>(() => {
-    if (typeof window === "undefined") return null;
-    try {
-      return JSON.parse(window.localStorage.getItem("tailorsupply-fx") ?? "null") as FxPayload | null;
-    } catch {
-      return null;
-    }
-  });
+  // 初始 state 固定为 null（服务端/客户端首帧一致，均走 FALLBACK_RATES），
+  // 避免 hydration mismatch：之前这里在 useState 初始化时读 localStorage，
+  // 服务端返回 null、客户端首帧返回缓存汇率 → 首帧价格不同 → React 报错。
+  // 缓存读取已移到 useEffect（水合完成后更新，React 标准模式）。
+  const [payload, setPayload] = useState<FxPayload | null>(null);
 
   useEffect(() => {
+    try {
+      const saved = JSON.parse(
+        window.localStorage.getItem("tailorsupply-fx") ?? "null",
+      ) as FxPayload | null;
+      if (saved) setPayload(saved);
+    } catch {}
     void loadRates().then((next) => next && setPayload(next));
   }, []);
 

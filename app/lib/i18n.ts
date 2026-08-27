@@ -210,6 +210,7 @@ export const T: Dict = {
   "home.stylesSummary": { zh: "专属选项", en: "Options", de: "Optionen", ja: "オプション" },
   "home.singleChoice": { zh: "单选 · 必选", en: "Single · Required", de: "Einfach · Pflicht", ja: "単一選択 · 必須" },
   "home.selected": { zh: "已选择", en: "Selected", de: "Gewählt", ja: "選択済み" },
+  "home.tailoringFee": { zh: "加工费", en: "Tailoring fee", de: "Verarbeitung", ja: "加工費" },
   "home.saveStyle": { zh: "保存并选择款式", en: "Save & Choose Style", de: "Speichern & Stil wählen", ja: "保存してスタイルへ" },
   "home.stylesIndependent": { zh: "产品选项已独立", en: "Independent options", de: "Unabhängige Optionen", ja: "独立したオプション" },
   "home.noFabric": { zh: "待选择面料", en: "Fabric not selected", de: "Kein Stoff", ja: "生地未選択" },

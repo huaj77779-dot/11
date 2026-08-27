@@ -15,10 +15,60 @@ export type SeoArticle = {
   updated: string;
   readingTime: string;
   primaryKeyword: string;
+  images?: {
+    src: string;
+    alt: string;
+    caption: string;
+  }[];
   sections: ArticleSection[];
 };
 
 export const SEO_ARTICLES: SeoArticle[] = [
+  {
+    slug: "150-custom-linen-trousers-bulk-order-completed",
+    title: "150 Custom Linen Trousers Completed for a Bulk Order",
+    titleZh: "150 条定制亚麻西裤团单保质保量完成",
+    description: "A 150-piece custom linen trouser order completed with consistent construction, elasticated comfort waistbands and carefully finished details.",
+    descriptionZh: "150 条定制亚麻西裤团单已保质保量完成，展示成衣版型、松紧抽绳腰头、拉链与批量生产细节。",
+    category: "Workshop Update",
+    published: "2026-08-27",
+    updated: "2026-08-27",
+    readingTime: "3 min read",
+    primaryKeyword: "custom linen trousers manufacturer",
+    images: [
+      { src: "/news/custom-linen-trousers-150/custom-linen-trousers-blue-and-beige.webp", alt: "Blue and beige custom linen trousers with elasticated drawstring waistbands", caption: "Two colourways from the completed custom linen trouser order, showing the tailored front and comfort waistband construction." },
+      { src: "/news/custom-linen-trousers-150/bulk-linen-trousers-production.webp", alt: "Completed beige linen trousers stacked after bulk production", caption: "Completed trousers prepared together after production, with consistent waist and drawstring details across the order." },
+      { src: "/news/custom-linen-trousers-150/linen-trouser-metal-zip-detail.webp", alt: "Metal zip and clean interior finishing on custom linen trousers", caption: "Close-up of the metal zip and interior seam finishing used on the custom trousers." },
+    ],
+    sections: [
+      { heading: "A 150-piece custom trouser order completed", paragraphs: ["Our workshop has completed a bulk order of 150 custom linen trousers. The order combines a tailored appearance with practical comfort details, making the trousers suitable for warm-weather uniforms, hospitality teams, retail collections and private-label programmes.", "The finished garments were organised and checked as a complete production batch so that colour, construction and visible finishing remained consistent across the order."] },
+      { heading: "Tailored structure with an adjustable comfort waist", paragraphs: ["The trousers feature a clean tailored front together with an elasticated back waistband and drawstring adjustment. This construction gives the garment a smarter appearance than casual drawstring trousers while allowing more flexibility for daily wear.", "Blue and natural beige colourways demonstrate how the same specification can be adapted for different uniform or collection requirements."], bullets: ["Tailored trouser front with belt loops", "Elasticated back waist for additional comfort", "Drawstring adjustment", "Metal zip fastening and clean interior finishing", "Repeatable construction for coordinated bulk orders"] },
+      { heading: "Quality and quantity controlled together", paragraphs: ["Bulk custom production is not only about reaching the requested quantity. It also requires the approved garment details to be repeated consistently. For this order, the waistband gathering, drawstrings, fastening components and visible seams were treated as shared control points throughout production.", "For tailoring shops, uniform buyers and menswear brands, we can develop custom trousers around the required fabric, colour, sizing plan and construction specification. Enquiries can begin with a reference sample, technical notes or clear product photographs."] },
+    ],
+  },
+  {
+    slug: "vbc-super-150s-full-canvas-three-piece-suit",
+    title: "Completed Custom VBC 150s Full-Canvas Three-Piece Suit",
+    titleZh: "定制成品展示：VBC 150s 全麻无粘衬三件套",
+    description: "A workshop look at a completed custom VBC 150s full-canvas three-piece suit, including its clean peak lapels, balanced front and non-fused construction.",
+    descriptionZh: "本期定制成品采用 VBC 150s 面料与全麻无粘衬结构，展示戗驳领、前身平衡和高级三件套西装的制作重点。",
+    category: "Workshop Update",
+    published: "2026-08-27",
+    updated: "2026-08-27",
+    readingTime: "6 min read",
+    primaryKeyword: "custom VBC 150s full canvas three-piece suit",
+    images: [
+      { src: "/news/vbc-super-150s-full-canvas-three-piece-suit/vbc-super-150s-custom-suit-jacket-front.webp", alt: "Front view of a grey custom VBC 150s full-canvas suit jacket with peak lapels", caption: "Completed jacket front: a restrained grey cloth, peak lapels and a clean, balanced presentation." },
+      { src: "/news/vbc-super-150s-full-canvas-three-piece-suit/vbc-super-150s-full-canvas-suit-lapel-detail.webp", alt: "Close-up of peak lapel and chest on a custom VBC 150s full-canvas suit", caption: "Close-up of the lapel, chest and cloth surface under natural light." },
+    ],
+    sections: [
+      { heading: "A completed VBC 150s three-piece suit from our workshop", paragraphs: ["This completed custom order is a grey three-piece suit made with VBC 150s cloth and a full-canvas, non-fused construction. The set comprises a jacket, waistcoat and trousers, giving the wearer a coordinated option for business, formal occasions and other settings where a more complete tailored presentation is required.", "The photographs focus on the jacket because its front balance, lapel line and chest are the clearest places to assess the character of the tailoring. The restrained grey tone makes the suit versatile, while the subtle surface texture becomes more visible in natural light. Rather than relying on decorative details, the design uses proportion and a clean silhouette to create a polished result."] },
+      { heading: "Why choose a full-canvas, non-fused construction?", paragraphs: ["A full-canvas suit uses a floating internal canvas through the front of the jacket instead of bonding the outer cloth to a fusible interlining. The purpose is not simply to add a premium label. The internal structure supports the chest and lapel while allowing the outer fabric to retain a more natural appearance.", "For tailoring businesses sourcing a custom full-canvas three-piece suit, construction must be specified clearly at the order stage. Fabric choice, canvas structure, measurements and style details work as one system; selecting an expensive cloth alone cannot correct an incomplete specification or an unsuitable pattern. Our production review therefore confirms the construction together with the approved garment details before cutting begins."], bullets: ["Full canvas through the jacket front", "No fused front interlining", "Coordinated jacket, waistcoat and trousers", "Order-specific measurements and style selections"] },
+      { heading: "Peak lapels and a disciplined front design", paragraphs: ["Peak lapels give this custom VBC 150s suit a more assertive formal line. Their points extend toward the shoulders, visually strengthening the upper body without requiring excessive width. The buttonhole, welt chest pocket and flap pockets are kept understated so that the lapel shape and cloth remain the main visual features.", "The front also shows the practical value of careful pressing and alignment. Pocket positions, lapel edges and the two sides of the jacket need to read as a single composition. These details matter to made-to-measure suit retailers because clients often judge a finished garment first from its overall balance and only later from its internal construction."] },
+      { heading: "VBC 150s cloth requires controlled tailoring", paragraphs: ["Fine suit cloth rewards precise handling. During production, the goal is to preserve a smooth surface while building enough structure for the intended silhouette. Cutting, shaping, sewing and pressing must be coordinated so that the finished garment looks clean without appearing rigid.", "For a VBC fabric custom suit order, the exact bunch and article reference should always be recorded separately from the general fabric description. This protects repeat-order accuracy and helps the retailer confirm availability before promising a delivery date. The same discipline applies to lining, buttons, lapel style, pockets and all customer-specific measurements."] },
+      { heading: "What B2B tailoring partners can specify", paragraphs: ["We work with tailoring shops, menswear retailers and private-label businesses that need order-level customization rather than a fixed ready-to-wear product. A full-canvas made-to-measure suit can be developed around the store's customer profile, measurement method and preferred style language, subject to fabric and production confirmation.", "When requesting a similar three-piece suit, provide the fabric reference, body and garment measurements, posture notes, jacket construction, lapel and pocket choices, waistcoat design, trouser details, lining, buttons and required delivery destination. A complete specification enables a more accurate review, quotation and production schedule. It also creates a reliable record for future alterations or reorders.", "This finished VBC 150s full-canvas three-piece suit illustrates our approach: clarify the order, control the construction and let proportion, cloth and workmanship produce the final impression. For wholesale, private-label or one-piece made-to-measure enquiries, send us your target product, fabric preference and order requirements for a project-specific assessment."] },
+    ],
+  },
   {
     slug: "choose-private-label-suit-manufacturer",
     title: "How to Choose a Private-Label Suit Manufacturer",

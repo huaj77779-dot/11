@@ -46,9 +46,9 @@ type CustomerDetail = {
 type MeasurementGarment = "jacket" | "trousers" | "waistcoat" | "shirt";
 type MeasurementTab = MeasurementGarment | "posture";
 const CUSTOMER_MEASUREMENT_GROUPS: Record<MeasurementGarment, { name: string; fields: string[] }> = {
-  jacket: { name: "西装上衣", fields: ["肩宽", "臂围", "袖长", "胸围", "中腰", "腰围", "下摆", "前长", "后长"] },
-  trousers: { name: "西裤", fields: ["裤腰", "臀围", "横裆", "腿围", "全长", "内长", "脚口"] },
-  waistcoat: { name: "马甲", fields: ["胸围", "腰围", "前长", "后长"] },
+  jacket: { name: "西装上衣", fields: ["前衣长", "后中长", "左袖长", "右袖长", "肩宽", "胸围", "中腰", "肚围", "下摆", "袖肥", "袖肘", "袖口", "领窝"] },
+  trousers: { name: "西裤", fields: ["腰围", "臀围", "大腿围", "膝围", "小腿围", "裤口", "立裆", "全裆", "裤长 左", "裤长 右"] },
+  waistcoat: { name: "马甲", fields: ["前衣长", "后衣长", "胸围", "腰围", "下摆", "肩宽", "领窝"] },
   shirt: { name: "衬衫", fields: ["领围", "肩宽", "胸围", "肚围", "摆围", "袖肥", "腕围", "长袖长", "前衣长", "后衣长"] },
 };
 const CUSTOMER_POSTURE_GROUPS = [
@@ -302,15 +302,17 @@ function CustomerMeasurementsEditor({ customer, onSaved }: { customer: CustomerR
   const parsePostures = () => { const value = parseAll().__posture; return value && typeof value === "object" ? value as Record<string, string> : {}; };
   const [tab, setTab] = useState<MeasurementTab>("jacket");
   const [unit, setUnit] = useState<"cm" | "in">("cm");
+  const [imperialDrafts, setImperialDrafts] = useState<Record<string, string>>({});
   const [values, setValues] = useState<Record<string, [string, string]>>(parse);
   const [postures, setPostures] = useState<Record<string, string>>(parsePostures);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const group = tab === "posture" ? null : CUSTOMER_MEASUREMENT_GROUPS[tab];
-  const display = (value: string) => unit === "cm" || !value ? value : (Number(value) / 2.54).toFixed(2).replace(/\.00$/, "");
+  const draftKey = (field: string, slot: 0 | 1) => `${tab}:${field}:${slot}`;
+  const display = (field: string, slot: 0 | 1, value: string) => unit === "cm" || !value ? value : (imperialDrafts[draftKey(field, slot)] ?? (Number(value) / 2.54).toFixed(2).replace(/\.00$/, ""));
   const store = (value: string) => unit === "cm" || !value ? value : (Number(value) * 2.54).toFixed(2).replace(/\.00$/, "");
-  const setMeasurement = (field: string, slot: 0 | 1, value: string) => { if (tab === "posture") return; setValues(prev => { const key = `${tab}:${field}`; const current = prev[key] || ["", ""]; const next: [string, string] = [current[0], current[1]]; next[slot] = store(value); return { ...prev, [key]: next }; }); };
+  const setMeasurement = (field: string, slot: 0 | 1, value: string) => { if (tab === "posture") return; if (unit === "in") setImperialDrafts(prev => ({ ...prev, [draftKey(field, slot)]: value })); setValues(prev => { const key = `${tab}:${field}`; const current = prev[key] || ["", ""]; const next: [string, string] = [current[0], current[1]]; next[slot] = store(value); return { ...prev, [key]: next }; }); };
   const saveMeasurements = async () => {
     setSaving(true); setSaved(false);
     try {
@@ -324,7 +326,7 @@ function CustomerMeasurementsEditor({ customer, onSaved }: { customer: CustomerR
   return <section className="profile-measure-editor">
     <div className="profile-measure-toolbar">
       <div><b>{t("cust.measureProfile")}</b><small>{customer.measurementsSavedAt ? `${t("cust.savedAt")}：${formatDateTime(customer.measurementsSavedAt)}` : t("cust.notSaved")}</small></div>
-      <div className="profile-measure-controls"><div className="profile-unit"><button className={unit === "cm" ? "on" : ""} onClick={() => setUnit("cm")}>{t("cust.metric")}</button><button className={unit === "in" ? "on" : ""} onClick={() => setUnit("in")}>{t("cust.imperial")}</button></div>{(Object.keys(CUSTOMER_MEASUREMENT_GROUPS) as MeasurementGarment[]).map(key => <button key={key} className={`profile-measure-tab ${tab === key ? "on" : ""}`} onClick={() => setTab(key)}>{tailoringTerm(CUSTOMER_MEASUREMENT_GROUPS[key].name, loc)}</button>)}<button className={`profile-measure-tab ${tab === "posture" ? "on" : ""}`} onClick={() => setTab("posture")}>{t("cust.posture")}</button></div>
+      <div className="profile-measure-controls"><div className="profile-unit"><button className={unit === "cm" ? "on" : ""} onClick={() => { setImperialDrafts({}); setUnit("cm"); }}>{t("cust.metric")}</button><button className={unit === "in" ? "on" : ""} onClick={() => { setImperialDrafts({}); setUnit("in"); }}>{t("cust.imperial")}</button></div>{(Object.keys(CUSTOMER_MEASUREMENT_GROUPS) as MeasurementGarment[]).map(key => <button key={key} className={`profile-measure-tab ${tab === key ? "on" : ""}`} onClick={() => setTab(key)}>{tailoringTerm(CUSTOMER_MEASUREMENT_GROUPS[key].name, loc)}</button>)}<button className={`profile-measure-tab ${tab === "posture" ? "on" : ""}`} onClick={() => setTab("posture")}>{t("cust.posture")}</button></div>
     </div>
     {tab === "posture" ? (
       <div className="profile-posture-grid">
@@ -333,8 +335,8 @@ function CustomerMeasurementsEditor({ customer, onSaved }: { customer: CustomerR
     ) : group ? (
       <><p className="profile-measure-hint">{t("cust.measureHint")}</p><div className="profile-measure-table-wrap"><div className="profile-measure-table" style={{ gridTemplateColumns: `68px repeat(${group.fields.length}, 54px)` }}>
         <div className="profile-measure-row head"><b>{tailoringTerm(group.name, loc)}</b>{group.fields.map(field => <span key={field}>{tailoringTerm(field, loc)}</span>)}</div>
-        <div className="profile-measure-row"><b>{t("cust.body")}</b>{group.fields.map(field => { const value = values[`${tab}:${field}`]?.[0] || ""; return <label key={field}><input disabled={!editing} inputMode="decimal" value={display(value)} onChange={e => setMeasurement(field, 0, e.target.value.replace(/[^0-9.]/g, ""))} /><em>{unit}</em></label>; })}</div>
-        <div className="profile-measure-row"><b>{t("cust.finished")}</b>{group.fields.map(field => { const value = values[`${tab}:${field}`]?.[1] || ""; return <label key={field}><input disabled={!editing} inputMode="decimal" value={display(value)} onChange={e => setMeasurement(field, 1, e.target.value.replace(/[^0-9.]/g, ""))} /><em>{unit}</em></label>; })}</div>
+        <div className="profile-measure-row"><b>{t("cust.body")}</b>{group.fields.map(field => { const value = values[`${tab}:${field}`]?.[0] || ""; return <label key={field}><input disabled={!editing} inputMode="decimal" value={display(field, 0, value)} onChange={e => setMeasurement(field, 0, e.target.value.replace(/[^0-9.]/g, ""))} /><em>{unit}</em></label>; })}</div>
+        <div className="profile-measure-row"><b>{t("cust.finished")}</b>{group.fields.map(field => { const value = values[`${tab}:${field}`]?.[1] || ""; return <label key={field}><input disabled={!editing} inputMode="decimal" value={display(field, 1, value)} onChange={e => setMeasurement(field, 1, e.target.value.replace(/[^0-9.]/g, ""))} /><em>{unit}</em></label>; })}</div>
       </div></div></>
     ) : null}
     <div className="profile-measure-actions">{editing ? <><button onClick={saveMeasurements} disabled={saving}>{saving ? t("cust.saving") : t("cust.saveMeasurements")}</button><button className="ghost" onClick={cancel}>{t("common.cancel")}</button></> : <button onClick={() => setEditing(true)}>{t("cust.editMeasurements")}</button>}{saved && <strong>{t("cust.saved")}</strong>}</div>
