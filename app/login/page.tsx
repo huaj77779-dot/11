@@ -34,9 +34,9 @@ export default function LoginPage() {
     <main className="login-page">
       <div className="login-card">
         <div className="login-brand">
-          <i>A</i>
+          <i className="login-monogram"><img src="/brand/verosuits-monogram.png" alt="" /></i>
           <div>
-            <b>TAILORSUPPLY OS</b>
+            <b>VEROSUITS</b>
             <small>MADE-TO-MEASURE PORTAL</small>
           </div>
         </div>

@@ -3,3 +3,6 @@
 @media(max-width:1050px){.side{width:190px}.work{margin-left:190px;width:calc(100% - 190px)}.layout{grid-template-columns:1fr}.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}.help{margin:0;height:max-content}.options{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.options{grid-template-columns:repeat(2,1fr)}}
 
 @media(max-width:700px){.shell{display:block}.side{position:static;width:100%;height:auto;padding:14px 18px}.side nav,.store{display:none}.brand{margin:0}.work{margin:0;width:100%}.work>header{height:auto;padding:17px}.actions button:first-child{display:none}.layout{padding:14px}.tabs{grid-template-columns:repeat(2,1fr)}.version{display:none}.legend,.row{grid-template-columns:.7fr 1fr 1fr .5fr;gap:5px}.panel-head{align-items:flex-start}.summary{grid-template-columns:1fr}}
+
+/* Keep narrow desktop layouts anchored beside the fixed sidebar. */
+@media(min-width:701px){.shell{overflow-x:hidden}.work{min-width:0;overflow-x:auto;overscroll-behavior-x:contain}}

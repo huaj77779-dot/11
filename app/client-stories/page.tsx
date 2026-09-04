@@ -1,45 +1,44 @@
 "use client";
 
 import { LandingSubpage } from "../_components/LandingSubpage";
-import { useLocale } from "../lib/i18n";
+import { useLocale, type Locale } from "../lib/i18n";
 import "./client-stories.css";
 
 const STEPS = [
-  ["01", "Enquiry & requirements", "询价及要求", "We confirm the store model, garment category, destination, expected volume and service requirements before quoting.", "报价前，我们会确认店铺模式、服装类别、目的地、预计销量和服务要求。"],
-  ["02", "Fabric, measurements & style", "面料、尺寸和款式", "The store records the customer profile, chooses an exact fabric code and completes the visual style specification.", "门店建立客户档案，选择准确的面料编号，并完成可视化款式配置。"],
-  ["03", "PI review & approval", "PI 审核与确认", "The PI brings customer, fabric, craft, quantity, price, address and payment details into one checkpoint.", "PI 将客户、面料、工艺、数量、价格、地址和付款信息集中确认。"],
-  ["04", "Production & quality control", "生产与质量控制", "Production follows the approved record. QC verifies identity, measurements, construction and visible finish before dispatch.", "生产按已确认记录执行，发货前核对身份、尺寸、工艺和外观。"],
-  ["05", "Dispatch & tracking", "发货与追踪", "Tracking, package count and dispatch date remain attached to the order so the store can update its customer.", "物流单号、包裹数量和发货日期会同步到订单，方便门店向客户更新进度。"],
-  ["06", "Delivery, feedback & reorder", "签收、反馈与复购", "With permission, delivery evidence and fit feedback close the order. Accepted measurements become the reference for reorders.", "经客户授权后保存签收与试穿反馈；确认后的尺寸可作为后续复购依据。"],
-];
+  ["01", "Enquiry & requirements", "询价与需求", "We confirm the store model, garment category, destination, expected volume and service requirements before quoting.", "报价前，我们会确认门店模式、服装品类、目的地、预计数量和服务要求。"],
+  ["02", "Fabric, measurements & style", "面料、尺寸与款式", "The store records the customer profile, chooses an exact fabric code and completes the visual style specification.", "门店建立客户档案，选择准确的面料编号，并完成可视化款式配置。"],
+  ["03", "PI review & approval", "形式发票审核与确认", "The PI brings customer, fabric, craft, quantity, price, address and payment details into one checkpoint.", "形式发票汇总客户、面料、工艺、数量、价格、地址和付款信息，供统一确认。"],
+  ["04", "Production & quality control", "生产与质量控制", "Production follows the approved record. QC verifies identity, measurements, construction and visible finish before dispatch.", "生产按已确认的记录执行；发货前，质检会核对身份、尺寸、结构与外观。"],
+  ["05", "Dispatch & tracking", "发货与追踪", "Tracking, package count and dispatch date remain attached to the order so the store can update its customer.", "物流单号、包裹数量和发货日期会保留在订单中，方便门店向客户同步进度。"],
+  ["06", "Delivery, feedback & reorder", "签收、反馈与复购", "With permission, delivery evidence and fit feedback close the order. Accepted measurements become the reference for reorders.", "经客户授权后保存签收和试穿反馈；确认后的尺寸将作为复购参考。"],
+] as const;
 
-const STEP_IMAGES = [
-  { src: "/brand/client-journey/01-enquiry.webp", en: "Private-label tailoring enquiry and fabric consultation", zh: "私牌定制询价与面料沟通流程示意" },
-  { src: "/brand/client-journey/02-measurement-style.webp", en: "Customer measurements and garment style selection", zh: "客户量体与服装款式选择流程示意" },
-  { src: "/brand/client-journey/03-pi-approval.webp", en: "Redacted proforma invoice review and approval", zh: "隐去敏感信息的 PI 审核流程示意" },
-  { src: "/brand/client-journey/04-quality-control.webp", en: "Tailored garment production quality inspection", zh: "定制服装生产与质量检查流程示意" },
-  { src: "/brand/client-journey/05-dispatch-tracking.webp", en: "Garment packing, dispatch and shipment tracking", zh: "成衣包装、发货与物流追踪流程示意" },
-  { src: "/brand/client-journey/06-delivery-reorder.webp", en: "Delivered garment fitting, feedback and reorder", zh: "成衣交付、试穿反馈与复购流程示意" },
-];
+const IMAGES = ["01-enquiry.webp", "02-measurement-style.webp", "03-pi-approval.webp", "04-quality-control.webp", "05-dispatch-tracking.webp", "06-delivery-reorder.webp"];
+const EN = ["From First Message to Delivered Garments", "A transparent B2B order journey showing what is confirmed, who acts next and what evidence is retained.", "Customers know what happens next. Stores know where the order stands.", "What makes a client story credible", "State customer type, country and product without inventing identities.", "Redact sensitive data from PI, shipping and garment evidence.", "Clearly separate verified cases, workflow examples and AI previews.", "Publish messages and delivery evidence only with written permission.", "Start a conversation →"];
+const COPY: Record<Locale, string[]> = {
+  zh: ["从第一次沟通到客户签收", "用清晰的节点说明每一步由谁处理、确认什么，以及保留哪些记录。", "客户知道下一步会发生什么，门店也能掌握订单进度。", "什么样的客户案例值得信赖", "说明客户类型、国家和产品，不虚构身份。", "隐去形式发票、物流和成衣资料中的敏感信息。", "明确区分真实案例、流程示例与 AI 预览。", "仅在获得书面许可后发布沟通及交付资料。", "开始沟通 →"],
+  en: EN,
+  de: ["Von der ersten Nachricht bis zur Auslieferung", "Ein transparenter B2B-Bestellablauf mit klaren Freigaben, Zuständigkeiten und Nachweisen.", "Kunden kennen den nächsten Schritt. Geschäfte kennen den Auftragsstatus.", "Was eine Kundenreferenz glaubwürdig macht", "Kundentyp, Land und Produkt nennen, ohne Identitäten zu erfinden.", "Sensible Daten aus Proforma-Rechnung, Versand- und Produktnachweisen entfernen.", "Verifizierte Fälle, Prozessbeispiele und KI-Vorschauen klar trennen.", "Nachrichten und Liefernachweise nur mit schriftlicher Genehmigung veröffentlichen.", "Gespräch beginnen →"],
+  ja: ["最初のご相談から納品まで", "確認事項、次の担当者、保存する記録を明確にした透明性の高いB2B受注プロセスです。", "お客様には次の工程を、店舗には注文状況を明確にお伝えします。", "信頼できる導入事例とは", "架空の身元を使わず、顧客区分・国・製品を明記します。", "PI、配送、製品資料から機密情報を削除します。", "実績、工程例、AIプレビューを明確に区別します。", "メッセージと納品資料は書面による許可を得て公開します。", "相談を始める →"],
+  fr: ["Du premier message à la livraison", "Un parcours B2B transparent précisant validations, responsabilités et preuves conservées.", "Le client connaît la prochaine étape. La boutique connaît l’état de la commande.", "Ce qui rend un témoignage crédible", "Indiquer le type de client, le pays et le produit sans inventer d’identité.", "Masquer les données sensibles des PI, expéditions et preuves produit.", "Distinguer clairement cas vérifiés, exemples de processus et aperçus IA.", "Publier messages et preuves de livraison uniquement avec autorisation écrite.", "Commencer la discussion →"],
+  it: ["Dal primo messaggio alla consegna", "Un percorso B2B trasparente che chiarisce approvazioni, responsabilità e prove conservate.", "Il cliente conosce il passo successivo. Il negozio conosce lo stato dell’ordine.", "Cosa rende credibile una storia cliente", "Indicare tipo di cliente, paese e prodotto senza inventare identità.", "Oscurare i dati sensibili da PI, spedizioni e prove del capo.", "Distinguere casi verificati, esempi di processo e anteprime IA.", "Pubblicare messaggi e prove di consegna solo con autorizzazione scritta.", "Inizia una conversazione →"],
+  es: ["Del primer mensaje a la entrega", "Un proceso B2B transparente que muestra aprobaciones, responsables y pruebas conservadas.", "El cliente conoce el siguiente paso. La tienda conoce el estado del pedido.", "Qué hace creíble una historia de cliente", "Indicar tipo de cliente, país y producto sin inventar identidades.", "Ocultar datos sensibles de la factura proforma, el envío y las prendas.", "Distinguir casos verificados, ejemplos de proceso y vistas previas de IA.", "Publicar mensajes y pruebas de entrega solo con autorización escrita.", "Iniciar una conversación →"],
+  pt: ["Da primeira mensagem à entrega", "Um percurso B2B transparente que mostra aprovações, responsáveis e comprovativos guardados.", "O cliente conhece o próximo passo. A loja conhece o estado da encomenda.", "O que torna um caso de cliente credível", "Indicar tipo de cliente, país e produto sem inventar identidades.", "Ocultar dados sensíveis da fatura proforma, expedição e provas da peça.", "Distinguir casos verificados, exemplos de processo e prévias de IA.", "Publicar mensagens e comprovativos apenas com autorização escrita.", "Iniciar conversa →"],
+  nl: ["Van eerste bericht tot levering", "Een transparant B2B-orderproces met duidelijke goedkeuringen, verantwoordelijkheden en bewijzen.", "De klant kent de volgende stap. De winkel kent de orderstatus.", "Wat een klantverhaal geloofwaardig maakt", "Noem klanttype, land en product zonder identiteiten te verzinnen.", "Verwijder gevoelige gegevens uit proforma, verzending en productbewijs.", "Onderscheid geverifieerde cases, procesvoorbeelden en AI-previews.", "Publiceer berichten en leveringsbewijs alleen met schriftelijke toestemming.", "Gesprek starten →"],
+  pl: ["Od pierwszej wiadomości do dostawy", "Przejrzysty proces B2B pokazujący akceptacje, odpowiedzialność i zachowane dowody.", "Klient zna następny krok. Salon zna status zamówienia.", "Co buduje wiarygodność historii klienta", "Podaj typ klienta, kraj i produkt bez wymyślania tożsamości.", "Usuń dane wrażliwe z proformy, wysyłki i dokumentacji produktu.", "Rozróżniaj realizacje, przykłady procesu i wizualizacje AI.", "Publikuj wiadomości i dowody dostawy wyłącznie za pisemną zgodą.", "Rozpocznij rozmowę →"],
+  sv: ["Från första meddelande till leverans", "En transparent B2B-orderprocess som visar godkännanden, ansvar och sparade underlag.", "Kunden vet nästa steg. Butiken vet orderns status.", "Vad som gör en kundberättelse trovärdig", "Ange kundtyp, land och produkt utan att hitta på identiteter.", "Dölj känsliga uppgifter i proforma, frakt- och produktunderlag.", "Skilj verifierade fall, processexempel och AI-förhandsvisningar.", "Publicera endast med skriftligt tillstånd.", "Starta en dialog →"],
+  da: ["Fra første besked til levering", "Et gennemsigtigt B2B-ordreforløb med klare godkendelser, ansvar og dokumentation.", "Kunden kender næste trin. Butikken kender ordrens status.", "Hvad gør en kundehistorie troværdig", "Angiv kundetype, land og produkt uden at opfinde identiteter.", "Skjul følsomme data i proforma, fragt- og produktdokumentation.", "Adskil verificerede cases, proceseksempler og AI-visninger.", "Publicér kun med skriftlig tilladelse.", "Start en samtale →"],
+  no: ["Fra første melding til levering", "En transparent B2B-ordreprosess med tydelige godkjenninger, ansvar og dokumentasjon.", "Kunden kjenner neste trinn. Butikken kjenner ordrestatusen.", "Hva gjør en kundehistorie troverdig", "Oppgi kundetype, land og produkt uten å dikte opp identiteter.", "Skjul sensitive data i proforma, frakt- og produktdokumentasjon.", "Skill verifiserte saker, prosesseksempler og KI-visninger.", "Publiser bare med skriftlig tillatelse.", "Start en samtale →"],
+  cs: ["Od první zprávy po doručení", "Transparentní proces B2B objednávky s jasným schválením, odpovědností a doklady.", "Zákazník zná další krok. Prodejna zná stav objednávky.", "Co dělá příběh zákazníka důvěryhodným", "Uveďte typ zákazníka, zemi a produkt bez vymýšlení identity.", "Odstraňte citlivé údaje z proformy, dopravy a dokladů k oděvu.", "Oddělte ověřené případy, ukázky procesu a náhledy AI.", "Publikujte pouze s písemným souhlasem.", "Zahájit rozhovor →"],
+};
 
 export default function ClientStoriesPage() {
-  const { locale } = useLocale();
-  const zh = locale === "zh-CN";
-
+  const { loc } = useLocale();
+  const c = COPY[loc];
+  const zh = loc === "zh";
   return <LandingSubpage>
-    <section className="content-hero process-hero"><div className="landing-wrap">
-      <p className="eyebrow">TAILORSUPPLY OS · VERIFIED WORKFLOW</p>
-      <h1>{zh ? "从第一次沟通到客户签收" : "From First Message to Delivered Garments"}</h1>
-      <p>{zh ? "用清晰的节点说明每一步由谁处理、确认什么，以及保留哪些记录。" : "A transparent B2B order journey designed to show what is confirmed, who acts next and what evidence is retained."}</p>
-      <div className="trust-strip"><span>{zh ? "隐私处理" : "Privacy redacted"}</span><span>{zh ? "节点可追踪" : "Traceable checkpoints"}</span><span>{zh ? "真实资料替换" : "Real evidence only"}</span></div>
-    </div></section>
-    <section className="content-section"><div className="landing-wrap">
-      <div className="process-intro"><div><p className="eyebrow">HOW COOPERATION WORKS</p><h2>{zh ? "顾客知道接下来会发生什么，商店也知道订单的进展。" : "Customers know what happens next. Stores know where the order stands."}</h2></div><p>{zh ? "以下图片为 AI 流程示意，不作为真实客户证据。正式发布客户资料时，只使用已获授权并完成隐私处理的内容。" : "The images below are AI workflow illustrations, not client evidence. Published client material must be permission-cleared and privacy-redacted."}</p></div>
-      <div className="process-grid">{STEPS.map((step, index) => <article className="process-card" key={step[0]}>
-        <div className="process-copy"><span className="step-no">{step[0]}</span><h2>{zh ? step[2] : step[1]}</h2><p>{zh ? step[4] : step[3]}</p></div>
-        <figure className="proof-slot proof-filled"><img src={STEP_IMAGES[index].src} alt={zh ? STEP_IMAGES[index].zh : STEP_IMAGES[index].en} loading="lazy" /><span className="illustration-badge">{zh ? "AI 流程示意图" : "AI workflow illustration"}</span><figcaption>{zh ? "发布真实资料前，请遮挡姓名、电话、地址、付款和物流信息。" : "Redact names, phones, addresses, payment and tracking details before publishing real material."}</figcaption></figure>
-      </article>)}</div>
-    </div></section>
-    <section className="case-standard"><div className="landing-wrap case-standard-inner"><div><p className="eyebrow">PUBLISHING STANDARD</p><h2>{zh ? "什么样的客户案例才可信" : "What makes a client story credible"}</h2></div><ul><li>{zh ? "说明客户类型、国家和产品，不虚构身份。" : "State customer type, country and product without inventing identities."}</li><li>{zh ? "隐去 PI、物流和成衣资料中的全部敏感信息。" : "Redact all sensitive data from PI, shipping and garment evidence."}</li><li>{zh ? "明确区分真实案例、流程示意和 AI 预览。" : "Clearly separate verified cases, workflow examples and AI previews."}</li><li>{zh ? "仅在获得书面许可后发布沟通和交付资料。" : "Publish messages and delivery evidence only with written permission."}</li></ul><a href="/#contact">{zh ? "开始沟通 →" : "Start a conversation →"}</a></div></section>
+    <section className="content-hero process-hero"><div className="landing-wrap"><p className="eyebrow">VEROSUITS · VERIFIED WORKFLOW</p><h1>{c[0]}</h1><p>{c[1]}</p></div></section>
+    <section className="content-section"><div className="landing-wrap"><div className="process-intro"><div><p className="eyebrow">HOW COOPERATION WORKS</p><h2>{c[2]}</h2></div></div><div className="process-grid">{STEPS.map((step, i) => <article className="process-card" key={step[0]}><div className="process-copy"><span className="step-no">{step[0]}</span><h2>{zh ? step[2] : step[1]}</h2><p>{zh ? step[4] : step[3]}</p></div><figure className="proof-slot proof-filled"><img src={`/brand/client-journey/${IMAGES[i]}`} alt={zh ? step[2] : step[1]} loading="lazy" /><figcaption>{zh ? "发布真实材料前，请隐去姓名、电话、地址、付款及物流信息。" : "Sensitive personal and order data is redacted before publication."}</figcaption></figure></article>)}</div></div></section>
+    <section className="case-standard"><div className="landing-wrap case-standard-inner"><div><p className="eyebrow">PUBLISHING STANDARD</p><h2>{c[3]}</h2></div><ul><li>{c[4]}</li><li>{c[5]}</li><li>{c[6]}</li><li>{c[7]}</li></ul><a href="/#contact">{c[8]}</a></div></section>
   </LandingSubpage>;
 }

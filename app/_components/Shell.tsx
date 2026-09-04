@@ -1,18 +1,13 @@
 "use client";
 
 import { useLocale } from "../lib/i18n";
+import { BrandLogo } from "./BrandLogo";
 
 export function Shell({ active }: { active: "new" | "customers" | "orders" }) {
   const { t } = useLocale();
   return (
     <aside className="side">
-      <div className="brand">
-        <i>A</i>
-        <div>
-          <b>TAILORSUPPLY OS</b>
-          <small>WHITE-LABEL PORTAL</small>
-        </div>
-      </div>
+      <div className="brand"><BrandLogo compact /></div>
       <nav>
         <a href="/customize" className={active === "new" ? "on" : ""}>
           ▦　{t("home.newOrder")}

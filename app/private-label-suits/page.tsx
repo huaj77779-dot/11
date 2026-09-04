@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Private label made-to-measure suit manufacturing for independent tailors and menswear boutiques, with one-piece ordering and Italian fabric options.",
   alternates: { canonical: "/private-label-suits" },
   openGraph: {
-    title: "Private Label Suit Manufacturer for Tailors | TailorSupply OS",
+    title: "Private Label Suit Manufacturer for Tailors | verosuits",
     description: "A white-label made-to-measure production partner for tailoring shops and menswear boutiques.",
     url: "/private-label-suits",
   },
@@ -16,7 +16,7 @@ export default function PrivateLabelSuitsPage() {
   return <SeoServicePage
     eyebrow="PRIVATE LABEL SUIT MANUFACTURER"
     title="Made-to-measure suits produced under your store's name."
-    intro="TailorSupply OS supports independent tailors, menswear boutiques and appointment-led retailers with private-label suit production, Italian fabric choices and a digital ordering workflow."
+    intro="verosuits supports independent tailors, menswear boutiques and appointment-led retailers with private-label suit production, Italian fabric choices and a digital ordering workflow."
     summary="Your customer sees your shop and your service. Behind the scenes, our ordering portal keeps measurements, fabric references and construction choices together so that repeat orders are easier to reproduce and production instructions are clearer."
     audience={["Independent tailoring shops", "Menswear boutiques", "Wedding specialists", "Travelling tailors", "Corporate uniform providers", "New made-to-measure businesses"]}
     capabilities={[

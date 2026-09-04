@@ -8,9 +8,56 @@ export const users = sqliteTable("users", {
   passwordHash: text("password_hash").notNull(),
   role: text("role").notNull().default("store"),
   storeName: text("store_name").notNull().default(""),
+  displayName: text("display_name").notNull().default(""),
+  email: text("email").notNull().default(""),
+  permissions: text("permissions").notNull().default("[]"),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
   token: text("token"),
   tokenExpiresAt: text("token_expires_at"),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+/** 可由后台维护的网站文案、图片和多语言字段。 */
+export const siteContent = sqliteTable("site_content", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  section: text("section").notNull(),
+  contentKey: text("content_key").notNull(),
+  locale: text("locale").notNull().default("en"),
+  value: text("value").notNull().default(""),
+  valueType: text("value_type").notNull().default("text"),
+  updatedBy: integer("updated_by").notNull().default(0),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+/** 后台发布的新闻文章。 */
+export const newsArticles = sqliteTable("news_articles", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  slug: text("slug").notNull().unique(),
+  locale: text("locale").notNull().default("en"),
+  title: text("title").notNull(),
+  excerpt: text("excerpt").notNull().default(""),
+  body: text("body").notNull().default(""),
+  category: text("category").notNull().default("Company News"),
+  coverImage: text("cover_image"),
+  status: text("status").notNull().default("draft"),
+  publishedAt: text("published_at"),
+  authorId: integer("author_id").notNull().default(0),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+/** 官网询盘；先入库，再尝试发送外部通知。 */
+export const inquiries = sqliteTable("inquiries", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  company: text("company").notNull(),
+  contact: text("contact").notNull(),
+  message: text("message").notNull().default(""),
+  source: text("source").notNull().default("website"),
+  status: text("status").notNull().default("new"),
+  assigneeId: integer("assignee_id").notNull().default(0),
+  notes: text("notes").notNull().default(""),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
 /** 面料库（后台批量上架管理） */
@@ -116,3 +163,6 @@ export type Fabric = typeof fabrics.$inferSelect;
 export type NewFabric = typeof fabrics.$inferInsert;
 export type StyleOption = typeof styleOptions.$inferSelect;
 export type NewStyleOption = typeof styleOptions.$inferInsert;
+export type SiteContent = typeof siteContent.$inferSelect;
+export type NewsArticle = typeof newsArticles.$inferSelect;
+export type Inquiry = typeof inquiries.$inferSelect;

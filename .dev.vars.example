@@ -3,3 +3,6 @@ WECHAT_WEBHOOK_URL="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=replace
 
 # 首次部署或替换旧版默认管理员密码；至少 12 个字符
 INITIAL_ADMIN_PASSWORD="replace-with-a-unique-password-at-least-12-characters"
+INITIAL_STORE01_PASSWORD="replace-with-a-unique-password-at-least-12-characters"
+INITIAL_STORE02_PASSWORD="replace-with-a-unique-password-at-least-12-characters"
+INITIAL_STORE03_PASSWORD="replace-with-a-unique-password-at-least-12-characters"

@@ -16,7 +16,7 @@ export default function Page(){
   function move(event:PointerEvent<HTMLDivElement>){if(drag)setRotation(drag.r+(event.clientX-drag.x)*.45);}
   async function copy(){await navigator.clipboard?.writeText(JSON.stringify(orderJson(selected),null,2));setCopied(true);setTimeout(()=>setCopied(false),1400);}
   return <main className="lab">
-    <header className="top"><a href="/" className="brand"><i>TS</i><span>TAILORSUPPLY <b>LAB</b></span></a><div><small>EXPERIMENT 3001</small><strong>工厂款式配置实验室</strong></div><p><i/>主数据已连接 · {fields.length}字段</p></header>
+    <header className="top"><a href="/" className="brand"><i>VS</i><span>VEROSUITS <b>LAB</b></span></a><div><small>EXPERIMENT 3001</small><strong>工厂款式配置实验室</strong></div><p><i/>主数据已连接 · {fields.length}字段</p></header>
     <div className="workspace">
       <aside className="rail"><div className="category"><small>品类 CATEGORY</small><b>西装上衣</b><span>JACKET / C</span></div>{views.map(v=><section key={v}><h3>{names[v]}<small>{fields.filter(f=>f.view===v).length}</small></h3>{fields.filter(f=>f.view===v).map(f=><button key={f.id} className={active===f.id?"on":""} onClick={()=>{setActive(f.id);setView(f.view)}}><i>{f.presentation.toUpperCase()}</i><span><b>{f.zh}</b><small>{f.options.find(o=>o.id===selected[f.id])?.zh}</small></span></button>)}</section>)}</aside>
       <section className="stage"><div className="stage-head"><div><small>HYBRID GARMENT PREVIEW</small><h1>看得懂，也做得准。</h1><p>拖动旋转 · 滚轮缩放 · 点击部件配置</p></div><nav>{views.map(v=><button key={v} className={view===v?"on":""} onClick={()=>setView(v)}>{names[v]}</button>)}</nav></div>

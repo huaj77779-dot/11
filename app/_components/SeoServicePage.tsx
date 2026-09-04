@@ -32,8 +32,8 @@ export function SeoServicePage({
   return (
     <main className="seo-page" lang="en">
       <header className="seo-nav">
-        <a className="seo-brand" href="/" aria-label="TailorSupply OS home">
-          <i>TS</i><span><b>TAILORSUPPLY OS</b><small>MADE-TO-MEASURE SUPPLY</small></span>
+        <a className="seo-brand" href="/" aria-label="verosuits home">
+          <i>VS</i><span><b>VEROSUITS</b><small>MADE-TO-MEASURE SUPPLY</small></span>
         </a>
         <nav aria-label="Main navigation">
           <a href="/private-label-suits">Private label suits</a>
@@ -109,11 +109,11 @@ export function SeoServicePage({
 
       <section className="seo-final-cta">
         <div><p className="seo-kicker">START WITH ONE CUSTOMER ORDER</p><h2>Build a reliable made-to-measure supply workflow for your store.</h2></div>
-        <a href="/#contact">Contact TailorSupply OS</a>
+        <a href="/#contact">Contact verosuits</a>
       </section>
 
       <footer className="seo-footer">
-        <b>TAILORSUPPLY OS</b>
+        <b>VEROSUITS</b>
         <span>Private-label made-to-measure supply for professional tailoring businesses.</span>
         <nav><a href="/company">Company</a><a href="/quality">Quality</a><a href="/news">Updates</a></nav>
       </footer>

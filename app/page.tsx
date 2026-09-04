@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { LanguageSwitcher } from "./_components/LanguageSwitcher";
-import { useLocale } from "./lib/i18n";
+import { BrandLogo } from "./_components/BrandLogo";
+import { localizeStoreName, useLocale } from "./lib/i18n";
 import { useAuthGuard } from "./lib/useAuthGuard";
 import { clearAuth } from "./lib/api";
 
@@ -14,7 +15,7 @@ const NEWS = [
 ];
 
 const SOCIAL_LINKS = [
-  { name: "WhatsApp", href: "https://wa.me/8613800000000", icon: "☎" },
+  { name: "WhatsApp", href: "https://wa.me/18169255770", icon: "☎" },
   { name: "Facebook", href: "https://www.facebook.com/", icon: "f" },
   { name: "Instagram", href: "https://www.instagram.com/", icon: "◎" },
   { name: "TikTok", href: "https://www.tiktok.com/", icon: "♪" },
@@ -22,8 +23,8 @@ const SOCIAL_LINKS = [
 ];
 
 export default function LandingPage() {
-  const { t, locale } = useLocale();
-  const zh = locale === "zh-CN";
+  const { t, loc } = useLocale();
+  const zh = loc === "zh";
   const { user, ready } = useAuthGuard(false);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -62,19 +63,13 @@ export default function LandingPage() {
     <main className="landing">
       {/* ===== 顶部导航 ===== */}
       <header className="landing-nav">
-        <a className="landing-brand" href="#top">
-          <i>TS</i>
-          <span>
-            <b>TAILORSUPPLY OS</b>
-            <small>MADE-TO-MEASURE SUPPLY</small>
-          </span>
-        </a>
+        <a className="landing-brand" href="#top"><BrandLogo /></a>
         <nav className="landing-nav-links">
           <a href="#top">{t("landing.navHome")}</a>
           <a href="/company">{t("landing.navCompany")}</a>
           <a href="/quality">{t("landing.navQuality")}</a>
           <a href="/news">{t("landing.navNews")}</a>
-          <a href="/client-stories">{zh ? "合作流程" : "Client Journey"}</a>
+          <a href="/client-stories">{t("landing.navJourney")}</a>
           <a href="#contact">{t("landing.navContact")}</a>
           <a href="/customize">{t("landing.navCustomize")}</a>
         </nav>
@@ -86,7 +81,7 @@ export default function LandingPage() {
               <a className="landing-link" href="/customers">{t("landing.navCustomers")}</a>
               {user.role === "master" && <a className="landing-link" href="/admin">{t("landing.navAdmin")}</a>}
               <button className="landing-account" onClick={logout} title={t("landing.navLogout")}>
-                <span>{user.storeName || user.username}</span>
+                <span>{localizeStoreName(user.storeName || user.username, loc)}</span>
                 <i aria-hidden="true">⇥</i>
               </button>
             </>
@@ -125,17 +120,13 @@ export default function LandingPage() {
           <div className="landing-hero-visual">
             <div className="hero-frame">
               <img src="/brand/tailorsupply-workshop-hero.webp" alt="Faceless master tailor marking a bespoke pattern on navy wool" />
-              <div className="hero-frame-tag">
-                <small>VBC · STYLBIELLA</small>
-                <b>意大利面料直采</b>
-              </div>
             </div>
           </div>
         </div>
         <div className="landing-stats">
           <span><b>15+</b>{t("landing.statYears")}</span>
           <span><b>30+</b>{t("landing.statMarkets")}</span>
-          <span><b>4 周</b>{t("landing.statLead")}</span>
+          <span><b>{t("landing.statLeadValue")}</b>{t("landing.statLead")}</span>
           <span><b>6+</b>{t("landing.statMills")}</span>
         </div>
       </section>
@@ -143,23 +134,23 @@ export default function LandingPage() {
       {/* ===== 公司简介 ===== */}
       <section className="atelier-story">
         <div className="landing-wrap atelier-story-head">
-          <div><p className="eyebrow">DESIGNED FOR INDEPENDENT TAILORS</p><h2>{zh ? "不是成衣批发，而是为每一位客户建立一件产品" : "Not wholesale stock. One product built for one customer."}</h2></div>
-          <p>{zh ? "TailorSupply OS 把门店的量体、面料和款式选择，转化成工厂可以稳定执行的订单。客户看到的是你的品牌，背后由可追踪的定制生产体系完成。" : "TailorSupply OS turns your store's measurements, fabric and style decisions into a production-ready order. Your customer sees your brand; a traceable made-to-measure workflow operates behind it."}</p>
+          <div><p className="eyebrow">DESIGNED FOR INDEPENDENT TAILORS</p><h2>{t("landing.storyTitle")}</h2></div>
+          <p>{t("landing.storyLead")}</p>
         </div>
         <div className="landing-wrap factory-collage">
-          <figure className="factory-main"><img src="/brand/custom-cutting-process.png" alt="Custom suit paper pattern aligned on wool fabric" loading="lazy" decoding="async"/><figcaption><span>01</span><div><b>{zh ? "单件裁剪" : "Single-order cutting"}</b><small>{zh ? "面料编号、量体和纸样逐单对应" : "Fabric code, measurements and pattern matched order by order"}</small></div></figcaption></figure>
-          <figure className="factory-side"><img src="/brand/jacket-quality-control.webp" alt="Faceless artisan inspecting the lapel and handwork of a brown jacket" loading="lazy" decoding="async"/><figcaption><span>02</span><div><b>{zh ? "成衣质检" : "Garment quality control"}</b><small>{zh ? "核对驳头、对称、工艺和外观" : "Lapel roll, symmetry, craft and finish inspected"}</small></div></figcaption></figure>
-          <aside className="factory-quote"><p>“</p><h3>{zh ? "数字系统负责准确，工匠负责质感。" : "The system protects accuracy. Craft gives it character."}</h3><a href="/client-stories">{zh ? "查看完整合作流程 →" : "See the complete client journey →"}</a></aside>
+          <figure className="factory-main"><img src="/brand/custom-cutting-process.png" alt="Custom suit paper pattern aligned on wool fabric" loading="lazy" decoding="async"/><figcaption><span>01</span><div><b>{t("landing.cuttingTitle")}</b><small>{t("landing.cuttingText")}</small></div></figcaption></figure>
+          <figure className="factory-side"><img src="/brand/jacket-quality-control.webp" alt="Faceless artisan inspecting the lapel and handwork of a brown jacket" loading="lazy" decoding="async"/><figcaption><span>02</span><div><b>{t("landing.qcTitle")}</b><small>{t("landing.qcText")}</small></div></figcaption></figure>
+          <aside className="factory-quote"><p>“</p><h3>{t("landing.storyQuote")}</h3><a href="/client-stories">{t("landing.storyLink")}</a></aside>
         </div>
       </section>
 
       <section className="custom-advantages"><div className="landing-wrap">
-        <div className="landing-section-head"><p className="eyebrow">OUR CUSTOMISATION ADVANTAGE</p><h2>{zh ? "让门店能卖得更专业，也能下单得更简单" : "More freedom for your client. Less friction for your store."}</h2></div>
+        <div className="landing-section-head"><p className="eyebrow">OUR CUSTOMISATION ADVANTAGE</p><h2>{t("landing.advantageTitle")}</h2></div>
         <div className="advantage-grid">
-          <article><span>01</span><h3>{zh ? "一件起订" : "One-piece MOQ"}</h3><p>{zh ? "西装上衣、西裤、马甲和衬衫均可按客户单独下单，降低库存压力。" : "Order jackets, trousers, waistcoats and shirts for individual clients without stocking finished garments."}</p></article>
-          <article><span>02</span><h3>{zh ? "四维定制" : "Four layers of customisation"}</h3><p>{zh ? "面料、量体、体态和款式工艺形成完整订单，不靠聊天记录猜测。" : "Fabric, measurements, posture and style details become one complete, reviewable order."}</p></article>
-          <article><span>03</span><h3>{zh ? "门店白牌" : "Store-first white label"}</h3><p>{zh ? "客户界面与交付过程突出门店品牌，工厂信息不干扰客户关系。" : "Your store remains customer-facing while production operates quietly behind your brand."}</p></article>
-          <article><span>04</span><h3>{zh ? "档案复购" : "Reorder-ready records"}</h3><p>{zh ? "保存每次量体、体态、款式和修改时间，为复购建立可靠依据。" : "Dated measurement, posture and style records create a dependable base for repeat orders."}</p></article>
+          <article><img src="/brand/advantage-one-piece-v2.png" alt="Tailor marking a single made-to-measure jacket pattern on navy wool" loading="lazy"/><div className="advantage-copy"><span>01</span><h3>{t("landing.advantage1")}</h3><p>{t("landing.advantage1Text")}</p></div></article>
+          <article><img src="/brand/advantage-four-layers.png" alt="Made-to-measure garments and tailoring forms in the atelier" loading="lazy"/><div className="advantage-copy"><span>02</span><h3>{t("landing.advantage2")}</h3><p>{t("landing.advantage2Text")}</p></div></article>
+          <article><img src="/brand/advantage-white-label.png" alt="Private-label suit prepared for delivery" loading="lazy"/><div className="advantage-copy"><span>03</span><h3>{t("landing.advantage3")}</h3><p>{t("landing.advantage3Text")}</p></div></article>
+          <article><img src="/brand/advantage-reorder.png" alt="Tailoring records and fabric swatches for repeat orders" loading="lazy"/><div className="advantage-copy"><span>04</span><h3>{t("landing.advantage4")}</h3><p>{t("landing.advantage4Text")}</p></div></article>
         </div>
       </div></section>
 
@@ -267,8 +258,8 @@ export default function LandingPage() {
           </div>
           <div className="landing-contact-grid">
             <div className="contact-info">
-              <span><i>✉</i><div><small>{t("landing.contactEmailLabel")}</small><b>sales@tailorsupplyos.com</b></div></span>
-              <span><i>✆</i><div><small>{t("landing.contactWaLabel")}</small><b>+86 138 0000 0000</b></div></span>
+              <span><i>✉</i><div><small>{t("landing.contactEmailLabel")}</small><b>verosuits@gmail.com</b></div></span>
+              <span><i>✆</i><div><small>{t("landing.contactWaLabel")}</small><b>+1 816 925 5770</b></div></span>
               <span><i>◈</i><div><small>{t("landing.contactAddrLabel")}</small><b>{t("landing.contactAddr")}</b></div></span>
               <span><i>◷</i><div><small>{t("landing.contactHoursLabel")}</small><b>{t("landing.contactHours")}</b></div></span>
             </div>
@@ -278,7 +269,7 @@ export default function LandingPage() {
                 <div className="contact-done">
                   <b>{t("landing.contactDone")}</b>
                   <pre>{summary || "—"}</pre>
-                  <a className="landing-cta sm" href={`mailto:sales@tailorsupplyos.com?subject=${encodeURIComponent("合作需求 · " + (form.name || "新客户"))}&body=${encodeURIComponent(summary || "")}`}>
+                  <a className="landing-cta sm" href={`mailto:verosuits@gmail.com?subject=${encodeURIComponent("合作需求 · " + (form.name || "新客户"))}&body=${encodeURIComponent(summary || "")}`}>
                     ✉ 通过邮箱发送
                   </a>
                 </div>
@@ -288,7 +279,7 @@ export default function LandingPage() {
                   <label><span>{t("landing.contactEmail")} <i>*</i></span><input required value={form.contact} onChange={(e) => setForm({ ...form, contact: e.target.value })} /></label>
                   <label><span>{t("landing.contactMsg")}</span><textarea rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} /></label>
                   {submitError && <p className="contact-error" role="alert">{submitError}</p>}
-                  <button className="landing-cta" type="submit" disabled={sending}>{sending ? "正在发送…" : t("landing.contactSubmit")}</button>
+                  <button className="landing-cta" type="submit" disabled={sending}>{sending ? t("landing.contactSending") : t("landing.contactSubmit")}</button>
                 </>
               )}
             </form>
@@ -299,7 +290,13 @@ export default function LandingPage() {
       <aside className="landing-socials" aria-label="社交媒体">
         {SOCIAL_LINKS.map((item) => (
           <a key={item.name} className={`social-icon social-${item.name.toLowerCase()}`} href={item.href} target="_blank" rel="noreferrer" aria-label={item.name} title={item.name}>
-            <span aria-hidden="true">{item.icon}</span>
+            {item.name === "LinkedIn" ? (
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.56V9h3.56v11.45Z" />
+              </svg>
+            ) : (
+              <img src={`https://cdn.simpleicons.org/${item.name.toLowerCase()}/fff`} alt="" aria-hidden="true" />
+            )}
           </a>
         ))}
       </aside>
@@ -307,21 +304,8 @@ export default function LandingPage() {
       {/* ===== 页脚 ===== */}
       <footer className="landing-footer">
         <div className="landing-wrap landing-footer-inner">
-          <a className="landing-brand" href="#top">
-            <i>TS</i>
-            <span><b>TAILORSUPPLY OS</b><small>MADE-TO-MEASURE SUPPLY</small></span>
-          </a>
-          <nav>
-            <a href="/private-label-suits">Private Label Suits</a>
-            <a href="/made-to-measure-suits">Made-to-Measure</a>
-            <a href="/custom-tailoring-supplier">For Tailoring Shops</a>
-            <a href="/company">{t("landing.navCompany")}</a>
-            <a href="/quality">{t("landing.navQuality")}</a>
-            <a href="/news">{t("landing.navNews")}</a>
-            <a href="/client-stories">{zh ? "合作流程" : "Client Journey"}</a>
-            <a href="#contact">{t("landing.navContact")}</a>
-            <a href="/customize">{t("landing.navCustomize")}</a>
-          </nav>
+          <a className="landing-brand" href="#top"><BrandLogo /></a>
+            <a href="/client-stories">{t("landing.navJourney")}</a>
           <p>{t("landing.footRights")}</p>
         </div>
       </footer>

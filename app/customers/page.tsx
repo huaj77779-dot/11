@@ -334,7 +334,7 @@ function CustomerMeasurementsEditor({ customer, onSaved }: { customer: CustomerR
       </div>
     ) : group ? (
       <><p className="profile-measure-hint">{t("cust.measureHint")}</p><div className="profile-measure-table-wrap"><div className="profile-measure-table" style={{ gridTemplateColumns: `68px repeat(${group.fields.length}, 54px)` }}>
-        <div className="profile-measure-row head"><b>{tailoringTerm(group.name, loc)}</b>{group.fields.map(field => <span key={field}>{tailoringTerm(field, loc)}</span>)}</div>
+        <div className="profile-measure-row head"><b>{tailoringTerm(group.name, loc)}</b>{group.fields.map(field => <span key={field}>{tailoringTerm(field, loc, "measurement")}</span>)}</div>
         <div className="profile-measure-row"><b>{t("cust.body")}</b>{group.fields.map(field => { const value = values[`${tab}:${field}`]?.[0] || ""; return <label key={field}><input disabled={!editing} inputMode="decimal" value={display(field, 0, value)} onChange={e => setMeasurement(field, 0, e.target.value.replace(/[^0-9.]/g, ""))} /><em>{unit}</em></label>; })}</div>
         <div className="profile-measure-row"><b>{t("cust.finished")}</b>{group.fields.map(field => { const value = values[`${tab}:${field}`]?.[1] || ""; return <label key={field}><input disabled={!editing} inputMode="decimal" value={display(field, 1, value)} onChange={e => setMeasurement(field, 1, e.target.value.replace(/[^0-9.]/g, ""))} /><em>{unit}</em></label>; })}</div>
       </div></div></>

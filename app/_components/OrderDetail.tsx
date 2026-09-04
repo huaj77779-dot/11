@@ -2,6 +2,7 @@
 
 import { getLocale, useLocale, type Locale } from "../lib/i18n";
 import { useCurrency } from "../lib/currency";
+import { tailoringTerm } from "../lib/tailoring-terms";
 
 export type OrderDetailRow = {
   id: number;
@@ -71,7 +72,7 @@ export function formatDateTime(value?: string): string {
 }
 
 export function OrderDetailBlock({ order }: { order: OrderDetailRow }) {
-  const { t } = useLocale();
+  const { loc, t } = useLocale();
   const { money } = useCurrency();
   const snapshot = order.customerSnapshot ?? {};
   const address = order.shippingAddress ?? {};
@@ -131,7 +132,7 @@ export function OrderDetailBlock({ order }: { order: OrderDetailRow }) {
           <div className="grid2">
             {measurements.map((m) => (
               <span key={m.field}>
-                <i>{m.field}</i>
+                <i>{tailoringTerm(m.field, loc, "measurement")}</i>
                 <b>
                   {m.net ?? "—"} / {m.finished ?? "—"} cm
                 </b>

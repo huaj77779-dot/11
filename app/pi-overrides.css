@@ -172,3 +172,23 @@
 .fabric-book-inline .fabric-card .swatch { width:100%; height:150px !important; min-height:150px; }
 .fabric-book-inline .fabric-card .swatch img { width:100%; height:100%; object-fit:cover; }
 @media(max-width:700px){.fabric-book-inline .fabric-card{grid-template-rows:170px auto}.fabric-book-inline .fabric-card .swatch{height:170px!important;min-height:170px}}
+
+/* Compact customer profile: identity and shipping share one horizontal band. */
+@media(min-width:901px){
+  .client.client-form:has(.client-measure){display:grid;grid-template-columns:82px minmax(280px,.9fr) minmax(520px,1.55fr);column-gap:14px;row-gap:10px;align-items:stretch;padding:14px 16px}
+  .client.client-form:has(.client-measure) .client-form-top{grid-column:1/-1;margin-bottom:0;padding-bottom:9px}
+  .client.client-form:has(.client-measure) .avatar-upload{grid-column:1;width:82px;max-width:82px;align-self:center}
+  .client.client-form:has(.client-measure) .avatar-upload .avatar{width:68px;height:68px}
+  .client.client-form:has(.client-measure) .client-fields{grid-column:2;width:100%!important;max-width:none!important;min-width:0;align-self:stretch;gap:7px 9px}
+  .client.client-form:has(.client-measure) .client-fields input,.client.client-form:has(.client-measure) .client-fields .name input{height:32px}
+  .client.client-form:has(.client-measure) .client-shipping-address{grid-column:3;width:100%;margin:0;padding:10px 12px}
+  .client.client-form:has(.client-measure) .client-address-title{padding-bottom:7px}
+  .client.client-form:has(.client-measure) .client-address-title h3{font-size:12px}
+  .client.client-form:has(.client-measure) .client-shipping-address .address-fields{margin-top:8px;gap:7px 9px}
+  .client.client-form:has(.client-measure) .client-shipping-address .address-fields input,.client.client-form:has(.client-measure) .client-shipping-address .address-fields select{height:32px}
+  .client.client-form:has(.client-measure) .client-measure{grid-column:1/-1;margin-top:2px;padding-top:11px}
+}
+@media(min-width:701px) and (max-width:900px){
+  .client.client-form:has(.client-measure) .client-shipping-address{order:1}
+  .client.client-form:has(.client-measure) .client-measure{order:2}
+}

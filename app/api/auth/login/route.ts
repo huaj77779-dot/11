@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       .from(users)
       .where(eq(users.username, username))
       .limit(1);
-    if (!user) {
+    if (!user || !user.active) {
       return Response.json({ error: "账号或密码错误" }, { status: 401 });
     }
     const verification = await verifyPassword(password, user.passwordHash);
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     }
     const token = await createToken(db, user.id);
     return Response.json(
-      { user: { id: user.id, username: user.username, role: user.role, storeName: user.storeName } },
+      { user: { id: user.id, username: user.username, role: user.role, storeName: user.storeName, displayName: user.displayName, email: user.email, permissions: JSON.parse(user.permissions || "[]") } },
       { headers: { "Set-Cookie": sessionCookie(token), "Cache-Control": "no-store" } },
     );
   } catch (error) {

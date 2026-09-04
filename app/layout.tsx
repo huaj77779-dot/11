@@ -22,8 +22,8 @@ import "./news-media.css";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_ORIGIN),
   title: {
-    default: "Private Label Made-to-Measure Suit Manufacturer | TailorSupply OS",
-    template: "%s | TailorSupply OS",
+    default: "Private Label Made-to-Measure Suit Manufacturer | verosuits",
+    template: "%s | verosuits",
   },
   description:
     "Private label made-to-measure suits, trousers, waistcoats and shirts for tailoring shops and menswear boutiques, with Italian fabrics and digital ordering.",
@@ -41,20 +41,20 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/",
     siteName: SITE_NAME,
-    title: "Private Label Made-to-Measure Suit Manufacturer | TailorSupply OS",
+    title: "Private Label Made-to-Measure Suit Manufacturer | verosuits",
     description: SITE_TAGLINE,
     images: [
       {
         url: "/ai-previews/jacket.png",
         width: 1024,
         height: 1536,
-        alt: "TailorSupply OS private-label made-to-measure navy suit",
+        alt: "verosuits private-label made-to-measure navy suit",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Private Label Made-to-Measure Suit Manufacturer | TailorSupply OS",
+    title: "Private Label Made-to-Measure Suit Manufacturer | verosuits",
     description: SITE_TAGLINE,
     images: ["/ai-previews/jacket.png"],
   },

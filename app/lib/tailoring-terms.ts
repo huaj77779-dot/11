@@ -44,6 +44,78 @@ const englishTerms: Record<string, string> = {
   胸兜款式: "Breast pocket",
   下摆开角大小: "Front quarters",
   肩膀样式: "Shoulder construction",
+  纽扣钉法: "Button stitching",
+  纽扣选择: "Button selection",
+  纽扣数量: "Button quantity",
+  扣眼方向: "Buttonhole direction",
+  穿着习惯: "Fit preference",
+  色丁位置: "Satin placement",
+  驳头宽: "Lapel width",
+  根据体型默认: "Based on body shape",
+  里兜左: "Left inside pockets",
+  里兜右: "Right inside pocket",
+  过面: "Facing",
+  外珠边: "Edge stitching",
+  香水垫: "Fragrance pad",
+  牛角扣: "Horn buttons",
+  金属扣: "Metal buttons",
+  果实扣: "Corozo buttons",
+  木质扣: "Wooden buttons",
+  尿素扣: "Urea buttons",
+  熟料扣: "Plastic buttons",
+  树脂扣: "Resin buttons",
+  贝壳扣: "Shell buttons",
+  直扣眼: "Straight buttonholes",
+  斜扣眼: "Slanted buttonholes",
+  紧身: "Skinny fit",
+  很修身: "Extra slim fit",
+  修身: "Slim fit",
+  合体偏瘦: "Slim tailored fit",
+  合体: "Tailored fit",
+  合体偏松: "Relaxed tailored fit",
+  宽松: "Relaxed fit",
+  很宽松: "Loose fit",
+  非常宽松: "Extra loose fit",
+  无: "None",
+  过面腰兜牙: "Facing and waist-pocket welts",
+  过面胸兜腰兜牙: "Facing, breast pocket and waist-pocket welts",
+  领面: "Lapel facing",
+  领面腰兜牙: "Lapel facing and waist-pocket welts",
+  领面胸兜腰兜牙: "Lapel facing, breast pocket and waist-pocket welts",
+  可脱卸假驳头: "Detachable mock notch lapel",
+  可脱卸假青果领: "Detachable mock shawl collar",
+  过面领面: "Facing and lapel facing",
+  过面领面腰兜牙: "Facing, lapel facing and waist-pocket welts",
+  过面领面胸兜: "Facing, lapel facing and breast pocket",
+  过面领面胸兜腰兜牙: "Facing, lapel facing, breast pocket and waist-pocket welts",
+  里大兜笔兜烟兜: "Large inside pocket, pen pocket and cigarette pocket",
+  里大兜烟兜: "Large inside pocket and cigarette pocket",
+  里大兜钻石兜烟兜: "Large inside pocket, diamond pocket and cigarette pocket",
+  里大兜票兜笔兜烟兜: "Large inside pocket, ticket pocket, pen pocket and cigarette pocket",
+  里大兜票兜烟兜: "Large inside pocket, ticket pocket and cigarette pocket",
+  里大兜票兜钻石兜烟兜: "Large inside pocket, ticket pocket, diamond pocket and cigarette pocket",
+  里大兜: "Large inside pocket",
+  A宝剑头过面: "A · Sword-tip facing",
+  B圆过面: "B · Rounded facing",
+  C弯过面: "C · Curved facing",
+  D直过面: "D · Straight facing",
+  E拼接耳皮: "E · Pieced facing extension",
+  半圆: "Semicircular",
+  圆形: "Round",
+  "过面+腰兜牙": "Facing and waist-pocket welts",
+  "过面+胸兜+腰兜牙": "Facing, breast pocket and waist-pocket welts",
+  "领面+腰兜牙": "Lapel facing and waist-pocket welts",
+  "领面+胸兜+腰兜牙": "Lapel facing, breast pocket and waist-pocket welts",
+  "过面+领面": "Facing and lapel facing",
+  "过面+领面+腰兜牙": "Facing, lapel facing and waist-pocket welts",
+  "过面+领面+胸兜": "Facing, lapel facing and breast pocket",
+  "过面+领面+胸兜+腰兜牙": "Facing, lapel facing, breast pocket and waist-pocket welts",
+  "里大兜+笔兜+烟兜": "Large inside pocket, pen pocket and cigarette pocket",
+  "里大兜+烟兜": "Large inside pocket and cigarette pocket",
+  "里大兜+钻石兜+烟兜": "Large inside pocket, diamond pocket and cigarette pocket",
+  "里大兜+票兜+笔兜+烟兜": "Large inside pocket, ticket pocket, pen pocket and cigarette pocket",
+  "里大兜+票兜+烟兜": "Large inside pocket, ticket pocket and cigarette pocket",
+  "里大兜+票兜+钻石兜+烟兜": "Large inside pocket, ticket pocket, diamond pocket and cigarette pocket",
   口袋款式: "Pocket style",
   后幅款式与工艺: "Back style",
   开衩位置选择: "Vents",
@@ -109,6 +181,62 @@ const localizedTailoringTerms: Record<string, Partial<Record<Locale, string>>> =
   "刺绣文字": { en: "Monogram text", de: "Monogrammtext", ja: "刺繍文字", fr: "Texte du monogramme", it: "Testo del monogramma", es: "Texto del monograma", pt: "Texto do monograma", nl: "Monogramtekst", pl: "Tekst monogramu", sv: "Monogramtext", da: "Monogramtekst", no: "Monogramtekst", cs: "Text monogramu" },
 };
 
+const postureLabels: Record<Locale, string[]> = {
+  zh: ["驼背", "凸肚", "挺胸", "左肩斜度", "右肩斜度", "正常背型", "后背衣长增加", "正常腹型", "前腹围增加", "正常胸型", "前腰节长增加", "平肩上提", "正常肩型", "轻度溜肩下调", "中度溜肩下调", "重度溜肩下调"],
+  en: ["Stooped posture", "Prominent abdomen", "Erect posture", "Left shoulder slope", "Right shoulder slope", "Regular back", "Add to back length", "Regular abdomen", "Add to front abdomen", "Regular chest", "Add to front waist length", "Raise flat shoulder", "Regular shoulder", "Lower slight slope", "Lower medium slope", "Lower pronounced slope"],
+  de: ["Gebeugte Haltung", "Ausgeprägter Bauch", "Aufrechte Haltung", "Linke Schulterneigung", "Rechte Schulterneigung", "Normaler Rücken", "Rückenlänge verlängern", "Normaler Bauch", "Vordere Bauchweite vergrößern", "Normale Brust", "Vordere Taillenlänge verlängern", "Flache Schulter anheben", "Normale Schulter", "Leichte Neigung absenken", "Mittlere Neigung absenken", "Starke Neigung absenken"],
+  ja: ["前傾体型", "腹部突出", "反身体型", "左肩傾斜", "右肩傾斜", "標準的な背中", "後丈を追加", "標準的な腹部", "前腹囲を追加", "標準的な胸", "前ウエスト丈を追加", "いかり肩を上げる", "標準肩", "軽いなで肩を下げる", "中程度のなで肩を下げる", "強いなで肩を下げる"],
+  fr: ["Posture voûtée", "Abdomen proéminent", "Posture cambrée", "Pente épaule gauche", "Pente épaule droite", "Dos standard", "Allonger le dos", "Abdomen standard", "Augmenter l’abdomen devant", "Poitrine standard", "Allonger la taille devant", "Relever l’épaule carrée", "Épaule standard", "Abaisser la pente légère", "Abaisser la pente moyenne", "Abaisser la pente prononcée"],
+  it: ["Postura curva", "Addome prominente", "Postura eretta", "Inclinazione spalla sinistra", "Inclinazione spalla destra", "Schiena regolare", "Allungare il dietro", "Addome regolare", "Aumentare l’addome anteriore", "Torace regolare", "Allungare la vita anteriore", "Alzare la spalla dritta", "Spalla regolare", "Abbassare pendenza lieve", "Abbassare pendenza media", "Abbassare pendenza marcata"],
+  es: ["Postura encorvada", "Abdomen prominente", "Postura erguida", "Caída del hombro izquierdo", "Caída del hombro derecho", "Espalda normal", "Aumentar largo de espalda", "Abdomen normal", "Aumentar abdomen delantero", "Pecho normal", "Aumentar talle delantero", "Elevar hombro recto", "Hombro normal", "Bajar caída leve", "Bajar caída media", "Bajar caída pronunciada"],
+  pt: ["Postura curvada", "Abdómen proeminente", "Postura ereta", "Inclinação do ombro esquerdo", "Inclinação do ombro direito", "Costas normais", "Aumentar comprimento das costas", "Abdómen normal", "Aumentar abdómen dianteiro", "Peito normal", "Aumentar cintura dianteira", "Elevar ombro direito", "Ombro normal", "Baixar inclinação ligeira", "Baixar inclinação média", "Baixar inclinação acentuada"],
+  nl: ["Voorovergebogen houding", "Prominente buik", "Rechte houding", "Linker schouderhelling", "Rechter schouderhelling", "Normale rug", "Ruglengte verlengen", "Normale buik", "Voorbuik vergroten", "Normale borst", "Voorste taillelengte verlengen", "Rechte schouder verhogen", "Normale schouder", "Lichte helling verlagen", "Middelmatige helling verlagen", "Sterke helling verlagen"],
+  pl: ["Sylwetka pochylona", "Wystający brzuch", "Sylwetka wyprostowana", "Spadek lewego ramienia", "Spadek prawego ramienia", "Plecy standardowe", "Wydłużyć tył", "Brzuch standardowy", "Powiększyć przód brzucha", "Klatka standardowa", "Wydłużyć przednią talię", "Podnieść proste ramię", "Ramię standardowe", "Obniżyć lekki spadek", "Obniżyć średni spadek", "Obniżyć duży spadek"],
+  sv: ["Framåtlutad hållning", "Framträdande mage", "Upprätt hållning", "Vänster axellutning", "Höger axellutning", "Normal rygg", "Öka rygglängd", "Normal mage", "Öka främre bukvidd", "Normal bröstkorg", "Öka främre midjelängd", "Höj rak axel", "Normal axel", "Sänk lätt lutning", "Sänk medellutning", "Sänk kraftig lutning"],
+  da: ["Foroverbøjet holdning", "Fremtrædende mave", "Opret holdning", "Venstre skulderhældning", "Højre skulderhældning", "Normal ryg", "Forlæng ryglængde", "Normal mave", "Øg mavevidde foran", "Normalt bryst", "Forlæng taljelængde foran", "Hæv lige skulder", "Normal skulder", "Sænk let hældning", "Sænk middel hældning", "Sænk kraftig hældning"],
+  no: ["Foroverbøyd holdning", "Fremtredende mage", "Oppreist holdning", "Venstre skulderhelling", "Høyre skulderhelling", "Normal rygg", "Øk rygglengde", "Normal mage", "Øk magevidde foran", "Normalt bryst", "Øk fremre midjelengde", "Hev rett skulder", "Normal skulder", "Senk lett helling", "Senk middels helling", "Senk kraftig helling"],
+  cs: ["Shrbené držení", "Vystouplé břicho", "Vzpřímené držení", "Sklon levého ramene", "Sklon pravého ramene", "Běžná záda", "Prodloužit délku zad", "Běžné břicho", "Zvětšit přední břišní obvod", "Běžný hrudník", "Prodloužit přední pas", "Zvýšit rovné rameno", "Běžné rameno", "Snížit mírný sklon", "Snížit střední sklon", "Snížit výrazný sklon"],
+};
+
+function postureTerm(value: string, locale: Locale): string | undefined {
+  const p = postureLabels[locale];
+  const exact: Record<string, number> = { "驼背": 0, "凸肚": 1, "挺胸": 2, "左平溜肩": 3, "右平溜肩": 4, "正常背": 5, "正常肚": 7, "正常胸": 9, "正常肩": 12 };
+  if (exact[value] !== undefined) return p[exact[value]];
+  const rules: [string, number][] = [["背长加长", 6], ["前肚围加大", 8], ["前腰节长加", 10], ["平肩上提", 11], ["微溜肩下调", 13], ["中溜肩下调", 14], ["重溜肩下调", 15]];
+  for (const [prefix, index] of rules) if (value.startsWith(prefix)) return `${p[index]} ${value.slice(prefix.length).trim()}`;
+}
+
+const measurementTerms: Record<string, Partial<Record<Locale, string>>> = {
+  前衣长: { en: "Front length", de: "Vorderlänge", ja: "前丈", fr: "Longueur devant", it: "Lunghezza davanti", es: "Largo delantero" },
+  后中长: { en: "Center back length", de: "Rückenlänge", ja: "後中心丈", fr: "Longueur dos milieu", it: "Lunghezza centro dietro", es: "Largo centro espalda" },
+  后衣长: { en: "Back length", de: "Rückenlänge", ja: "後丈", fr: "Longueur dos", it: "Lunghezza dietro", es: "Largo espalda" },
+  左袖长: { en: "Left sleeve", de: "Linke Ärmellänge", ja: "左袖丈", fr: "Manche gauche", it: "Manica sinistra", es: "Manga izquierda" },
+  右袖长: { en: "Right sleeve", de: "Rechte Ärmellänge", ja: "右袖丈", fr: "Manche droite", it: "Manica destra", es: "Manga derecha" },
+  长袖长: { en: "Sleeve length", de: "Ärmellänge", ja: "袖丈", fr: "Longueur manche", it: "Lunghezza manica", es: "Largo de manga" },
+  肩宽: { en: "Shoulder width", de: "Schulterbreite", ja: "肩幅", fr: "Largeur épaules", it: "Larghezza spalle", es: "Ancho de hombros" },
+  胸围: { en: "Chest", de: "Brustumfang", ja: "胸囲", fr: "Poitrine", it: "Torace", es: "Pecho" },
+  中腰: { en: "Mid waist", de: "Mittlere Taille", ja: "中胴", fr: "Taille médiane", it: "Vita media", es: "Cintura media" },
+  腰围: { en: "Waist", de: "Taillenumfang", ja: "胴囲", fr: "Taille", it: "Vita", es: "Cintura" },
+  肚围: { en: "Abdomen", de: "Bauchumfang", ja: "腹囲", fr: "Abdomen", it: "Addome", es: "Abdomen" },
+  臀围: { en: "Seat", de: "Gesäßumfang", ja: "ヒップ", fr: "Bassin", it: "Bacino", es: "Cadera" },
+  下摆: { en: "Hem", de: "Saumweite", ja: "裾幅", fr: "Bas", it: "Fondo", es: "Bajo" },
+  摆围: { en: "Hem circumference", de: "Saumumfang", ja: "裾回り", fr: "Tour de bas", it: "Circonferenza fondo", es: "Contorno de bajo" },
+  袖肥: { en: "Upper sleeve", de: "Oberarmweite", ja: "上腕囲", fr: "Tour de bras", it: "Ampiezza braccio", es: "Contorno de brazo" },
+  袖肘: { en: "Elbow", de: "Ellbogenweite", ja: "肘回り", fr: "Coude", it: "Gomito", es: "Codo" },
+  袖口: { en: "Cuff circumference", de: "Manschettenumfang", ja: "袖口回り", fr: "Tour de poignet", it: "Circonferenza polsino", es: "Contorno de puño" },
+  腕围: { en: "Wrist", de: "Handgelenkumfang", ja: "手首回り", fr: "Poignet", it: "Polso", es: "Muñeca" },
+  领窝: { en: "Neckline", de: "Halsausschnitt", ja: "首回り", fr: "Encolure", it: "Scollatura", es: "Escote" },
+  领围: { en: "Neck circumference", de: "Halsumfang", ja: "首回り", fr: "Tour de cou", it: "Circonferenza collo", es: "Contorno de cuello" },
+  大腿围: { en: "Thigh", de: "Oberschenkelumfang", ja: "太もも回り", fr: "Cuisse", it: "Coscia", es: "Muslo" },
+  膝围: { en: "Knee", de: "Knieumfang", ja: "膝回り", fr: "Genou", it: "Ginocchio", es: "Rodilla" },
+  小腿围: { en: "Calf", de: "Wadenumfang", ja: "ふくらはぎ", fr: "Mollet", it: "Polpaccio", es: "Pantorrilla" },
+  裤口: { en: "Trouser hem", de: "Fußweite", ja: "裾口", fr: "Bas de pantalon", it: "Fondo pantalone", es: "Bajo del pantalón" },
+  立裆: { en: "Rise", de: "Leibhöhe", ja: "股上", fr: "Fourche verticale", it: "Cavallo", es: "Tiro" },
+  全裆: { en: "Total rise", de: "Gesamtschrittlänge", ja: "総股ぐり", fr: "Fourche totale", it: "Cavallo totale", es: "Tiro total" },
+  "裤长 左": { en: "Left trouser length", de: "Linke Hosenlänge", ja: "左パンツ丈", fr: "Longueur jambe gauche", it: "Lunghezza gamba sinistra", es: "Largo pierna izquierda" },
+  "裤长 右": { en: "Right trouser length", de: "Rechte Hosenlänge", ja: "右パンツ丈", fr: "Longueur jambe droite", it: "Lunghezza gamba destra", es: "Largo pierna derecha" },
+};
+
 const japaneseTailoringTerms: Record<string, string> = {
   "西装上衣": "ジャケット", "西裤": "トラウザーズ", "马甲": "ウェストコート", "衬衫": "シャツ",
   "正面款式": "フロントボタン", "胸兜款式": "胸ポケット", "下摆开角大小": "フロントカット",
@@ -134,7 +262,13 @@ const japaneseTailoringTerms: Record<string, string> = {
 };
 
 export function tailoringTerm(value: string, locale: Locale, group?: string): string {
+  if (group === "measurement") {
+    if (locale === "zh") return value;
+    return measurementTerms[value]?.[locale] ?? measurementTerms[value]?.en ?? value;
+  }
   if (locale === "zh") return value;
+  const posture = postureTerm(value, locale);
+  if (posture) return posture;
   if (localizedTailoringTerms[value]?.[locale]) return localizedTailoringTerms[value]![locale]!;
   if (locale === "ja" && japaneseTailoringTerms[value]) return japaneseTailoringTerms[value];
   const english = englishTerms[value] ?? englishOption(group, value);
@@ -201,6 +335,17 @@ export function fabricTerm(value: string, locale: Locale): string {
     .replaceAll("冬季", "Winter")
     .replaceAll("纯色", "Plain")
     .replaceAll("混纺", "Blend");
+}
+
+const SEASON_SPEC_PATTERN = /^(四季|春夏|秋冬|冬季|多季节|秋冬及过渡季|all[ -]?season|year[ -]?round|spring\s*\/\s*summer|autumn\s*\/\s*winter|winter|multi[ -]?season)$/i;
+
+export function fabricSpecification(value: string, locale: Locale): string {
+  const withoutSeason = value
+    .split("·")
+    .map((part) => part.trim())
+    .filter((part) => part && !SEASON_SPEC_PATTERN.test(part))
+    .join(" · ");
+  return fabricTerm(withoutSeason, locale);
 }
 
 const localizedFabricColors: Record<string, Partial<Record<Locale, string>>> = {

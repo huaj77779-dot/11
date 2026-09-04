@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { europeanTranslation } from "./eu-translations";
+import { homepageTranslation } from "./homepage-translations";
 
 export type Locale =
   | "zh"
@@ -373,12 +374,13 @@ export const T: Dict = {
   "landing.heroEyebrow": { zh: "PRIVATE MADE-TO-MEASURE · B2B SUPPLY", en: "PRIVATE MADE-TO-MEASURE · B2B SUPPLY", de: "PRIVATE MADE-TO-MEASURE · B2B SUPPLY", ja: "PRIVATE MADE-TO-MEASURE · B2B SUPPLY" },
   "landing.heroTitleA": { zh: "从面料到成衣", en: "From fabric to finished garment", de: "Vom Stoff zum fertigen Anzug", ja: "生地から仕上がりまで" },
   "landing.heroTitleB": { zh: "为定制门店提供稳定产能", en: "stable supply for tailoring stores", de: "stabile Produktion für Maßschneidereien", ja: "テーラー店舗への安定供給" },
-  "landing.heroSub": { zh: "一站式白标定制平台。对接意大利 VBC、STYLBIELLA 等国际面料,西装、西裤、马甲、衬衫全品类小单快返,为欧美定制门店与品牌提供可靠的供应链与数字化下单系统。", en: "An all-in-one white-label tailoring platform. Sourcing Italian mills such as VBC and STYLBIELLA, with low-MOQ production across jackets, trousers, waistcoats and shirts — plus a digital ordering system for stores and brands.", de: "", ja: "" },
+  "landing.heroSub": { zh: "一站式白标定制平台。对接意大利 VBC、STYLBIELLA 等国际面料,西装、西裤、马甲、衬衫全品类小单快返,为欧美定制门店与品牌提供可靠的供应链与数字化下单系统。", en: "An all-in-one white-label tailoring platform. Sourcing Italian mills such as VBC and STYLBIELLA, with low-MOQ production across jackets, trousers, waistcoats and shirts — plus a digital ordering system for stores and brands.", de: "Eine integrierte White-Label-Plattform für Maßkonfektion mit Stoffen italienischer Webereien wie VBC und STYLBIELLA, flexibler Kleinmengenfertigung für Sakkos, Hosen, Westen und Hemden sowie einem digitalen Bestellsystem für Fachgeschäfte und Marken.", ja: "VBC、STYLBIELLAなどイタリアの服地を扱い、ジャケット、トラウザーズ、ウェストコート、シャツを小ロットで生産する一体型ホワイトラベル・オーダーメイドプラットフォームです。店舗やブランド向けのデジタル発注システムも提供します。" },
   "landing.heroCta": { zh: "在线定制", en: "Customize Online", de: "Online anpassen", ja: "オンライン注文" },
-  "landing.heroCtaSub": { zh: "选择面料 · 录入尺寸 · 确认款式", en: "Pick fabric · Enter measurements · Confirm style", de: "", ja: "" },
+  "landing.heroCtaSub": { zh: "选择面料 · 录入尺寸 · 确认款式", en: "Pick fabric · Enter measurements · Confirm style", de: "Stoff wählen · Maße eingeben · Modell bestätigen", ja: "生地選択 · 採寸入力 · 仕様確認" },
   "landing.heroCta2": { zh: "联系我们", en: "Contact Us", de: "Kontakt", ja: "お問い合わせ" },
   "landing.statYears": { zh: "年定制生产经验", en: "Years of tailoring", de: "Jahre Maßschneiderei", ja: "年の仕立て経験" },
   "landing.statMarkets": { zh: "合作市场", en: "Partner markets", de: "Partnermärkte", ja: "取引市場" },
+  "landing.statLeadValue": { zh: "4 周", en: "4 weeks", de: "4 Wochen", ja: "4週間" },
   "landing.statLead": { zh: "标准生产周期", en: "Standard lead time", de: "Standard-Lieferzeit", ja: "標準リードタイム" },
   "landing.statMills": { zh: "国际面料品牌", en: "Fabric mills", de: "Stofflieferanten", ja: "海外生地ブランド" },
   "landing.secCompanyEyebrow": { zh: "COMPANY PROFILE · 公司简介", en: "COMPANY PROFILE", de: "COMPANY PROFILE", ja: "COMPANY PROFILE" },
@@ -421,12 +423,12 @@ export const T: Dict = {
   "landing.contactWaLabel": { zh: "WhatsApp", en: "WhatsApp", de: "", ja: "" },
   "landing.contactAddrLabel": { zh: "工厂地址", en: "Factory address", de: "", ja: "" },
   "landing.contactHoursLabel": { zh: "工作时间", en: "Working hours", de: "", ja: "" },
-  "landing.contactAddr": { zh: "待补充", en: "To be confirmed", de: "", ja: "" },
-  "landing.contactHours": { zh: "周一至周六 09:00–18:00 (北京时间)", en: "Mon–Sat 09:00–18:00 (CST)", de: "", ja: "" },
-  "landing.heroBadge1": { zh: "全品类定制", en: "Full-category MTM", de: "", ja: "" },
-  "landing.heroBadge2": { zh: "小单快返", en: "Low MOQ & fast reorder", de: "", ja: "" },
-  "landing.heroBadge3": { zh: "国际物流直达", en: "Global shipping", de: "", ja: "" },
-  "landing.footRights": { zh: "© 2026 TailorSupply OS · 定制西装供应链平台", en: "© 2026 TailorSupply OS · Made-to-measure supply platform", de: "", ja: "" },
+  "landing.contactAddr": { zh: "广州市南沙区双山大道5号805房", en: "Room 805, No. 5 Shuangshan Avenue, Nansha District, Guangzhou, China", de: "Zimmer 805, Shuangshan Avenue 5, Bezirk Nansha, Guangzhou, China", ja: "中国広州市南沙区双山大道5号805室" },
+  "landing.contactHours": { zh: "周一至周日 · 24 小时", en: "Monday–Sunday · 24 hours", de: "Montag–Sonntag · 24 Stunden", ja: "月曜日～日曜日 · 24時間" },
+  "landing.heroBadge1": { zh: "全品类定制", en: "Full-category MTM", de: "MTM für alle Produktgruppen", ja: "全カテゴリーのMTM" },
+  "landing.heroBadge2": { zh: "小单快返", en: "Low MOQ & fast reorder", de: "Kleine Mindestmenge & schnelle Nachbestellung", ja: "小ロット・短納期の追加注文" },
+  "landing.heroBadge3": { zh: "国际物流直达", en: "Global shipping", de: "Weltweiter Direktversand", ja: "国際直送" },
+  "landing.footRights": { zh: "© 2026 verosuits · 定制西装供应链平台", en: "© 2026 verosuits · Made-to-measure supply platform", de: "", ja: "" },
   "landing.news1Date": { zh: "2026-08-05", en: "2026-08-05", de: "", ja: "" },
   "landing.news1Tag": { zh: "面料动态", en: "Fabric", de: "", ja: "" },
   "landing.news1Title": { zh: "2026 秋冬西服面料册更新", en: "2026 Autumn/Winter suiting book updated", de: "", ja: "" },
@@ -447,6 +449,28 @@ export const T: Dict = {
   "currency.latestRate": { zh: "最新参考汇率", en: "Latest reference rate", de: "Aktueller Referenzkurs", ja: "最新参考為替レート" },
   "currency.loadingRate": { zh: "正在更新汇率", en: "Updating exchange rate", de: "Wechselkurs wird aktualisiert", ja: "為替レートを更新中" },
   "home.styleNotePlaceholder": { zh: "请填写本件产品的特殊要求、制作说明或其他备注（选填）", en: "Add special requests, making instructions or other notes for this item (optional)", de: "Sonderwünsche, Fertigungshinweise oder weitere Notizen zu diesem Artikel (optional)", ja: "この商品の特別なご要望、縫製指示、その他の備考をご記入ください（任意）" },
+  "landing.navJourney": { zh: "合作流程", en: "Client Journey" },
+  "landing.storyTitle": { zh: "不是成衣批发，而是为每一位客户建立一件产品", en: "Not wholesale stock. One product built for one customer." },
+  "landing.storyLead": { zh: "verosuits 把门店的量体、面料和款式选择，转化成工厂可以稳定执行的订单。客户看到的是你的品牌，背后由可追踪的定制生产体系完成。", en: "verosuits turns your store's measurements, fabric and style decisions into a production-ready order. Your customer sees your brand; a traceable made-to-measure workflow operates behind it." },
+  "landing.cuttingTitle": { zh: "单件裁剪", en: "Single-order cutting" },
+  "landing.cuttingText": { zh: "面料编号、量体和纸样逐单对应", en: "Fabric code, measurements and pattern matched order by order" },
+  "landing.qcTitle": { zh: "成衣质检", en: "Garment quality control" },
+  "landing.qcText": { zh: "核对驳头、对称、工艺和外观", en: "Lapel roll, symmetry, craft and finish inspected" },
+  "landing.storyQuote": { zh: "数字系统负责准确，工匠负责质感。", en: "The system protects accuracy. Craft gives it character." },
+  "landing.storyLink": { zh: "查看完整合作流程 →", en: "See the complete client journey →" },
+  "landing.advantageTitle": { zh: "让门店能卖得更专业，也能下单得更简单", en: "More freedom for your client. Less friction for your store." },
+  "landing.advantage1": { zh: "一件起订", en: "One-piece MOQ" },
+  "landing.advantage1Text": { zh: "西装上衣、西裤、马甲和衬衫均可按客户单独下单，降低库存压力。", en: "Order jackets, trousers, waistcoats and shirts for individual clients without stocking finished garments." },
+  "landing.advantage2": { zh: "四维定制", en: "Four layers of customisation" },
+  "landing.advantage2Text": { zh: "面料、量体、体态和款式工艺形成完整订单，不靠聊天记录猜测。", en: "Fabric, measurements, posture and style details become one complete, reviewable order." },
+  "landing.advantage3": { zh: "门店白牌", en: "Store-first white label" },
+  "landing.advantage3Text": { zh: "客户界面与交付过程突出门店品牌，工厂信息不干扰客户关系。", en: "Your store remains customer-facing while production operates quietly behind your brand." },
+  "landing.advantage4": { zh: "档案复购", en: "Reorder-ready records" },
+  "landing.advantage4Text": { zh: "保存每次量体、体态、款式和修改时间，为复购建立可靠依据。", en: "Dated measurement, posture and style records create a dependable base for repeat orders." },
+  "landing.contactSending": { zh: "正在发送…", en: "Sending…" },
+  "pages.newsTitle": { zh: "定制男装供应与门店增长指南", en: "Practical Guides for Tailoring Businesses", de: "Praxisleitfäden für Maßschneidereien", ja: "テーラー事業の実践ガイド", fr: "Guides pratiques pour les tailleurs", it: "Guide pratiche per attività sartoriali", es: "Guías prácticas para negocios de sastrería", pt: "Guias práticos para alfaiatarias", nl: "Praktische gidsen voor kleermakerszaken", pl: "Praktyczne poradniki dla salonów krawieckich", sv: "Praktiska guider för skrädderiverksamheter", da: "Praktiske guider til skræddervirksomheder", no: "Praktiske guider for skreddervirksomheter", cs: "Praktické průvodce pro krejčovské firmy" },
+  "pages.newsLead": { zh: "围绕私牌生产、低起订、面料采购、量体复购、质检和国际交付的真实运营内容。", en: "Evidence-led guidance on private-label production, low-MOQ ordering, fabric sourcing, measurements, quality control and international delivery.", de: "Praxisnahe Informationen zu White-Label-Produktion, kleinen Mindestmengen, Stoffbeschaffung, Maßen, Qualitätskontrolle und internationaler Lieferung.", ja: "ホワイトラベル生産、小ロット発注、生地調達、採寸、品質管理、国際配送に関する実務情報。", fr: "Conseils concrets sur la production en marque blanche, les petites quantités, l’approvisionnement en tissus, les mesures, le contrôle qualité et la livraison internationale.", it: "Indicazioni concrete su produzione white label, piccoli quantitativi, approvvigionamento tessuti, misure, controllo qualità e consegna internazionale.", es: "Orientación práctica sobre producción de marca blanca, pedidos pequeños, compra de tejidos, medidas, control de calidad y entrega internacional.", pt: "Orientação prática sobre produção em marca branca, pequenas quantidades, tecidos, medidas, controlo de qualidade e entrega internacional.", nl: "Praktische informatie over white-labelproductie, kleine oplages, stoffeninkoop, maten, kwaliteitscontrole en internationale levering.", pl: "Praktyczne treści o produkcji white label, niskim MOQ, zakupie tkanin, wymiarach, kontroli jakości i dostawie międzynarodowej.", sv: "Praktisk vägledning om white-label-produktion, små order, tyginköp, mått, kvalitetskontroll och internationell leverans.", da: "Praktisk vejledning om white-label-produktion, små ordrer, stofindkøb, mål, kvalitetskontrol og international levering.", no: "Praktisk veiledning om white-label-produksjon, små bestillinger, stoffinnkjøp, mål, kvalitetskontroll og internasjonal levering.", cs: "Praktické informace o výrobě pod privátní značkou, nízkém MOQ, nákupu látek, mírách, kontrole kvality a mezinárodním doručení." },
+  "pages.readGuide": { zh: "阅读全文 →", en: "Read guide →", de: "Ratgeber lesen →", ja: "記事を読む →", fr: "Lire le guide →", it: "Leggi la guida →", es: "Leer la guía →", pt: "Ler o guia →", nl: "Lees de gids →", pl: "Czytaj poradnik →", sv: "Läs guiden →", da: "Læs guiden →", no: "Les guiden →", cs: "Číst průvodce →" },
 };
 
 export function translate(key: string, locale?: Locale): string {
@@ -455,7 +479,22 @@ export function translate(key: string, locale?: Locale): string {
   const loc = locale ?? store.locale;
   const european = europeanTranslation(loc, key);
   if (european) return european;
-  return entry[loc] ?? entry.en ?? key;
+  const homepage = homepageTranslation(loc, key);
+  if (homepage) return homepage;
+  return entry[loc]?.trim() || entry.en?.trim() || entry.zh?.trim() || key;
+}
+
+const STORE_WORD: Record<Locale, string> = {
+  zh: "门店", en: "Store", de: "Filiale", ja: "店舗", fr: "Boutique", it: "Negozio",
+  es: "Tienda", pt: "Loja", nl: "Vestiging", pl: "Salon", sv: "Butik", da: "Butik",
+  no: "Butikk", cs: "Prodejna",
+};
+
+/** Localizes legacy account names such as “门店 01” without changing stored data. */
+export function localizeStoreName(name: string, locale?: Locale): string {
+  const loc = locale ?? store.locale;
+  const match = name.trim().match(/^(?:门店|Store|Filiale|店舗|Boutique|Negozio|Tienda|Loja|Vestiging|Salon|Butik|Butikk|Prodejna)\s*(.*)$/i);
+  return match ? `${STORE_WORD[loc]}${match[1] ? ` ${match[1]}` : ""}` : name;
 }
 
 /** 客户端 hook：响应语言切换 */

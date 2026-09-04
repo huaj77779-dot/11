@@ -5,7 +5,7 @@ const configuredOrigin =
   "http://localhost:3000";
 
 export const SITE_ORIGIN = configuredOrigin.replace(/\/$/, "");
-export const SITE_NAME = "TailorSupply OS";
+export const SITE_NAME = "verosuits";
 export const SITE_TAGLINE =
   "Private-label made-to-measure manufacturing, Italian fabrics and digital ordering for tailoring shops and menswear boutiques.";
 

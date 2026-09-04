@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "A custom tailoring supply and ordering platform for boutiques, independent tailors and made-to-measure stores serving international clients.",
   alternates: { canonical: "/custom-tailoring-supplier" },
   openGraph: {
-    title: "Custom Tailoring Supplier for Boutiques | TailorSupply OS",
+    title: "Custom Tailoring Supplier for Boutiques | verosuits",
     description: "Private-label production support and a digital made-to-measure ordering portal for professional tailoring businesses.",
     url: "/custom-tailoring-supplier",
   },
@@ -16,7 +16,7 @@ export default function CustomTailoringSupplierPage() {
   return <SeoServicePage
     eyebrow="CUSTOM TAILORING SUPPLIER"
     title="A practical ordering system for modern tailoring shops."
-    intro="TailorSupply OS connects the in-store fitting appointment with fabric selection, customer records, garment configuration and international order preparation."
+    intro="verosuits connects the in-store fitting appointment with fabric selection, customer records, garment configuration and international order preparation."
     summary="The service is designed for businesses that sell expertise rather than off-the-rack stock. Staff can guide the appointment visually, preserve the customer's measurement history and build multiple garments without losing the selected fabric or previous page position."
     audience={["New tailoring businesses", "Established bespoke shops adding MTM", "Menswear boutiques", "Wedding suit retailers", "Multi-store tailoring groups", "International client advisors"]}
     capabilities={[

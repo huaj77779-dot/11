@@ -3,7 +3,9 @@ import type { DrizzleD1Database } from "drizzle-orm/d1";
 import * as schema from "../../db/schema";
 import type { User } from "../../db/schema";
 
-export type AuthUser = Pick<User, "id" | "username" | "role" | "storeName">;
+export type AuthUser = Pick<User, "id" | "username" | "role" | "storeName" | "displayName" | "email"> & {
+  permissions: string[];
+};
 
 export const SESSION_COOKIE = "tailorsupply_session";
 
@@ -45,9 +47,11 @@ export async function getSession(
     [user] = await db.select().from(schema.users).where(eq(schema.users.token, token)).limit(1);
     if (user) await db.update(schema.users).set({ token: tokenHash }).where(eq(schema.users.id, user.id));
   }
-  if (!user || !user.tokenExpiresAt) return null;
+  if (!user || !user.active || !user.tokenExpiresAt) return null;
   if (new Date(user.tokenExpiresAt).getTime() < Date.now()) return null;
-  return { id: user.id, username: user.username, role: user.role, storeName: user.storeName };
+  let permissions: string[] = [];
+  try { permissions = JSON.parse(user.permissions || "[]") as string[]; } catch { permissions = []; }
+  return { id: user.id, username: user.username, role: user.role, storeName: user.storeName, displayName: user.displayName, email: user.email, permissions };
 }
 
 export async function createToken(
@@ -85,5 +89,11 @@ export async function clearToken(
  */
 export function scopeFor(user: AuthUser | null): number | null {
   if (!user) return null;
-  return user.role === "master" ? null : user.id;
+  return user.role === "store" ? user.id : null;
+}
+
+export function canManage(user: AuthUser | null, permission?: string): boolean {
+  if (!user || user.role === "store") return false;
+  if (user.role === "master" || user.role === "admin") return true;
+  return permission ? user.permissions.includes(permission) : true;
 }

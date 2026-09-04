@@ -2,10 +2,11 @@
 import { useEffect, useRef, useState } from "react";
 import { shirtOptionImageUrl } from "./shirt-option-images";
 import { suitOptionImageUrl } from "./suit-option-images";
-import { useLocale } from "./lib/i18n";
+import { localizeStoreName, useLocale } from "./lib/i18n";
 import { useCurrency } from "./lib/currency";
-import { fabricDisplayName, fabricTerm, tailoringTerm } from "./lib/tailoring-terms";
+import { fabricDisplayName, fabricSpecification, fabricTerm, tailoringTerm } from "./lib/tailoring-terms";
 import { LanguageSwitcher } from "./_components/LanguageSwitcher";
+import { BrandLogo } from "./_components/BrandLogo";
 import { apiFetch, clearAuth } from "./lib/api";
 import { useAuthGuard } from "./lib/useAuthGuard";
 import {
@@ -194,8 +195,20 @@ const optionsByGarment = {
       title: "里布位置",
       items: ["全里布", "二分之一里布", "三分之一里布", "四分之一里布"],
     },
-    { title: "驳头款式", items: ["平驳领", "青果领", "戗驳领"] },
+    { title: "驳头款式", items: ["平驳头", "青果领", "戗驳头"] },
     { title: "袖叉款式", items: ["假扣眼", "无扣眼", "真扣眼"] },
+    { title: "纽扣钉法", items: ["平钉", "叠钉"] },
+    { title: "纽扣选择", items: ["牛角扣", "金属扣", "果实扣", "木质扣", "尿素扣", "熟料扣", "树脂扣", "贝壳扣"] },
+    { title: "纽扣数量", items: ["3", "4", "5", "6"] },
+    { title: "扣眼方向", items: ["直扣眼", "斜扣眼"] },
+    { title: "穿着习惯", items: ["紧身", "很修身", "修身", "合体偏瘦", "合体", "合体偏松", "宽松", "很宽松", "非常宽松"] },
+    { title: "色丁位置", items: ["无", "过面", "过面+腰兜牙", "过面+胸兜+腰兜牙", "领面", "领面+腰兜牙", "领面+胸兜+腰兜牙", "可脱卸假驳头", "可脱卸假青果领", "过面+领面", "过面+领面+腰兜牙", "过面+领面+胸兜", "过面+领面+胸兜+腰兜牙"] },
+    { title: "驳头宽", items: ["根据体型默认", "5.5cm", "6cm", "6.5cm", "7cm", "7.5cm", "8cm", "8.5cm", "9cm", "9.5cm", "10cm", "10.5cm", "11cm", "11.5cm", "12cm", "12.5cm", "13cm", "13.5cm", "14cm", "14.5cm", "15cm"] },
+    { title: "里兜左", items: ["里大兜+笔兜+烟兜", "里大兜+烟兜", "里大兜+钻石兜+烟兜", "里大兜+票兜+笔兜+烟兜", "里大兜+票兜+烟兜", "里大兜+票兜+钻石兜+烟兜"] },
+    { title: "里兜右", items: ["里大兜", "无"] },
+    { title: "过面", items: ["A宝剑头过面", "B圆过面", "C弯过面", "D直过面", "E拼接耳皮"] },
+    { title: "外珠边", items: ["0.15cm", "0.25cm", "0.6cm", "0.8cm"] },
+    { title: "香水垫", items: ["半圆", "三角", "无"] },
   ],
   trousers: [
     {
@@ -209,13 +222,18 @@ const optionsByGarment = {
         "廓尔格腰头",
       ],
     },
-    { title: "褶皱", items: ["三褶皱", "无褶皱", "单褶皱", "双褶皱"] },
+    { title: "褶皱", items: ["无褶皱", "单褶皱", "双褶皱"] },
     {
       title: "裤脚",
-      items: ["裤脚口内折边", "毛边", "裤脚口外翻翘", "靴裤脚口"],
+      items: ["裤脚口内折边", "裤脚口外翻翘", "靴裤脚口"],
     },
     { title: "裤型", items: ["喇叭裤型", "锥状裤型", "标准裤型", "直筒裤型"] },
     { title: "裤脚口", items: ["裤脚口打开", "裤脚口三角开口"] },
+    { title: "侧兜", items: ["斜侧兜", "直侧兜"] },
+    { title: "前表兜", items: ["无", "有", "有兜盖"] },
+    { title: "后斗锁眼", items: ["无", "左右锁眼", "左锁眼", "右锁眼"] },
+    { title: "兜中兜", items: ["无", "有"] },
+    { title: "后兜", items: ["双牙", "单牙1.0", "单牙1.2", "单牙1.5"] },
   ],
   waistcoat: [
     {
@@ -225,15 +243,19 @@ const optionsByGarment = {
         "圆形三粒扣",
         "双排六扣三",
         "青果领三粒扣",
-        "平驳领五粒扣",
-        "平驳领六扣三",
-        "戗驳领五粒扣",
-        "戗驳领六扣三",
+        "平驳头五粒扣",
+        "平驳头六扣三",
+        "戗驳头五粒扣",
+        "戗驳头六扣三",
       ],
     },
     { title: "马甲口袋数量", items: ["无胸兜", "单胸兜", "双胸兜"] },
     { title: "马甲口袋款式", items: ["标准兜", "带兜盖", "双牙兜"] },
     { title: "马甲下摆", items: ["平摆", "尖摆"] },
+    { title: "后领条", items: ["有", "无"] },
+    { title: "后背面", items: ["面料", "里料"] },
+    { title: "侧开叉", items: ["无", "有"] },
+    { title: "外珠边", items: ["0.15", "0.25", "0.6", "0.8"] },
   ],
   shirt: [
     {
@@ -395,18 +417,32 @@ function spreadsheetEscape(value: unknown) {
     .replaceAll('"', "&quot;");
 }
 const basePrices: Record<GarmentKey, number> = {
-  jacket: 500,
+  jacket: 450,
   trousers: 200,
   waistcoat: 200,
-  shirt: 520,
+  shirt: 100,
 };
 const WAISTCOAT_EXTRA_LENGTH_STYLES = new Set([
   "青果领三粒扣",
-  "平驳领五粒扣",
-  "平驳领六扣三",
-  "戗驳领五粒扣",
-  "戗驳领六扣三",
+  "平驳头五粒扣",
+  "平驳头六扣三",
+  "戗驳头五粒扣",
+  "戗驳头六扣三",
 ]);
+const JACKET_DROPDOWN_GROUPS = new Set([
+  "纽扣选择",
+  "纽扣数量",
+  "穿着习惯",
+  "色丁位置",
+  "驳头宽",
+  "里兜左",
+  "里兜右",
+  "过面",
+  "外珠边",
+  "香水垫",
+]);
+const WAISTCOAT_DROPDOWN_GROUPS = new Set(["后领条", "后背面", "侧开叉", "外珠边"]);
+const TROUSER_DROPDOWN_GROUPS = new Set(["侧兜", "前表兜", "后斗锁眼", "兜中兜", "后兜"]);
 const fabricPrices: Record<string, number> = {
   "VBC-110-NV": 680,
   "TR-120-CH": 420,
@@ -549,12 +585,39 @@ function shippingQuote(country: string, weightKg: number) {
   };
 }
 
+const SHIRT_OPTION_SURCHARGES: Record<string, number> = {
+  "领型\u0000古巴领": 20,
+  "领型\u0000针孔领(11.5)": 30,
+  "领型\u0000意式一片领(9.5)": 20,
+  "袖口\u0000意式法式袖3#": 10,
+  "袖口\u0000意式法式袖2#": 5,
+  "袖口\u0000大圆角": 5,
+  "袖口折\u0000意式碎折": 10,
+  "袖口折\u0000意式三折": 5,
+  "后幅\u0000意式后片碎折": 10,
+  "后担干\u0000担干八字拼接": 15,
+  "下摆\u0000圆摆贴三角": 5,
+  "下摆\u0000圆摆宝剑头贴": 5,
+  "侧缝工艺\u0000手工包缝": 10,
+  "袖山意式碎折\u0000袖山意式碎折": 20,
+  "错位上袖\u0000需要": 40,
+  "鸡爪扣钉\u0000需要": 10,
+  "礼服打条\u0000礼服打条": 70,
+};
+
 function optionSurcharge(
   garment: GarmentKey,
   groupIndex: number,
   itemIndex: number,
 ) {
-  if (itemIndex <= 0) return 0;
+  if (itemIndex < 0) return 0;
+  if (garment === "shirt") {
+    const group = optionsByGarment.shirt[groupIndex];
+    const item = group?.items[itemIndex];
+    return group && item
+      ? (SHIRT_OPTION_SURCHARGES[`${group.title}\u0000${item}`] ?? 0)
+      : 0;
+  }
   const rules: Record<GarmentKey, Record<number, number[]>> = {
     jacket: {
       7: [0, 100, 1900],
@@ -570,16 +633,7 @@ function optionSurcharge(
     waistcoat: {
       0: [0, 0, 0, 80, 80, 80, 80, 80],
     },
-    shirt: {
-      0: [0, 20, 20, 25, 35, 35, 40, 30, 35, 45, 20, 50, 45, 25, 40],
-      3: [0, 25, 45, 45],
-      4: [0, 15, 15, 20],
-      5: [
-        0, 20, 20, 35, 35, 35, 45, 45, 45, 55, 65, 45, 60, 60, 60, 70, 80, 80,
-      ],
-      10: [0, 80],
-      15: [0, 30, 60, 0, 90],
-    },
+    shirt: {},
   };
   return rules[garment][groupIndex]?.[itemIndex] ?? 0;
 }
@@ -763,7 +817,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
   const { money } = useCurrency();
   const { user, ready } = useAuthGuard(false);
   const [loginReq, setLoginReq] = useState(false);
-  const WHATSAPP = "8613800000000";
+  const WHATSAPP = "18169255770";
   const logout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
@@ -803,6 +857,9 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
           init[`${key}:${group.title}`] = group.items[0];
       });
     });
+    init["jacket:纽扣数量"] = "4";
+    init["jacket:扣眼方向"] = "直扣眼";
+    init["jacket:驳头宽"] = "根据体型默认";
     return init;
   });
   const [measurements, setMeasurements] =
@@ -817,16 +874,17 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
     garment === "jacket"
       ? [
           ["正面款式"],
-          ["胸兜款式", "肩膀样式"],
+          ["胸兜款式", "肩膀样式", "纽扣钉法", "纽扣选择", "纽扣数量"],
           ["口袋款式"],
-          ["下摆开角大小", "驳头款式"],
+          ["驳头款式", "驳头宽", "下摆开角大小"],
           ["西服背面款式", "西服开衩选择"],
           ["里布位置", "毛衬"],
+          ["穿着习惯", "色丁位置", "外珠边", "香水垫", "里兜左", "里兜右", "过面"],
         ]
       : garment === "trousers"
-        ? [["扣型", "褶皱"], ["裤脚", "裤型", "裤脚口"]]
+        ? [["扣型", "褶皱"], ["裤脚", "裤型", "裤脚口"], ["侧兜", "前表兜", "后斗锁眼", "兜中兜", "后兜"]]
         : garment === "waistcoat"
-          ? [["马甲款式"], ["马甲口袋数量", "马甲口袋款式", "马甲下摆"]]
+          ? [["马甲款式"], ["马甲口袋数量", "马甲口袋款式", "马甲下摆"], ["后领条", "后背面", "侧开叉", "外珠边"]]
           : garment === "shirt"
             ? [
                 ["领型"],
@@ -1464,13 +1522,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
   return (
     <main className={`shell ${whiteLabel ? "white-label-mode" : ""}`}>
       <aside className="side">
-        <div className="brand">
-          <i>A</i>
-          <div>
-            <b>TAILORSUPPLY OS</b>
-            <small>WHITE-LABEL PORTAL</small>
-          </div>
-        </div>
+        <div className="brand"><BrandLogo compact /></div>
         <nav>
           <a className="on" href="/customize">
             ▦　{t("home.newOrder")}
@@ -1566,7 +1618,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
               {ready && user ? (
                 <>
                   <span className="user-chip">
-                    {user.storeName || user.username}
+                    {localizeStoreName(user.storeName || user.username, loc)}
                     {user.role === "master" ? " · 主账号" : ""}
                   </span>
                   <button onClick={logout} title={t("home.logout")}>
@@ -1926,7 +1978,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                               <div className="cm-tr head">
                                 <b>{tailoringTerm(corner, loc)}</b>
                                 {shownFields.map((f) => (
-                                  <span key={f}>{tailoringTerm(f, loc)}</span>
+                                  <span key={f}>{tailoringTerm(f, loc, "measurement")}</span>
                                 ))}
                               </div>
                               <div className="cm-tr">
@@ -2257,7 +2309,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                         )}
                       </b>
                       <p>{fabricDisplayCode(currentFabric)}</p>
-                      <span>{currentFabric.meta}</span>
+                      <span>{fabricSpecification(currentFabric.meta, loc)}</span>
                     </div>
                   )}
                   {currentFabric && (
@@ -2333,7 +2385,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                                 .length ?? 0),
                             0,
                           );
-                          const rowColumns = garment === "trousers" ? 10 : 8;
+                          const rowColumns = garment === "trousers" ? 9 : 8;
                           const gBase = Math.floor(rowColumns / row.length);
                           const gRem = rowColumns - gBase * row.length;
                           return (
@@ -2341,6 +2393,33 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                                className={`group-row ${
                                  garment === "trousers"
                                    ? "trousers-group-row"
+                                   : ""
+                               } ${
+                                 garment === "trousers" &&
+                                 row.includes("侧兜") &&
+                                 row.includes("后兜")
+                                   ? "trousers-detail-row"
+                                   : ""
+                               } ${
+                                 garment === "jacket" &&
+                                 row.includes("纽扣钉法") &&
+                                 row.includes("胸兜款式")
+                                   ? "pocket-button-row"
+                                   : garment === "jacket" &&
+                                       row.includes("纽扣钉法")
+                                     ? "button-config-row"
+                                     : ""
+                               } ${
+                                 garment === "jacket" &&
+                                 row.includes("穿着习惯") &&
+                                 row.includes("香水垫")
+                                   ? "jacket-detail-row"
+                                   : ""
+                               } ${
+                                 garment === "jacket" &&
+                                 row.includes("驳头款式") &&
+                                 row.includes("下摆开角大小")
+                                   ? "lapel-front-row"
                                    : ""
                                } ${
                                  garment === "shirt" &&
@@ -2353,6 +2432,13 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                                   ? "shirt-optional-row"
                                   : ""
                               }`}
+                              data-button-label={
+                                garment === "jacket" &&
+                                row.includes("纽扣钉法") &&
+                                row.includes("胸兜款式")
+                                  ? tailoringTerm("纽扣选择", loc)
+                                  : undefined
+                              }
                               key={ri}
                             >
                               {row.map((title, j) => {
@@ -2363,6 +2449,10 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                                   ? ((group) => {
                                       const groupKey = `${garment}:${group.title}`;
                                       const chosen = selected[groupKey];
+                                      const isJacketDetailSelect =
+                                        garment === "jacket" &&
+                                        row.includes("穿着习惯") &&
+                                        row.includes("香水垫");
                                       const span =
                                         rowTotal === rowColumns
                                           ? group.items.length
@@ -2374,7 +2464,46 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                                           style={{ gridColumn: `span ${span}` }}
                                         >
                                           <div>
-                                            <h3>{tailoringTerm(group.title, loc)}</h3>
+                                            {garment === "jacket" &&
+                                            group.title === "纽扣数量" ? (
+                                              <div
+                                                className="buttonhole-direction-picker"
+                                                role="group"
+                                                aria-label="扣眼方向"
+                                              >
+                                                {["直扣眼", "斜扣眼"].map((item) => (
+                                                  <button
+                                                    type="button"
+                                                    key={item}
+                                                    className={
+                                                      selected["jacket:扣眼方向"] === item
+                                                        ? "selected"
+                                                        : ""
+                                                    }
+                                                    onClick={() =>
+                                                      setSelected({
+                                                        ...selected,
+                                                        "jacket:扣眼方向": item,
+                                                      })
+                                                    }
+                                                  >
+                                                    {tailoringTerm(
+                                                      item,
+                                                      loc,
+                                                      "扣眼方向",
+                                                    )}
+                                                  </button>
+                                                ))}
+                                              </div>
+                                            ) : (
+                                              <h3 aria-label={tailoringTerm(group.title, loc)}>
+                                                {garment === "jacket" &&
+                                                (group.title === "纽扣钉法" ||
+                                                  group.title === "纽扣选择")
+                                                  ? null
+                                                  : tailoringTerm(group.title, loc)}
+                                              </h3>
+                                            )}
                                           </div>
                                           <div className="options">
                                             {garment === "shirt" &&
@@ -2390,7 +2519,84 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                                                 />
                                               </label>
                                             ) : null}
-                                            {group.items.map((item) => {
+                                            {(garment === "jacket" &&
+                                              JACKET_DROPDOWN_GROUPS.has(group.title)) ||
+                                            (garment === "waistcoat" &&
+                                              WAISTCOAT_DROPDOWN_GROUPS.has(group.title)) ||
+                                            (garment === "trousers" &&
+                                              TROUSER_DROPDOWN_GROUPS.has(group.title)) ? (
+                                              garment === "jacket" &&
+                                              group.title === "纽扣数量" ? (
+                                                <div
+                                                  className="button-count-picker"
+                                                  role="group"
+                                                  aria-label={tailoringTerm(group.title, loc)}
+                                                >
+                                                  {group.items.map((item) => (
+                                                    <button
+                                                      type="button"
+                                                      key={item}
+                                                      className={chosen === item ? "selected" : ""}
+                                                      onClick={() =>
+                                                        setSelected({
+                                                          ...selected,
+                                                          [groupKey]: item,
+                                                        })
+                                                      }
+                                                    >
+                                                      {item}
+                                                    </button>
+                                                  ))}
+                                                </div>
+                                              ) : (
+                                                <label
+                                                  className={`compact-option-select ${
+                                                    garment === "jacket" &&
+                                                    group.title === "纽扣选择"
+                                                      ? "wrap-selected-value"
+                                                      : garment === "jacket" &&
+                                                          group.title === "驳头宽"
+                                                        ? "lapel-wrap-selected-value"
+                                                      : isJacketDetailSelect
+                                                        ? "detail-wrap-selected-value"
+                                                        : ""
+                                                  }`}
+                                                >
+                                                  <select
+                                                    aria-label={tailoringTerm(group.title, loc)}
+                                                    value={chosen ?? ""}
+                                                    onChange={(event) =>
+                                                      setSelected({
+                                                        ...selected,
+                                                        [groupKey]: event.target.value,
+                                                      })
+                                                    }
+                                                  >
+                                                    {group.items.map((item) => (
+                                                      <option key={item} value={item}>
+                                                        {tailoringTerm(item, loc, group.title)}
+                                                      </option>
+                                                    ))}
+                                                  </select>
+                                                  {(garment === "jacket" &&
+                                                    group.title === "纽扣选择") ||
+                                                  (garment === "jacket" &&
+                                                    group.title === "驳头宽") ||
+                                                  isJacketDetailSelect ? (
+                                                    <span
+                                                      className="compact-selected-value"
+                                                      aria-hidden="true"
+                                                    >
+                                                      {tailoringTerm(
+                                                        chosen ?? "",
+                                                        loc,
+                                                        group.title,
+                                                      )}
+                                                    </span>
+                                                  ) : null}
+                                                </label>
+                                              )
+                                            ) : group.items.map((item) => {
                                               const optImg =
                                                 garment === "shirt"
                                                   ? shirtOptionImageUrl(
@@ -2402,16 +2608,14 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                                                       item,
                                                     );
                                               const surcharge =
-                                                garment === "shirt"
-                                                  ? 0
-                                                  : optionSurcharge(
-                                                      garment,
-                                                      optionGroups.findIndex(
-                                                        (candidate) =>
-                                                          candidate.title === group.title,
-                                                      ),
-                                                      group.items.indexOf(item),
-                                                    );
+                                                optionSurcharge(
+                                                  garment,
+                                                  optionGroups.findIndex(
+                                                    (candidate) =>
+                                                      candidate.title === group.title,
+                                                  ),
+                                                  group.items.indexOf(item),
+                                                );
                                               if (
                                                 garment === "shirt" &&
                                                 group.title === "字体" &&
@@ -2533,16 +2737,14 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                                       ? shirtOptionImageUrl(group.title, item)
                                       : suitOptionImageUrl(group.title, item);
                                   const surcharge =
-                                    garment === "shirt"
-                                      ? 0
-                                      : optionSurcharge(
-                                          garment,
-                                          optionGroups.findIndex(
-                                            (candidate) =>
-                                              candidate.title === group.title,
-                                          ),
-                                          group.items.indexOf(item),
-                                        );
+                                    optionSurcharge(
+                                      garment,
+                                      optionGroups.findIndex(
+                                        (candidate) =>
+                                          candidate.title === group.title,
+                                      ),
+                                      group.items.indexOf(item),
+                                    );
                                   return (
                                     <button
                                       key={item}
@@ -3093,7 +3295,7 @@ function PiPreview({
       .note{color:#756657;font-size:11px;padding-top:12px}
     </style></head><body>
       <table class="meta">
-        <tr><td colspan="4" class="brand">TAILORSUPPLY OS</td><td colspan="5" class="title">PROFORMA INVOICE</td></tr>
+        <tr><td colspan="4" class="brand">VEROSUITS</td><td colspan="5" class="title">PROFORMA INVOICE</td></tr>
         <tr><td><b>${spreadsheetEscape(t("pi.customer"))}</b></td><td colspan="3">${spreadsheetEscape(customerName || "—")}</td><td><b>Date</b></td><td colspan="4">${dateLabel}</td></tr>
         <tr><td><b>${spreadsheetEscape(t("pi.address"))}</b></td><td colspan="8">${spreadsheetEscape(address || "—")}</td></tr>
       </table><br>
@@ -3101,7 +3303,7 @@ function PiPreview({
         <thead><tr><th>#</th><th>${spreadsheetEscape(t("pi.product"))}</th><th>${spreadsheetEscape(t("pi.fabric"))}</th><th>${spreadsheetEscape(t("pi.styles"))}</th><th>${spreadsheetEscape(t("pi.make"))}</th><th>${spreadsheetEscape(t("pi.fabricPrice"))}</th><th>${spreadsheetEscape(t("pi.extra"))}</th><th>${spreadsheetEscape(t("pi.shipping"))}</th><th>${spreadsheetEscape(t("pi.price"))}</th></tr></thead>
         <tbody>${rows}<tr class="grand"><td colspan="8">${spreadsheetEscape(t("pi.total"))}</td><td class="money">${spreadsheetEscape(money(total))}</td></tr></tbody>
       </table>
-      <div class="note">Currency: ${currency} · Generated by TailorSupply OS</div>
+      <div class="note">Currency: ${currency} · Generated by verosuits</div>
     </body></html>`;
     const blob = new Blob(["\ufeff", html], {
       type: "application/vnd.ms-excel;charset=utf-8",
@@ -3412,7 +3614,7 @@ function PiPreview({
         </div>
         <b className="pi-no">{channelCode || "CH"}-DD-MM-序号</b>
       </div>
-      <section className="shipping-address">
+      {false && <section className="shipping-address">
         <div className="address-title">
           <div>
             <p className="eyebrow">SHIPPING ADDRESS</p>
@@ -3474,7 +3676,7 @@ function PiPreview({
           </span>
           <small hidden={!(country && region && city && street && postalCode)}>{t("home.shipNote")}</small>
         </div>
-      </section>
+      </section>}
       <div className="pi-customer">
         <div>
           <small>{t("pi.customer")}</small>
@@ -4095,7 +4297,7 @@ function FabricFirst({
               <b>
                 {STYLBIELLA_BOOK_META[book].title} · {book}
               </b>
-              <span>{fabricTerm(STYLBIELLA_BOOK_META[book].meta, loc)}</span>
+              <span>{fabricSpecification(STYLBIELLA_BOOK_META[book].meta, loc)}</span>
             </div>
             {FABRIC_BOOK_DETAILS[book] ? (
               <button
@@ -4114,7 +4316,7 @@ function FabricFirst({
                   <small>STYLBIELLA</small>
                   <b>{FABRIC_BOOK_DETAILS[book].title} · {book}</b>
                   <em>{t("home.bookDetail")}</em>
-                  <p>{fabricTerm(FABRIC_BOOK_DETAILS[book].summary, loc)}</p>
+                  <p>{fabricSpecification(FABRIC_BOOK_DETAILS[book].summary, loc)}</p>
                   <strong>{t("home.viewFullBook")} →</strong>
                 </span>
               </button>
@@ -4140,7 +4342,7 @@ function FabricFirst({
                   <small>{f.mill}</small>
                   <b>{fabricDisplayName(f.name, loc, STYLBIELLA_FABRIC_COLORS[f.code]?.color)}</b>
                   <em>{fabricDisplayCode(f)}</em>
-                  <p>{fabricTerm(f.meta, loc)}</p>
+                  <p>{fabricSpecification(f.meta, loc)}</p>
                   <em className="fabric-card-meter-price">
                     {money(getFabricPrice(f.code))}/{t("home.perMeter")}
                   </em>
@@ -4171,7 +4373,7 @@ function FabricFirst({
                   <small>{f.mill}</small>
                   <b>{fabricDisplayName(f.name, loc, STYLBIELLA_FABRIC_COLORS[f.code]?.color)}</b>
                   <em>{fabricDisplayCode(f)}</em>
-                  <p>{fabricTerm(f.meta, loc)}</p>
+                  <p>{fabricSpecification(f.meta, loc)}</p>
                   <strong
                     className={
                       f.stock === "库存较少"
@@ -4258,7 +4460,6 @@ function FabricFirst({
               </div>
               <dl>
                 <div><dt>{t("home.bookProducts")}</dt><dd>{loc === "zh" ? FABRIC_BOOK_DETAILS[showBookDetail].products : FABRIC_BOOK_DETAILS_EN[showBookDetail].products}</dd></div>
-                <div><dt>{t("home.bookSeason")}</dt><dd>{loc === "zh" ? FABRIC_BOOK_DETAILS[showBookDetail].season : FABRIC_BOOK_DETAILS_EN[showBookDetail].season}</dd></div>
                 <div><dt>{t("home.bookWeight")}</dt><dd>{FABRIC_BOOK_DETAILS[showBookDetail].weight}</dd></div>
                 <div><dt>{t("home.bookView")}</dt><dd>{t("home.bookViewHint")}</dd></div>
               </dl>
@@ -4356,7 +4557,7 @@ function FabricFirst({
                 <b>
                   {fabricDisplayName(chosen.name, loc, STYLBIELLA_FABRIC_COLORS[chosen.code]?.color)} · {chosen.code}
                 </b>
-                <p>{fabricTerm(chosen.meta, loc)}</p>
+                <p>{fabricSpecification(chosen.meta, loc)}</p>
               </div>
               <em className="fabric-price">
                 {chosen.code === "WC-MATCH-01"

@@ -13,10 +13,54 @@ const DDL_STATEMENTS = [
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'store',
     store_name TEXT NOT NULL DEFAULT '',
+    display_name TEXT NOT NULL DEFAULT '',
+    email TEXT NOT NULL DEFAULT '',
+    permissions TEXT NOT NULL DEFAULT '[]',
+    active INTEGER NOT NULL DEFAULT 1,
     token TEXT,
     token_expires_at TEXT,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`,
+  `CREATE TABLE IF NOT EXISTS site_content (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    section TEXT NOT NULL,
+    content_key TEXT NOT NULL,
+    locale TEXT NOT NULL DEFAULT 'en',
+    value TEXT NOT NULL DEFAULT '',
+    value_type TEXT NOT NULL DEFAULT 'text',
+    updated_by INTEGER NOT NULL DEFAULT 0,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS idx_site_content_key_locale ON site_content(content_key, locale)`,
+  `CREATE TABLE IF NOT EXISTS news_articles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug TEXT NOT NULL UNIQUE,
+    locale TEXT NOT NULL DEFAULT 'en',
+    title TEXT NOT NULL,
+    excerpt TEXT NOT NULL DEFAULT '',
+    body TEXT NOT NULL DEFAULT '',
+    category TEXT NOT NULL DEFAULT 'Company News',
+    cover_image TEXT,
+    status TEXT NOT NULL DEFAULT 'draft',
+    published_at TEXT,
+    author_id INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`,
+  `CREATE INDEX IF NOT EXISTS idx_news_status_published ON news_articles(status, published_at)`,
+  `CREATE TABLE IF NOT EXISTS inquiries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    company TEXT NOT NULL,
+    contact TEXT NOT NULL,
+    message TEXT NOT NULL DEFAULT '',
+    source TEXT NOT NULL DEFAULT 'website',
+    status TEXT NOT NULL DEFAULT 'new',
+    assignee_id INTEGER NOT NULL DEFAULT 0,
+    notes TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`,
+  `CREATE INDEX IF NOT EXISTS idx_inquiries_status_created ON inquiries(status, created_at)`,
   `CREATE TABLE IF NOT EXISTS fabrics (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     code TEXT NOT NULL UNIQUE,
@@ -154,15 +198,25 @@ export async function verifyPassword(password: string, stored: string): Promise<
  * SCHEMA_VERSION：修改 DDL_STATEMENTS / ensureColumn 清单后必须 +1，
  * 否则已有库会因标记命中而跳过新迁移。
  */
-const SCHEMA_VERSION = 3;
+const SCHEMA_VERSION = 4;
 const SCHEMA_META = "schema_meta";
 const SCHEMA_FLAG_KEY = "schema_initialized_v" + SCHEMA_VERSION;
 const SCHEMA_KEY = "__tailorsupply_schema_ready_v" + SCHEMA_VERSION;
-type G = typeof globalThis & { [SCHEMA_KEY]?: boolean };
+const STORE_ACCOUNTS_KEY = "__tailorsupply_store_accounts_ready";
+type G = typeof globalThis & {
+  [SCHEMA_KEY]?: boolean;
+  [STORE_ACCOUNTS_KEY]?: boolean;
+};
 
 export async function ensureSchema(db: Db): Promise<void> {
   const g = globalThis as G;
-  if (g[SCHEMA_KEY]) return;
+  if (g[SCHEMA_KEY]) {
+    if (!g[STORE_ACCOUNTS_KEY]) {
+      await ensureStoreAccounts(db);
+      g[STORE_ACCOUNTS_KEY] = true;
+    }
+    return;
+  }
 
   // 持久化快速路径：meta 表存在性 + 标记（2 次查询；比全量 13+ 次便宜得多）
   await db.run(sql.raw(`CREATE TABLE IF NOT EXISTS ${SCHEMA_META} (key TEXT PRIMARY KEY, value TEXT NOT NULL)`));
@@ -174,6 +228,8 @@ export async function ensureSchema(db: Db): Promise<void> {
     await db.run(sql.raw(`INSERT OR REPLACE INTO ${SCHEMA_META} (key, value) VALUES ('${SCHEMA_FLAG_KEY}', '1')`));
   }
   g[SCHEMA_KEY] = true;
+  await ensureStoreAccounts(db);
+  g[STORE_ACCOUNTS_KEY] = true;
 }
 
 async function doEnsureSchema(db: Db): Promise<void> {
@@ -187,6 +243,10 @@ async function doEnsureSchema(db: Db): Promise<void> {
   await ensureColumn(db, "customers", "measurements_saved_at", "TEXT");
   await ensureColumn(db, "orders", "owner_id", "INTEGER NOT NULL DEFAULT 0");
   await ensureColumn(db, "fabrics", "book", "TEXT NOT NULL DEFAULT ''");
+  await ensureColumn(db, "users", "display_name", "TEXT NOT NULL DEFAULT ''");
+  await ensureColumn(db, "users", "email", "TEXT NOT NULL DEFAULT ''");
+  await ensureColumn(db, "users", "permissions", "TEXT NOT NULL DEFAULT '[]'");
+  await ensureColumn(db, "users", "active", "INTEGER NOT NULL DEFAULT 1");
   // Bootstrap or secure the master account from a deployment secret.
   const [master] = await db
     .select()
@@ -205,6 +265,31 @@ async function doEnsureSchema(db: Db): Promise<void> {
     await db.update(schema.users)
       .set({ passwordHash: await hashPassword(initialPassword), token: null, tokenExpiresAt: null })
       .where(sql`id = ${master.id}`);
+  }
+}
+
+async function ensureStoreAccounts(db: Db): Promise<void> {
+  const runtimeEnv = env as Record<string, string | undefined>;
+  const seeds = [
+    { username: "store01", password: runtimeEnv.INITIAL_STORE01_PASSWORD, storeName: "门店 01" },
+    { username: "store02", password: runtimeEnv.INITIAL_STORE02_PASSWORD, storeName: "门店 02" },
+    { username: "store03", password: runtimeEnv.INITIAL_STORE03_PASSWORD, storeName: "门店 03" },
+  ];
+
+  for (const seed of seeds) {
+    if (!seed.password || seed.password.length < 12) continue;
+    const [existing] = await db
+      .select({ id: schema.users.id })
+      .from(schema.users)
+      .where(sql`username = ${seed.username}`)
+      .limit(1);
+    if (existing) continue;
+    await db.insert(schema.users).values({
+      username: seed.username,
+      passwordHash: await hashPassword(seed.password),
+      role: "store",
+      storeName: seed.storeName,
+    });
   }
 }
 
