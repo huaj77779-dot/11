@@ -240,19 +240,19 @@
 
 .landing-socials {
   position: fixed; right: 18px; bottom: 18px; z-index: 30;
-  display: flex; gap: 8px; padding: 7px;
-  border: 1px solid rgba(20, 48, 41, .12); border-radius: 14px;
-  background: rgba(255, 253, 248, .92); box-shadow: 0 8px 28px rgba(10, 35, 29, .16);
-  backdrop-filter: blur(8px);
+  display: flex;
 }
 .landing-socials .social-icon {
-  display: grid; place-items: center; width: 30px; height: 30px;
-  border-radius: 50%; color: #fff; font: 700 15px/1 Arial, sans-serif;
-  transition: transform .18s ease, filter .18s ease;
+  display: inline-flex; align-items: center; gap: 9px; min-height: 44px;
+  padding: 0 17px 0 12px; border-radius: 999px; background: #25d366;
+  color: #fff; font: 700 14px/1 Arial, sans-serif;
+  box-shadow: 0 8px 28px rgba(10, 35, 29, .22);
+  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
 }
 .landing-socials .social-icon img,
 .landing-socials .social-icon svg { width: 16px; height: 16px; display: block; }
-.landing-socials .social-icon:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.landing-socials .social-icon:hover { transform: translateY(-2px); filter: brightness(1.04); box-shadow: 0 12px 32px rgba(10, 35, 29, .28); }
+.landing-socials .social-icon:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 .social-whatsapp { background: #25d366; }
 .social-facebook { background: #1877f2; }
 .social-instagram { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }

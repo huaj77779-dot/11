@@ -287,8 +287,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <aside className="landing-socials" aria-label="社交媒体">
-        {SOCIAL_LINKS.map((item) => (
+      <aside className="landing-socials" aria-label="联系我们">
+        {SOCIAL_LINKS.filter((item) => item.name === "WhatsApp").map((item) => (
           <a key={item.name} className={`social-icon social-${item.name.toLowerCase()}`} href={item.href} target="_blank" rel="noreferrer" aria-label={item.name} title={item.name}>
             {item.name === "LinkedIn" ? (
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -297,6 +297,7 @@ export default function LandingPage() {
             ) : (
               <img src={`https://cdn.simpleicons.org/${item.name.toLowerCase()}/fff`} alt="" aria-hidden="true" />
             )}
+            <span>联系我们</span>
           </a>
         ))}
       </aside>
