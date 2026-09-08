@@ -1,62 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { LanguageSwitcher } from "../_components/LanguageSwitcher";
 
-const whatsappHref = "https://wa.me/18169255770?text=Hello%20Vero%20Suits%2C%20I%20would%20like%20to%20register%20a%20store%20account.";
+declare global { interface Window { turnstile?: { render: (element: HTMLElement, config: { sitekey: string; action: string; callback: (token: string) => void; "expired-callback": () => void }) => void }; PasswordCredential?: new (data: { id: string; password: string; name?: string }) => Credential; } }
+type Stage = "details" | "password";
+type FormState = { storeName: string; displayName: string; email: string; whatsapp: string; password: string };
+const makePassword = () => { const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%"; const bytes = crypto.getRandomValues(new Uint8Array(14)); return Array.from(bytes, (byte) => alphabet[byte % alphabet.length]).join(""); };
+function Eye({ visible }: { visible: boolean }) { return visible ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z" /><circle cx="12" cy="12" r="2.7" /></svg> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 6.2A10.7 10.7 0 0 1 12 6c6.4 0 10 6 10 6a17.3 17.3 0 0 1-3.1 3.5M6.2 6.2C3.5 8 2 12 2 12s3.6 6 10 6c1.3 0 2.5-.2 3.6-.6" /><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" /></svg>; }
 
 export default function RegisterPage() {
-  const [form, setForm] = useState({ name: "", contact: "", message: "" });
-  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
-  const [error, setError] = useState("");
-
-  const submit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setStatus("sending");
-    setError("");
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, message: `【门店账号注册】${form.message}` }),
-      });
-      const result = (await response.json()) as { error?: string };
-      if (!response.ok) throw new Error(result.error || "提交失败，请稍后重试。");
-      setStatus("done");
-    } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "提交失败，请稍后重试。");
-      setStatus("error");
-    }
-  };
-
-  return (
-    <main className="login-page register-page">
-      <section className="login-card register-card">
-        <a className="auth-back" href="/login">← 返回登录</a>
-        <div className="login-brand">
-          <i className="login-monogram"><img src="/brand/verosuits-monogram.png" alt="" /></i>
-          <div><b>VEROSUITS</b><small>STORE ACCOUNT REQUEST</small></div>
-        </div>
-        <p className="auth-eyebrow">NEW PARTNER</p>
-        <h1>注册门店账号</h1>
-        <p className="login-sub">提交基本信息后，我们会为您核对合作资料并开通下单权限。</p>
-        {status === "done" ? (
-          <div className="register-success" role="status">
-            <b>申请已收到</b>
-            <p>我们会尽快联系您确认账户信息。若希望更快沟通，可直接 WhatsApp 联系我们。</p>
-            <a className="login-btn" href={whatsappHref} target="_blank" rel="noreferrer">WhatsApp 联系注册</a>
-            <a className="auth-text-link" href="/login">返回登录页</a>
-          </div>
-        ) : (
-          <form onSubmit={submit}>
-            <label><span>公司 / 门店名称</span><input value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} placeholder="例如：Vero Tailoring London" autoFocus required /></label>
-            <label><span>邮箱或 WhatsApp</span><input value={form.contact} onChange={(event) => setForm({ ...form, contact: event.target.value })} placeholder="name@store.com / +1 …" required /></label>
-            <label><span>所在地与合作需求 <em>可选</em></span><textarea rows={3} value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} placeholder="国家/城市、预计订单类型或想了解的合作方式" /></label>
-            {status === "error" && <p className="login-error" role="alert">{error}</p>}
-            <button type="submit" className="login-btn" disabled={status === "sending"}>{status === "sending" ? "提交中…" : "提交注册申请"}</button>
-          </form>
-        )}
-        {status !== "done" && <p className="register-alternative">已有账号？<a href="/login">立即登录</a>　或 <a href={whatsappHref} target="_blank" rel="noreferrer">WhatsApp 联系我们</a></p>}
-      </section>
-    </main>
-  );
+  const [form, setForm] = useState<FormState>({ storeName: "", displayName: "", email: "", whatsapp: "", password: "" }); const [code, setCode] = useState(""); const [message, setMessage] = useState(""); const [stage, setStage] = useState<Stage>("details"); const [codeSent, setCodeSent] = useState(false); const [loading, setLoading] = useState(false); const [turnstileToken, setTurnstileToken] = useState(""); const [newPassword, setNewPassword] = useState(""); const [confirmPassword, setConfirmPassword] = useState(""); const [showInitial, setShowInitial] = useState(true); const [showNew, setShowNew] = useState(false); const [showConfirm, setShowConfirm] = useState(false); const widget = useRef<HTMLDivElement>(null);
+  useEffect(() => { setForm((current) => current.password ? current : { ...current, password: makePassword() }); }, []);
+  useEffect(() => { let active = true; void fetch("/api/auth/turnstile-config", { cache: "no-store" }).then((r) => r.json()).then((config: { siteKey?: string }) => { if (!active || !config.siteKey || !widget.current) return; const render = () => window.turnstile?.render(widget.current!, { sitekey: config.siteKey!, action: "register", callback: setTurnstileToken, "expired-callback": () => setTurnstileToken("") }); if (window.turnstile) render(); else { const script = document.createElement("script"); script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"; script.async = true; script.onload = render; document.head.appendChild(script); } }); return () => { active = false; }; }, []);
+  const update = (key: keyof FormState) => (event: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, [key]: event.target.value });
+  const sendCode = async (event: React.FormEvent) => { event.preventDefault(); setLoading(true); setMessage(""); try { const response = await fetch("/api/auth/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, turnstileToken }) }); const result = await response.json(); if (!response.ok) throw new Error(result.error ?? "Unable to send a verification code."); setCodeSent(true); setMessage("A six-digit code has been sent to your email."); } catch (error) { setMessage(error instanceof Error ? error.message : "Unable to send a verification code."); } finally { setLoading(false); } };
+  const verifyCode = async () => { setLoading(true); setMessage(""); try { const response = await fetch("/api/auth/verify-email", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.email, code }) }); const result = await response.json(); if (!response.ok) throw new Error(result.error ?? "This verification code is invalid or has expired."); setStage("password"); } catch (error) { setMessage(error instanceof Error ? error.message : "This verification code is invalid or has expired."); } finally { setLoading(false); } };
+  const finish = async (useNew: boolean) => { const password = useNew ? newPassword : form.password; if (useNew && (newPassword.length < 10 || newPassword !== confirmPassword)) { setMessage(newPassword !== confirmPassword ? "The two passwords do not match." : "Please use at least 10 characters."); return; } setLoading(true); setMessage(""); try { if (useNew) { const response = await fetch("/api/auth/password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password }) }); const result = await response.json(); if (!response.ok) throw new Error(result.error ?? "Unable to save password."); } try { if (window.PasswordCredential && navigator.credentials) await navigator.credentials.store(new window.PasswordCredential({ id: form.email, name: form.email, password })); } catch { /* Standard autocomplete fields remain the fallback. */ } window.location.assign("/customize"); } catch (error) { setMessage(error instanceof Error ? error.message : "Unable to finish setup."); } finally { setLoading(false); } };
+  return <main className="login-page register-page"><section className="login-card register-card"><div className="auth-language"><LanguageSwitcher /></div><div className="login-brand"><i className="login-monogram"><img src="/brand/verosuits-monogram.png" alt="" /></i><div><b>VEROSUITS</b><small>STORE ACCOUNT</small></div></div><ol className="register-steps" aria-label="Registration progress"><li className={stage === "details" ? "active" : "complete"}><span>{stage === "password" ? "✓" : "1"}</span>Account details</li><li className={stage === "password" ? "active" : ""}><span>2</span>Set password</li></ol>{stage === "details" ? <><h1>Create your account</h1><p className="login-sub">Your work email will be your account name.</p><div className="turnstile-box turnstile-first" ref={widget} /><form onSubmit={sendCode}><label><span>Store name</span><input required value={form.storeName} onChange={update("storeName")} autoComplete="organization" placeholder="Enter store name" /></label><label><span>Your name <em>optional</em></span><input value={form.displayName} onChange={update("displayName")} autoComplete="name" placeholder="Enter your name" /></label><label><span>WhatsApp</span><input required value={form.whatsapp} onChange={update("whatsapp")} inputMode="tel" autoComplete="tel" placeholder="+86 138 0000 0000" /></label><label><span>Work email</span><input required type="email" autoComplete="email" value={form.email} onChange={update("email")} placeholder="name@yourstore.com" /></label><section className="verify-row"><div><b>Verify your email</b><small>Enter the six-digit code from your inbox.</small></div><div className="verify-controls"><input aria-label="Six-digit verification code" required inputMode="numeric" pattern="[0-9]{6}" maxLength={6} autoComplete="one-time-code" value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))} placeholder="6-digit code" /><button type={codeSent && code.length === 6 ? "button" : "submit"} onClick={codeSent && code.length === 6 ? () => void verifyCode() : undefined} disabled={loading || !turnstileToken || (codeSent && code.length !== 6)}>{loading ? "…" : codeSent ? "Verify" : "Send code"}</button></div></section>{message && <p className={codeSent ? "login-success" : "login-error"}>{message}</p>}</form></> : <><h1>Set your password</h1><p className="login-sub">Your account <b>{form.email}</b> is ready. Save the initial password or choose a new one.</p><form className="password-setup" onSubmit={(event) => { event.preventDefault(); void finish(true); }}><label><span>Initial password</span><div className="password-field"><input readOnly type={showInitial ? "text" : "password"} autoComplete="new-password" value={form.password} /><button type="button" onClick={() => setShowInitial(!showInitial)} aria-label={showInitial ? "Hide initial password" : "Show initial password"}><Eye visible={showInitial} /></button></div><small>This secure password was generated for you.</small></label><button type="button" className="copy-password" onClick={() => void navigator.clipboard?.writeText(form.password)}>Copy initial password</button><div className="password-divider">or set a new password now</div><label><span>New password <em>optional</em></span><div className="password-field"><input type={showNew ? "text" : "password"} autoComplete="new-password" minLength={10} value={newPassword} onChange={(event) => setNewPassword(event.target.value)} /><button type="button" onClick={() => setShowNew(!showNew)} aria-label={showNew ? "Hide password" : "Show password"}><Eye visible={showNew} /></button></div></label><label><span>Confirm new password</span><div className="password-field"><input type={showConfirm ? "text" : "password"} autoComplete="new-password" minLength={10} value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} /><button type="button" onClick={() => setShowConfirm(!showConfirm)} aria-label={showConfirm ? "Hide password" : "Show password"}><Eye visible={showConfirm} /></button></div></label>{message && <p className="login-error">{message}</p>}<button className="login-btn" type="submit" disabled={loading || !newPassword || !confirmPassword}>{loading ? "Saving…" : "Save password & continue"}</button><button className="secondary-auth-btn" type="button" onClick={() => void finish(false)} disabled={loading}>Keep initial password</button></form></>}<p className="login-links"><a href="/login">Already have an account? Sign in</a></p></section></main>;
 }

@@ -10,10 +10,23 @@ export const users = sqliteTable("users", {
   storeName: text("store_name").notNull().default(""),
   displayName: text("display_name").notNull().default(""),
   email: text("email").notNull().default(""),
+  whatsapp: text("whatsapp").notNull().default(""),
   permissions: text("permissions").notNull().default("[]"),
   active: integer("active", { mode: "boolean" }).notNull().default(true),
   token: text("token"),
   tokenExpiresAt: text("token_expires_at"),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+/** Single-use, time-limited tokens for account verification and password resets. */
+export const authTokens = sqliteTable("auth_tokens", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  email: text("email").notNull(),
+  purpose: text("purpose").notNull(),
+  tokenHash: text("token_hash").notNull().unique(),
+  payload: text("payload").notNull().default("{}"),
+  expiresAt: text("expires_at").notNull(),
+  consumedAt: text("consumed_at"),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 

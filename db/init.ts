@@ -15,12 +15,24 @@ const DDL_STATEMENTS = [
     store_name TEXT NOT NULL DEFAULT '',
     display_name TEXT NOT NULL DEFAULT '',
     email TEXT NOT NULL DEFAULT '',
+    whatsapp TEXT NOT NULL DEFAULT '',
     permissions TEXT NOT NULL DEFAULT '[]',
     active INTEGER NOT NULL DEFAULT 1,
     token TEXT,
     token_expires_at TEXT,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`,
+  `CREATE TABLE IF NOT EXISTS auth_tokens (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL,
+    purpose TEXT NOT NULL,
+    token_hash TEXT NOT NULL UNIQUE,
+    payload TEXT NOT NULL DEFAULT '{}',
+    expires_at TEXT NOT NULL,
+    consumed_at TEXT,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`,
+  `CREATE INDEX IF NOT EXISTS idx_auth_tokens_email_purpose_created ON auth_tokens(email, purpose, created_at)`,
   `CREATE TABLE IF NOT EXISTS site_content (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     section TEXT NOT NULL,
@@ -198,7 +210,7 @@ export async function verifyPassword(password: string, stored: string): Promise<
  * SCHEMA_VERSION：修改 DDL_STATEMENTS / ensureColumn 清单后必须 +1，
  * 否则已有库会因标记命中而跳过新迁移。
  */
-const SCHEMA_VERSION = 4;
+const SCHEMA_VERSION = 6;
 const SCHEMA_META = "schema_meta";
 const SCHEMA_FLAG_KEY = "schema_initialized_v" + SCHEMA_VERSION;
 const SCHEMA_KEY = "__tailorsupply_schema_ready_v" + SCHEMA_VERSION;
@@ -245,6 +257,7 @@ async function doEnsureSchema(db: Db): Promise<void> {
   await ensureColumn(db, "fabrics", "book", "TEXT NOT NULL DEFAULT ''");
   await ensureColumn(db, "users", "display_name", "TEXT NOT NULL DEFAULT ''");
   await ensureColumn(db, "users", "email", "TEXT NOT NULL DEFAULT ''");
+  await ensureColumn(db, "users", "whatsapp", "TEXT NOT NULL DEFAULT ''");
   await ensureColumn(db, "users", "permissions", "TEXT NOT NULL DEFAULT '[]'");
   await ensureColumn(db, "users", "active", "INTEGER NOT NULL DEFAULT 1");
   // Bootstrap or secure the master account from a deployment secret.
