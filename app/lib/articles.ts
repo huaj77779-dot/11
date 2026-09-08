@@ -354,6 +354,9 @@ export const SEO_ARTICLES: SeoArticle[] = [
     updated: "2026-08-24",
     readingTime: "6 min read",
     primaryKeyword: "white label tailoring",
+    images: [
+      { src: "/news/vbc-super-150s-full-canvas-three-piece-suit/vbc-super-150s-custom-suit-jacket-front.webp", alt: "Completed three-piece made-to-measure suit ready for a private-label presentation", caption: "A private-label programme begins with a finished garment the store can stand behind, then makes the specification repeatable." },
+    ],
     sections: [
       { heading: "White label: speed and operational simplicity", paragraphs: ["White-label supply usually uses a manufacturer’s established product and operating system while allowing the retailer to sell under its own customer relationship. It suits stores that want to launch quickly without designing every production standard from the beginning."] },
       { heading: "Private label: greater brand control", paragraphs: ["Private-label programs may add custom labels, packaging, product rules, exclusive options or a more deeply branded ordering experience. The trade-off is additional setup, approvals and responsibility for consistent specifications."] },
@@ -405,6 +408,9 @@ export const SEO_ARTICLES: SeoArticle[] = [
     updated: "2026-08-24",
     readingTime: "6 min read",
     primaryKeyword: "custom suit production lead time",
+    images: [
+      { src: "/news/lp-fabric-suit-hanging-shipping-box/blue-pinstripe-suit-hanging-shipping-box.webp", alt: "Custom blue pinstripe suit prepared in a hanging shipping box", caption: "Dispatch is only one stage of delivery planning; the order must first be complete, checked and ready to travel." },
+    ],
     sections: [
       { heading: "Lead time starts after the order is complete", paragraphs: ["An enquiry date is not a production start date. The clock should begin after fabric availability, measurements, style, price and payment conditions are confirmed. Missing details create queues that are often mistaken for slow sewing."] },
       { heading: "Separate production time from transit time", paragraphs: ["Quote the customer using distinct stages: order review, fabric allocation, production, quality control, international transport and local alteration buffer. Customs and carrier schedules vary by route, so do not represent an estimate as a guarantee."] },
@@ -456,6 +462,9 @@ export const SEO_ARTICLES: SeoArticle[] = [
     updated: "2026-08-24",
     readingTime: "8 min read",
     primaryKeyword: "start a private label suit line",
+    images: [
+      { src: "/news/vbc-super-150s-full-canvas-three-piece-suit/vbc-super-150s-full-canvas-suit-lapel-detail.webp", alt: "Detail of a finished made-to-measure suit lapel and fabric", caption: "A narrow first offer lets a new brand make its details visible, train its team well and learn before it expands." },
+    ],
     sections: [
       { heading: "Define a narrow first offer", paragraphs: ["Start with a clear customer, price position and small set of garments. A focused launch—such as business suits and separate trousers—makes training, sample investment and quality control manageable. Add complex options after staff can order the core range consistently."] },
       { heading: "Build the service before the advertising", paragraphs: ["Create a repeatable appointment, measurement, style consultation, PI approval, payment and after-sales process. Train staff using the same forms customers will encounter. Your brand promise must match the manufacturer’s actual lead times and correction policy."] },
