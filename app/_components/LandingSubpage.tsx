@@ -20,7 +20,7 @@ export function LandingSubpage({ children }: { children: ReactNode }) {
           <a href="/#contact">{t("landing.navContact")}</a>
           <a href="/customize">{t("landing.navCustomize")}</a>
         </nav>
-        <div className="landing-nav-actions"><LanguageSwitcher /><a className="landing-link" href="/login">{t("landing.navLogin")}</a></div>
+        <div className="landing-nav-actions"><LanguageSwitcher /><a className="landing-link" href="/login">{t("landing.navLogin")}</a><a className="landing-register-link" href="/register">注册账号</a></div>
       </header>
       {children}
       <footer className="landing-footer">

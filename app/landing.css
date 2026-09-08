@@ -253,6 +253,7 @@
 .landing-socials .social-icon svg { width: 16px; height: 16px; display: block; }
 .landing-socials .social-icon:hover { transform: translateY(-2px); filter: brightness(1.04); box-shadow: 0 12px 32px rgba(10, 35, 29, .28); }
 .landing-socials .social-icon:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.landing-register-link{color:#d6e6df;font-size:11px;text-decoration:none;white-space:nowrap}.landing-register-link:hover{text-decoration:underline}
 .social-whatsapp { background: #25d366; }
 .social-facebook { background: #1877f2; }
 .social-instagram { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }

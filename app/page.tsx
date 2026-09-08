@@ -86,7 +86,7 @@ export default function LandingPage() {
               </button>
             </>
           ) : (
-            <a className="landing-link" href="/login">{t("landing.navLogin")}</a>
+            <><a className="landing-link" href="/login">{t("landing.navLogin")}</a><a className="landing-register-link" href="/register">注册账号</a></>
           )}
         </div>
       </header>

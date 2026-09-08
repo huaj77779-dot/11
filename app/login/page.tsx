@@ -68,6 +68,11 @@ export default function LoginPage() {
             {loading ? "登录中…" : "登录"}
           </button>
         </form>
+        <div className="login-register-prompt">
+          <span>还没有门店账号？</span>
+          <a href="/register">注册账号</a>
+        </div>
+        <p className="login-help">新门店提交信息后，我们会核对合作资料并为您开通账号。</p>
       </div>
     </main>
   );
