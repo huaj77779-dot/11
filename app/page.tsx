@@ -81,8 +81,8 @@ export default function LandingPage() {
               <a className="landing-link" href="/customers">{t("landing.navCustomers")}</a>
               {user.role === "master" && <a className="landing-link" href="/admin">{t("landing.navAdmin")}</a>}
               <button className="landing-account" onClick={logout} title={t("landing.navLogout")}>
-                <span>{localizeStoreName(user.storeName || user.username, loc)}</span>
-                <i aria-hidden="true">⇥</i>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M21 4v16" /></svg>
+                <span>{t("landing.navLogout")}</span>
               </button>
             </>
           ) : (

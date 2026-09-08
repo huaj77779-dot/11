@@ -50,21 +50,10 @@
 .landing-nav-actions { display: flex; align-items: center; gap: 12px; }
 .landing-link { font-size: 13px; color: #c3d0cc; }
 .landing-link:hover { color: #fff; }
-.landing-account {
-  display: inline-flex; align-items: center; gap: 12px;
-  min-height: 32px; padding: 3px 4px 3px 13px;
-  background: transparent; border: 1px solid rgba(208, 174, 114, .45);
-  border-radius: 18px; color: var(--ld-gold-light); cursor: pointer;
-  font: inherit;
-}
+.landing-account {display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:0 12px;background:rgba(185,70,62,.08);border:1px solid rgba(222,117,105,.72);border-radius:7px;color:#ffd0c9;cursor:pointer;font:inherit}
 .landing-account span { font-size: 12px; white-space: nowrap; }
-.landing-account i {
-  display: grid; place-items: center; width: 26px; height: 26px;
-  border-left: 1px solid rgba(208, 174, 114, .28);
-  color: #fff; font-size: 14px; font-style: normal; line-height: 1;
-}
-.landing-account:hover { border-color: var(--ld-gold-light); background: rgba(208,174,114,.08); }
-.landing-account:hover i { color: var(--ld-gold-light); }
+.landing-account svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.landing-account:hover{border-color:#ffad9f;background:rgba(185,70,62,.18);color:#fff0ec}
 .landing .lang-switcher-compact { display: inline-flex; align-items: center; gap: 4px; color: #c3d0cc; font-size: 10px; white-space: nowrap; }
 .landing .lang-select { width: 140px; max-width: 140px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.28); border-radius: 5px; padding: 5px 7px; font-size: 11px; cursor: pointer; }
 .landing .lang-select option { color: #17201d; }
