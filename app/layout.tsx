@@ -58,7 +58,11 @@ export const metadata: Metadata = {
     description: SITE_TAGLINE,
     images: ["/ai-previews/jacket.png"],
   },
-  icons: { icon: "/favicon.svg" },
+  icons: {
+    icon: [{ url: "/verosuits-logo.png", type: "image/png", sizes: "512x512" }],
+    shortcut: "/verosuits-logo.png",
+    apple: "/verosuits-logo.png",
+  },
   robots: {
     index: true,
     follow: true,
@@ -77,7 +81,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: SITE_NAME,
   url: SITE_ORIGIN,
-  logo: `${SITE_ORIGIN}/favicon.svg`,
+  logo: `${SITE_ORIGIN}/verosuits-logo.png`,
   description: SITE_TAGLINE,
   knowsAbout: [
     "Made-to-measure tailoring",
