@@ -14,7 +14,7 @@
 .seo-hero h1 { max-width: 760px; margin: 0; color: #102f28; font-size: clamp(42px, 5vw, 70px); font-weight: 500; line-height: 1.02; }
 .seo-lead { max-width: 700px; margin: 28px 0 0; color: #52645f; font: 18px/1.7 Arial, sans-serif; }
 .seo-actions { margin-top: 34px; display: flex; gap: 12px; flex-wrap: wrap; }
-.seo-actions a,.seo-final-cta>a { padding: 15px 20px; border-radius: 5px; background: #17483d; color: #fff; text-decoration: none; font: 700 14px Arial, sans-serif; }
+.seo-actions a,.seo-final-actions>a { padding: 15px 20px; border-radius: 5px; background: #17483d; color: #fff; text-decoration: none; font: 700 14px Arial, sans-serif; }
 .seo-actions .secondary { border: 1px solid #b9c8c3; background: transparent; color: #17483d; }
 .seo-hero figure { margin: 0; overflow: hidden; border-radius: 6px; background: #e9e7df; box-shadow: 0 20px 60px rgba(15,46,39,.14); }
 .seo-hero img { width: 100%; aspect-ratio: 4/5; display: block; object-fit: cover; object-position: center 24%; }
@@ -32,13 +32,20 @@
 .seo-process ol { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 0; margin: 0; padding: 0; counter-reset: step; list-style: none; }
 .seo-process li { padding: 0 24px 0 0; counter-increment: step; }
 .seo-process li::before { content: "0" counter(step); display: block; color: #b58632; font: 700 12px Arial, sans-serif; }
+.seo-guides>div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.seo-guides a { min-height: 165px; padding: 26px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #d9ddd8; border-radius: 8px; background: #fff; color: #17483d; text-decoration: none; }
+.seo-guides b { font: 500 22px/1.2 Georgia, "Times New Roman", serif; }
+.seo-guides span { color: #52645f; font: 14px/1.55 Arial, sans-serif; }
 .seo-faq>div { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
 .seo-faq details { padding: 20px 0; border-top: 1px solid #d9ddd8; }
 .seo-faq summary { cursor: pointer; font: 700 15px Arial, sans-serif; }
 .seo-final-cta { padding: 64px max(28px, calc((100vw - 1124px) / 2)); display: flex; align-items: center; justify-content: space-between; gap: 48px; background: #102f28; color: #fff; }
 .seo-final-cta .seo-kicker { color: #d9b765; }
 .seo-final-cta h2 { margin-bottom: 0; }
-.seo-final-cta>a { flex: 0 0 auto; background: #c18c31; color: #102f28; }
+.seo-final-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.seo-final-actions>a:first-child { background: #c18c31; color: #102f28; }
+.seo-final-actions .secondary { border: 1px solid #d9b765; background: transparent; color: #fff; }
+.seo-whatsapp-float { position: fixed; z-index: 20; right: 22px; bottom: 22px; padding: 13px 17px; border-radius: 999px; background: #25d366; box-shadow: 0 10px 30px rgba(0,0,0,.2); color: #fff; text-decoration: none; font: 700 14px Arial, sans-serif; }
 .seo-footer { padding: 24px max(28px, calc((100vw - 1180px) / 2)); display: flex; align-items: center; gap: 30px; background: #0b241e; color: #b8cac4; font: 12px Arial, sans-serif; }
 .seo-footer b { color: #fff; letter-spacing: .12em; }
 .seo-footer span { flex: 1; }
@@ -51,6 +58,7 @@
   .seo-hero { padding-top: 48px; }
   .seo-hero figure { max-width: 520px; }
   .seo-card-grid { grid-template-columns: 1fr; }
+  .seo-guides>div { grid-template-columns: 1fr; }
   .seo-process ol { grid-template-columns: 1fr 1fr; gap: 28px; }
   .seo-faq>div { grid-template-columns: 1fr; }
   .seo-final-cta { align-items: flex-start; flex-direction: column; }
