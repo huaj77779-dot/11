@@ -2,7 +2,7 @@ const configuredOrigin =
   process.env.NEXT_PUBLIC_SITE_URL ||
   process.env.SITE_URL ||
   process.env.CF_PAGES_URL ||
-  "http://localhost:3000";
+  "https://verosuits.com";
 
 export const SITE_ORIGIN = configuredOrigin.replace(/\/$/, "");
 export const SITE_NAME = "verosuits";

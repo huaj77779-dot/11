@@ -38,7 +38,7 @@ const CSP_REPORT_ONLY = [
 
 const SENSITIVE_PATHS = [
   "/admin", "/customers", "/customize", "/orders", "/login", "/register", "/verify-email",
-  "/api/auth/", "/api/admin/", "/api/customers", "/api/orders", "/api/generate-image",
+  "/api/auth/", "/api/admin/", "/api/contact", "/api/customers", "/api/orders", "/api/generate-image",
 ];
 
 function isSameOrigin(request: Request, url: URL): boolean {
@@ -70,6 +70,10 @@ const worker = {
     }
 
     if (url.pathname === "/api/generate-image" && Number(request.headers.get("Content-Length") ?? "0") > 6_000_000) {
+      return new Response("Request too large", { status: 413, headers: { "Cache-Control": "no-store" } });
+    }
+
+    if (url.pathname === "/api/contact" && Number(request.headers.get("Content-Length") ?? "0") > 20_000) {
       return new Response("Request too large", { status: 413, headers: { "Cache-Control": "no-store" } });
     }
 

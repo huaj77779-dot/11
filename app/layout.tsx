@@ -86,6 +86,15 @@ const organizationJsonLd = {
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/verosuits-logo.png`,
   description: SITE_TAGLINE,
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      email: "verosuits@gmail.com",
+      telephone: "+1-816-925-5770",
+      availableLanguage: ["en", "zh"],
+    },
+  ],
   knowsAbout: [
     "Made-to-measure tailoring",
     "Private label suits",

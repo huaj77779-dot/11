@@ -472,7 +472,7 @@ export const SEO_ARTICLES: SeoArticle[] = [
       { heading: "Improve from the first ten orders", paragraphs: ["Review each completed order for data errors, fit corrections, communication delays and customer questions. Turn repeated questions into website guidance and repeated errors into required fields. The result is a private-label operation that becomes easier to scale because learning is captured in the system."] },
     ],
   },
-].filter((article) => article.images && article.images.length > 0);
+];
 
 export function getArticle(slug: string) {
   return SEO_ARTICLES.find((article) => article.slug === slug);

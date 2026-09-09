@@ -14,10 +14,17 @@ const publicRoutes = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-  return [...publicRoutes, ...SEO_ARTICLES.map((article) => ({ path: `/news/${article.slug}`, priority: 0.65, changeFrequency: "monthly" as const }))].map((route) => ({
+  return [
+    ...publicRoutes,
+    ...SEO_ARTICLES.map((article) => ({
+      path: `/news/${article.slug}`,
+      priority: 0.65,
+      changeFrequency: "monthly" as const,
+      lastModified: new Date(`${article.updated}T00:00:00.000Z`),
+    })),
+  ].map((route) => ({
     url: absoluteUrl(route.path),
-    lastModified,
+    ...(route.lastModified ? { lastModified: route.lastModified } : {}),
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));

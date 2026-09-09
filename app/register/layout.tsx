@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import "./experiment.css";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function InternalPreviewLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RegisterLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return children;
 }

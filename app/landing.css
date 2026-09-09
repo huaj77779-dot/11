@@ -225,7 +225,9 @@
 }
 .contact-form input:focus, .contact-form textarea:focus { border-color: var(--ld-gold); background: #fff; }
 .contact-error { margin: 0 0 12px; color: #a83232; font-size: 13px; }
-.contact-form button:disabled { cursor: wait; opacity: .65; }
+.contact-turnstile { min-height: 65px; margin: 0 0 14px; }
+.contact-honeypot { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
+.contact-form button:disabled { cursor: not-allowed; opacity: .65; }
 
 .landing-socials {
   position: fixed; right: 18px; bottom: 18px; z-index: 30;
@@ -259,6 +261,9 @@
 .landing-footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .landing-footer-inner > a:not(.landing-brand) { display: none; }
 .landing-footer p { font-size: 12px; margin: 0 0 0 auto; white-space: nowrap; }
+.landing-footer-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.landing-footer-links a { color: #c5b4a4; font-size: 12px; text-decoration: none; }
+.landing-footer-links a:hover { color: #e1b27e; text-decoration: underline; }
 
 /* -------- 响应式 -------- */
 @media (max-width: 1080px) {
@@ -269,6 +274,7 @@
   .landing-company, .landing-contact-grid { grid-template-columns: 1fr; gap: 34px; }
   .landing-footer-inner { flex-wrap: wrap; }
   .landing-footer p { margin-left: 0; }
+  .landing-footer-links { order: 3; width: 100%; }
 }
 @media (max-width: 700px) {
   .landing-nav { padding: 0 16px; gap: 12px; }
@@ -282,6 +288,7 @@
   .landing-quality-grid, .landing-news-grid, .landing-certs { grid-template-columns: 1fr; }
   .landing-hero-badges { gap: 12px; }
   .landing-footer-inner { flex-direction: column; align-items: flex-start; }
+  .landing-footer-links { gap: 8px 14px; }
 }
 
 /* TailorSupply OS — warm heritage / old-money visual system */

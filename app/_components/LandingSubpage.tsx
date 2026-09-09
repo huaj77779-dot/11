@@ -26,6 +26,11 @@ export function LandingSubpage({ children }: { children: ReactNode }) {
       <footer className="landing-footer">
         <div className="landing-wrap landing-footer-inner">
           <a className="landing-brand" href="/"><BrandLogo /></a>
+          <nav className="landing-footer-links" aria-label="Services">
+            <a href="/private-label-suits">Private label suits</a>
+            <a href="/made-to-measure-suits">Made-to-measure suits</a>
+            <a href="/custom-tailoring-supplier">Tailoring supplier</a>
+          </nav>
           <p>{t("landing.footRights")}</p>
         </div>
       </footer>

@@ -31,6 +31,21 @@ export function SeoServicePage({
       acceptedAnswer: { "@type": "Answer", text: faq.answer },
     })),
   };
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: title,
+    description: intro,
+    provider: {
+      "@type": "Organization",
+      name: "verosuits",
+      url: "https://verosuits.com",
+    },
+    audience: {
+      "@type": "Audience",
+      audienceType: audience.join(", "),
+    },
+  };
 
   return (
     <main className="seo-page" lang="en">
@@ -133,6 +148,7 @@ export function SeoServicePage({
       </footer>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
       <a className="seo-whatsapp-float" href={whatsappHref} target="_blank" rel="noreferrer" aria-label="WhatsApp Vero Suits">WhatsApp</a>
     </main>
   );
