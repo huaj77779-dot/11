@@ -59,8 +59,11 @@ export const metadata: Metadata = {
     images: ["/ai-previews/jacket.png"],
   },
   icons: {
-    icon: [{ url: "/verosuits-logo.png", type: "image/png", sizes: "512x512" }],
-    shortcut: "/verosuits-logo.png",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml", sizes: "any" },
+      { url: "/verosuits-logo.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.svg",
     apple: "/verosuits-logo.png",
   },
   robots: {
