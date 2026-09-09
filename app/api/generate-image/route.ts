@@ -1,57 +1,61 @@
 import { env } from "cloudflare:workers";
+import { getDb } from "../../../db";
+import { ensureSchema } from "../../../db/init";
+import { getSession } from "../../lib/auth";
+import { clientIp, rateLimit, rateLimitResponse, recordRateLimitAttempt } from "../../lib/abuse-protection";
 
-function toErrorMessage(error: unknown): string {
-  const message = error instanceof Error ? error.message : "Unexpected error";
-  const detail =
-    error instanceof Error && error.cause instanceof Error ? error.cause.message : "";
-  return `${message}${detail ? `\n${detail}` : ""}`;
-}
+const MAX_PROMPT_LENGTH = 2_000;
+const MAX_REFERENCE_IMAGES = 4;
+const MAX_REFERENCE_BYTES = 1_500_000;
 
-/**
- * 实时 AI 生图端点
- *
- * 支持两种模式：
- * 1. 真实生成：配置环境变量后调用 OpenAI Images API 兼容服务
- *    - AI_IMAGE_API_KEY  （必需）
- *    - AI_IMAGE_BASE_URL （可选，默认 https://api.openai.com/v1，兼容硅基流动/即梦等）
- *    - AI_IMAGE_MODEL    （可选，默认 gpt-image-1；dall-e-3 / 硅基流动 flux 等均可）
- * 2. 演示模式：未配置密钥时返回 public/ai-previews/ 下的示例图，功能链路可完整演示
- */
-/** 参考图（dataURL 或 http URL）转为二进制 */
-async function referenceToBytes(ref: string): Promise<Uint8Array> {
-  if (ref.startsWith("data:")) {
-    const base64 = ref.slice(ref.indexOf(",") + 1);
-    const bin = atob(base64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-    return arr;
-  }
-  const res = await fetch(ref);
-  if (!res.ok) throw new Error(`参考图下载失败 ${res.status}`);
-  return new Uint8Array(await res.arrayBuffer());
+function referenceToBlob(ref: string): Blob {
+  const match = /^data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/=]+)$/i.exec(ref);
+  if (!match) throw new Error("Reference images must be PNG, JPEG, or WebP data URLs.");
+  const estimatedBytes = Math.floor(match[2].length * 0.75);
+  if (estimatedBytes > MAX_REFERENCE_BYTES) throw new Error("A reference image is too large.");
+  const bin = atob(match[2]);
+  const buffer = new ArrayBuffer(bin.length);
+  const bytes = new Uint8Array(buffer);
+  for (let i = 0; i < bin.length; i += 1) bytes[i] = bin.charCodeAt(i);
+  return new Blob([buffer], { type: `image/${match[1].toLowerCase()}` });
 }
 
 export async function POST(request: Request) {
   try {
+    const db = getDb();
+    await ensureSchema(db);
+    const user = await getSession(db, request);
+    if (!user) {
+      return Response.json({ error: "Your session has expired. Please sign in again." }, { status: 401, headers: { "Cache-Control": "no-store" } });
+    }
+
+    const key = `image-ip:${clientIp(request)}`;
+    const limit = await rateLimit(db, { key, purpose: "image-rate", limit: 8, windowSeconds: 10 * 60 });
+    if (limit.limited) return rateLimitResponse(limit.retryAfter);
+
     const payload = (await request.json()) as {
       garment?: string;
       prompt?: string;
       style?: "wear" | "flat";
-      /** 款式参考图（dataURL 或 http URL），最多 4 张 */
       referenceImages?: string[];
     };
-    const garment = payload.garment ?? "jacket";
+    const allowedGarments = new Set(["jacket", "trousers", "waistcoat", "shirt", "fabric"]);
+    const garment = allowedGarments.has(payload.garment ?? "") ? payload.garment! : "jacket";
     const prompt = (payload.prompt ?? "").trim();
-    const faceSafePrompt = `${prompt}, privacy-safe product presentation: never show a face or facial features; if a person is present, compose the image strictly from the neck down with the entire head outside the frame; do not generate portraits, reflections of faces, or background faces`;
+    if (prompt.length > MAX_PROMPT_LENGTH) {
+      return Response.json({ error: "The image prompt is too long." }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    }
     const style = payload.style === "flat" ? "flat" : "wear";
-    const referenceImages = (payload.referenceImages ?? []).slice(0, 4);
+    const referenceImages = Array.isArray(payload.referenceImages) ? payload.referenceImages.slice(0, MAX_REFERENCE_IMAGES) : [];
+    if (referenceImages.some((image) => typeof image !== "string")) {
+      return Response.json({ error: "Reference images are invalid." }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    }
 
     const apiKey = (env as Record<string, string | undefined>).AI_IMAGE_API_KEY;
     const baseUrl = ((env as Record<string, string | undefined>).AI_IMAGE_BASE_URL ?? "https://api.openai.com/v1").replace(/\/+$/, "");
     const model = (env as Record<string, string | undefined>).AI_IMAGE_MODEL ?? "gpt-image-1";
 
     if (!apiKey) {
-      // 演示模式：返回内置示例图（真实密钥配置后自动切换）
       const demoFiles: Record<string, string> = {
         jacket: "/ai-previews/jacket.png",
         trousers: "/ai-previews/trousers.png",
@@ -63,37 +67,34 @@ export async function POST(request: Request) {
         imageUrl: `${demoFiles[garment] ?? demoFiles.jacket}?v=${Date.now()}`,
         provider: "demo",
         demo: true,
-        note: "演示模式：未配置 AI_IMAGE_API_KEY。配置真实生图服务后自动切换为实时生成。",
-      });
+      }, { headers: { "Cache-Control": "no-store" } });
     }
 
     if (!prompt) {
-      return Response.json({ error: "prompt 不能为空" }, { status: 400 });
+      return Response.json({ error: "An image prompt is required." }, { status: 400, headers: { "Cache-Control": "no-store" } });
     }
 
-    // 真实生成：有参考图走 edits 端点（款式保真），无参考图走 generations
-    let res: Response;
+    const faceSafePrompt = `${prompt}, privacy-safe product presentation: never show a face or facial features; if a person is present, compose the image strictly from the neck down with the entire head outside the frame; do not generate portraits, reflections of faces, or background faces`;
+    await recordRateLimitAttempt(db, key, "image-rate", 10 * 60);
+
+    let response: Response;
     if (referenceImages.length) {
       const form = new FormData();
       form.append("model", model);
       for (const ref of referenceImages) {
-        const bytes = await referenceToBytes(ref);
-        form.append("image", new Blob([bytes], { type: "image/png" }), "ref.png");
+        form.append("image", referenceToBlob(ref), "reference-image");
       }
       form.append("prompt", faceSafePrompt);
       form.append("response_format", "url");
-      res = await fetch(`${baseUrl}/images/edits`, {
+      response = await fetch(`${baseUrl}/images/edits`, {
         method: "POST",
         headers: { Authorization: `Bearer ${apiKey}` },
         body: form,
       });
     } else {
-      res = await fetch(`${baseUrl}/images/generations`, {
+      response = await fetch(`${baseUrl}/images/generations`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
         body: JSON.stringify({
           model,
           prompt: faceSafePrompt,
@@ -104,33 +105,20 @@ export async function POST(request: Request) {
       });
     }
 
-    if (!res.ok) {
-      const text = await res.text();
-      return Response.json(
-        { error: `生图服务返回 ${res.status}: ${text.slice(0, 300)}` },
-        { status: 502 }
-      );
+    if (!response.ok) {
+      console.error("image-provider-error", JSON.stringify({ status: response.status }));
+      return Response.json({ error: "The image service is unavailable. Please try again later." }, { status: 502, headers: { "Cache-Control": "no-store" } });
     }
 
-    const data = (await res.json()) as {
-      data?: Array<{ url?: string; b64_json?: string }>;
-    };
+    const data = (await response.json()) as { data?: Array<{ url?: string; b64_json?: string }> };
     const item = data.data?.[0];
-    if (!item) {
-      return Response.json({ error: "生图服务未返回图片" }, { status: 502 });
-    }
-
-    const imageUrl = item.url
-      ? item.url
-      : item.b64_json
-        ? `data:image/png;base64,${item.b64_json}`
-        : null;
+    const imageUrl = item?.url ?? (item?.b64_json ? `data:image/png;base64,${item.b64_json}` : null);
     if (!imageUrl) {
-      return Response.json({ error: "生图服务返回格式异常" }, { status: 502 });
+      return Response.json({ error: "The image service returned an unexpected response." }, { status: 502, headers: { "Cache-Control": "no-store" } });
     }
-
-    return Response.json({ imageUrl, provider: model, demo: false });
+    return Response.json({ imageUrl, provider: model, demo: false }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
-    return Response.json({ error: toErrorMessage(error) }, { status: 500 });
+    console.error("image-generation-error", error instanceof Error ? error.name : "unknown");
+    return Response.json({ error: "Unable to generate an image. Please try again later." }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }

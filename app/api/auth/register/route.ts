@@ -1,6 +1,6 @@
-import { and, desc, eq, gt, isNull, sql } from "drizzle-orm";
+import { and, eq, gt, sql } from "drizzle-orm";
 import { getDb } from "../../../../db";
-import { authTokens, users } from "../../../../db/schema";
+import { authTokens } from "../../../../db/schema";
 import { ensureSchema, hashPassword } from "../../../../db/init";
 import { env } from "cloudflare:workers";
 import { accountEmailShell, sendAccountEmail } from "../../../lib/email";
@@ -43,8 +43,9 @@ export async function POST(request: Request) {
 
     const db = getDb();
     await ensureSchema(db);
-    const [existing] = await db.select({ id: users.id }).from(users).where(sql`lower(${users.email}) = ${email}`).limit(1);
-    const cutoff = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    // SQLite CURRENT_TIMESTAMP uses a space-separated UTC timestamp. Compare
+    // with SQLite datetime rather than an ISO string so rate limiting works.
+    const cutoff = sql.raw("datetime('now', '-1 hour')");
     const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
     const recent = await db.select({ id: authTokens.id }).from(authTokens).where(and(eq(authTokens.email, email), eq(authTokens.purpose, "verify-code"), gt(authTokens.createdAt, cutoff))).limit(3);
     const recentIp = await db.select({ id: authTokens.id }).from(authTokens).where(and(eq(authTokens.email, `ip:${ip}`), eq(authTokens.purpose, "register-rate"), gt(authTokens.createdAt, cutoff))).limit(6);

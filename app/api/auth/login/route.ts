@@ -3,11 +3,15 @@ import { getDb } from "../../../../db";
 import { users } from "../../../../db/schema";
 import { ensureSchema, hashPassword, verifyPassword } from "../../../../db/init";
 import { createToken, sessionCookie } from "../../../lib/auth";
+import { clientIp, rateLimit, rateLimitResponse, recordRateLimitAttempt } from "../../../lib/abuse-protection";
 
 export async function POST(request: Request) {
   try {
     const db = getDb();
     await ensureSchema(db);
+    const key = `login-ip:${clientIp(request)}`;
+    const limit = await rateLimit(db, { key, purpose: "login-rate", limit: 5, windowSeconds: 10 * 60 });
+    if (limit.limited) return rateLimitResponse(limit.retryAfter);
     const payload = (await request.json()) as { username?: string; password?: string };
     const username = (payload.username ?? "").trim();
     const password = String(payload.password ?? "");
@@ -20,10 +24,12 @@ export async function POST(request: Request) {
       .where(eq(users.username, username))
       .limit(1);
     if (!user || !user.active) {
+      await recordRateLimitAttempt(db, key, "login-rate", 10 * 60);
       return Response.json({ error: "账号或密码错误" }, { status: 401 });
     }
     const verification = await verifyPassword(password, user.passwordHash);
     if (!verification.valid) {
+      await recordRateLimitAttempt(db, key, "login-rate", 10 * 60);
       return Response.json({ error: "账号或密码错误" }, { status: 401 });
     }
     if (verification.needsUpgrade) {
@@ -34,9 +40,8 @@ export async function POST(request: Request) {
       { user: { id: user.id, username: user.username, role: user.role, storeName: user.storeName, displayName: user.displayName, email: user.email, permissions: JSON.parse(user.permissions || "[]") } },
       { headers: { "Set-Cookie": sessionCookie(token), "Cache-Control": "no-store" } },
     );
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unexpected error";
-    return Response.json({ error: message }, { status: 500 });
+  } catch {
+    return Response.json({ error: "Login failed. Please try again later." }, { status: 500, headers: { "Cache-Control": "no-store" } });
   }
 }
 
