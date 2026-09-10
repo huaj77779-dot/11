@@ -19,6 +19,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const article = getArticle((await params).slug);
   if (!article) notFound();
   const keywords = [article.primaryKeyword, ...(article.keywords ?? []), "verosuits", "B2B tailoring", "made-to-measure suits"].filter((value, index, values) => values.indexOf(value) === index);
-  const jsonLd = { "@context": "https://schema.org", "@type": "Article", headline: article.title, description: article.description, datePublished: article.published, dateModified: article.updated, articleSection: article.category, image: article.images?.map(({ src }) => absoluteUrl(src)), author: { "@type": "Organization", name: SITE_NAME }, publisher: { "@type": "Organization", name: SITE_NAME }, mainEntityOfPage: absoluteUrl(`/news/${article.slug}`), keywords };
+  const pageUrl = absoluteUrl(`/news/${article.slug}`);
+  const jsonLd = { "@context": "https://schema.org", "@type": "Article", headline: article.title, description: article.description, datePublished: article.published, dateModified: article.updated, articleSection: article.category, image: article.images?.map(({ src }) => absoluteUrl(src)), author: { "@type": "Organization", name: SITE_NAME, url: absoluteUrl("/") }, publisher: { "@type": "Organization", name: SITE_NAME, url: absoluteUrl("/"), logo: absoluteUrl("/verosuits-logo.png") }, mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl }, about: keywords.map((name) => ({ "@type": "Thing", name })), keywords };
   return <LandingSubpage><ArticleBody article={article} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} /></LandingSubpage>;
 }

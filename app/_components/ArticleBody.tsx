@@ -21,6 +21,7 @@ export function ArticleBody({ article }: { article: SeoArticle }) {
       {zh && <aside className="translation-note">本页中文标题与摘要已适配；正文保留英文专业原文，避免行业术语直译失真。</aside>}
       {article.sections.map((section, index) => <section key={section.heading}><h2>{section.heading}</h2>{section.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}{section.bullets && <ul>{section.bullets.map(item => <li key={item}>{item}</li>)}</ul>}{article.images?.[index + 1] && <figure className="article-inline-image"><img src={article.images[index + 1].src} alt={article.images[index + 1].alt} /><figcaption>{article.images[index + 1].caption}</figcaption></figure>}</section>)}
       <aside className="article-cta"><p className="eyebrow">VEROSUITS</p><h2>{zh ? "把这套流程用于你的门店" : "Put this workflow to work in your store"}</h2><p>{zh ? "查看从沟通、PI 确认到生产和交付的合作流程。" : "See how enquiry, PI approval, production and delivery connect in one B2B ordering workflow."}</p><a href="/client-stories">{zh ? "查看合作流程 →" : "See the cooperation process →"}</a></aside>
+      {article.relatedService && <p className="article-related-link"><span>{zh ? "相关服务：" : "Related service: "}</span><a href={article.relatedService.href}>{zh ? article.relatedService.labelZh : article.relatedService.label} →</a></p>}
     </div>
   </article>;
 }

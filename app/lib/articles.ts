@@ -22,8 +22,78 @@ export type SeoArticle = {
   readingTime: string;
   primaryKeyword: string;
   keywords?: string[];
+  relatedService?: {
+    href: string;
+    label: string;
+    labelZh: string;
+  };
   images?: ArticleImage[];
   sections: ArticleSection[];
+};
+
+const ARTICLE_SEO_ENHANCEMENTS: Record<string, Pick<SeoArticle, "keywords" | "relatedService">> = {
+  "verosuits-unfused-linen-suit-construction": {
+    keywords: ["custom made suits", "custom suits"],
+    relatedService: { href: "/made-to-measure-suits", label: "Explore custom made suits", labelZh: "查看定制西服服务" },
+  },
+  "fabric-to-finished-custom-suit": {
+    keywords: ["custom suits", "custom tailored suits"],
+    relatedService: { href: "/custom-tailoring-supplier", label: "Explore custom suit manufacturing", labelZh: "查看定制西服制造服务" },
+  },
+  "custom-group-order-trousers": {
+    relatedService: { href: "/custom-tailoring-supplier", label: "Explore tailored trouser supply", labelZh: "查看定制西裤供应服务" },
+  },
+  "neapolitan-side-adjuster-trousers": {
+    relatedService: { href: "/made-to-measure-suits", label: "Explore made-to-measure tailoring", labelZh: "查看量身定制服务" },
+  },
+  "custom-wool-overcoats-balmacaan-polo": {
+    relatedService: { href: "/private-label-suits", label: "Explore private-label outerwear production", labelZh: "查看私标外套定制服务" },
+  },
+  "black-shawl-lapel-tuxedo": {
+    keywords: ["mens formal dress suits"],
+    relatedService: { href: "/made-to-measure-suits", label: "Explore men's formal tailoring", labelZh: "查看男士礼服定制服务" },
+  },
+  "herringbone-safari-jacket-detail": {
+    keywords: ["custom designed suits"],
+    relatedService: { href: "/private-label-suits", label: "Explore private-label garment production", labelZh: "查看私标服装定制服务" },
+  },
+  "double-breasted-six-button-patch-pocket-suit": {
+    keywords: ["men's suits"],
+    relatedService: { href: "/made-to-measure-suits", label: "Explore men's suits", labelZh: "查看男士西服定制服务" },
+  },
+  "full-lined-tailored-jacket-factory": {
+    keywords: ["custom suit"],
+    relatedService: { href: "/made-to-measure-suits", label: "Explore made-to-measure jackets", labelZh: "查看定制夹克服务" },
+  },
+  "cashmere-flannel-straight-trousers-420gsm": {
+    relatedService: { href: "/custom-tailoring-supplier", label: "Explore tailored trouser supply", labelZh: "查看定制西裤供应服务" },
+  },
+  "460gsm-winter-flannel-trousers": {
+    relatedService: { href: "/custom-tailoring-supplier", label: "Explore tailored trouser supply", labelZh: "查看定制西裤供应服务" },
+  },
+  "half-canvas-suit-construction": {
+    keywords: ["custom tailored suits"],
+    relatedService: { href: "/made-to-measure-suits", label: "Explore custom tailored suits", labelZh: "查看定制西服服务" },
+  },
+  "hand-finished-tailored-trousers": {
+    relatedService: { href: "/custom-tailoring-supplier", label: "Explore tailored trouser supply", labelZh: "查看定制西裤供应服务" },
+  },
+  "burgundy-herringbone-neapolitan-trousers": {
+    relatedService: { href: "/custom-tailoring-supplier", label: "Explore tailored trouser supply", labelZh: "查看定制西裤供应服务" },
+  },
+  "white-tailored-trousers-side-adjusters": {
+    keywords: ["custom suits for men"],
+    relatedService: { href: "/made-to-measure-suits", label: "Explore custom suits for men", labelZh: "查看男士定制西服服务" },
+  },
+  "prince-of-wales-quarter-lined-jacket": {
+    relatedService: { href: "/made-to-measure-suits", label: "Explore made-to-measure jackets", labelZh: "查看定制夹克服务" },
+  },
+  "tailored-jacket-final-finishing": {
+    relatedService: { href: "/custom-tailoring-supplier", label: "Explore custom suit manufacturing", labelZh: "查看定制西服制造服务" },
+  },
+  "zipper-pick-stitch-tailored-trousers": {
+    relatedService: { href: "/custom-tailoring-supplier", label: "Explore tailored trouser supply", labelZh: "查看定制西裤供应服务" },
+  },
 };
 
 export const SEO_ARTICLES: SeoArticle[] = [
@@ -881,5 +951,9 @@ export const SEO_ARTICLES: SeoArticle[] = [
 ];
 
 export function getArticle(slug: string) {
-  return SEO_ARTICLES.find((article) => article.slug === slug);
+  const article = SEO_ARTICLES.find((item) => item.slug === slug);
+  if (!article) return undefined;
+  const enhancement = ARTICLE_SEO_ENHANCEMENTS[slug];
+  const keywords = [...new Set([...(article.keywords ?? []), ...(enhancement?.keywords ?? [])])];
+  return { ...article, ...enhancement, keywords };
 }

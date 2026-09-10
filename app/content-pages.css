@@ -24,6 +24,8 @@
 .article-copy p,.article-copy li{font-size:18px;line-height:1.85;color:#514941}
 .article-copy li{margin:8px 0}
 .translation-note{padding:18px 22px;margin-bottom:40px;border-left:4px solid #aa7b49;background:#f7f0e7;color:#67513c}
+.article-related-link{margin:14px 0 42px;padding:18px 20px;border:1px solid #d7c7b4;border-radius:12px;background:#fffaf4;color:#514941}
+.article-related-link a{font-weight:700;color:#6c3e22;text-decoration:none}
 .article-cta{margin-top:70px;padding:42px;border-radius:18px;background:#eadbc8}
 .article-cta h2{margin:8px 0}
 .trust-strip{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
