@@ -30,7 +30,7 @@ function sourceEntries(article: SeoArticle): TextEntry[] {
   return entries;
 }
 
-function splitEntries(entries: TextEntry[], limit = 3600): TextEntry[][] {
+function splitEntries(entries: TextEntry[], limit = 1200): TextEntry[][] {
   const chunks: TextEntry[][] = [];
   let current: TextEntry[] = [];
   let length = 0;
@@ -49,7 +49,7 @@ function splitEntries(entries: TextEntry[], limit = 3600): TextEntry[][] {
 }
 
 async function translateChunk(entries: TextEntry[], locale: Locale): Promise<Map<string, string>> {
-  const source = entries.map((entry) => `[[[VRS:${entry.key}]]]\n${entry.value}`).join("\n\n");
+  const source = entries.map((entry, index) => `[[[${index}]]]\n${entry.value}`).join("\n\n");
   const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${TARGET_LANGUAGE[locale]}&dt=t&q=${encodeURIComponent(source)}`;
   const response = await fetch(url);
   if (!response.ok) throw new Error("Translation request failed");
@@ -57,15 +57,29 @@ async function translateChunk(entries: TextEntry[], locale: Locale): Promise<Map
   const translated = payload[0]?.map((part) => part[0]).join("") ?? "";
   const result = new Map<string, string>();
   entries.forEach((entry, index) => {
-    const marker = `[[[VRS:${entry.key}]]]`;
+    const marker = `[[[${index}]]]`;
     const start = translated.indexOf(marker);
     if (start < 0) return;
-    const nextMarker = index < entries.length - 1 ? `[[[VRS:${entries[index + 1].key}]]]` : undefined;
+    const nextMarker = index < entries.length - 1 ? `[[[${index + 1}]]]` : undefined;
     const end = nextMarker ? translated.indexOf(nextMarker, start + marker.length) : translated.length;
     const value = translated.slice(start + marker.length, end < 0 ? translated.length : end).trim();
     if (value) result.set(entry.key, value);
   });
+  if (result.size !== entries.length) throw new Error("Incomplete translation response");
   return result;
+}
+
+async function translateWithRetry(entries: TextEntry[], locale: Locale): Promise<Map<string, string>> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      return await translateChunk(entries, locale);
+    } catch (error) {
+      lastError = error;
+      await new Promise((resolve) => window.setTimeout(resolve, 350 * (attempt + 1)));
+    }
+  }
+  throw lastError;
 }
 
 function applyTranslation(article: SeoArticle, translated: Map<string, string>): LocalizedArticle {
@@ -101,7 +115,7 @@ export function useLocalizedArticle(article: SeoArticle, locale: Locale): { arti
       setLoading(false);
       return () => { active = false; };
     }
-    const cacheKey = `verosuits-article-v1:${locale}:${article.slug}:${article.updated}`;
+    const cacheKey = `verosuits-article-v2:${locale}:${article.slug}:${article.updated}`;
     const cached = window.localStorage.getItem(cacheKey);
     if (cached) {
       try {
@@ -117,7 +131,7 @@ export function useLocalizedArticle(article: SeoArticle, locale: Locale): { arti
       try {
         const translated = new Map<string, string>();
         for (const chunk of splitEntries(sourceEntries(article))) {
-          const part = await translateChunk(chunk, locale);
+          const part = await translateWithRetry(chunk, locale);
           part.forEach((value, key) => translated.set(key, value));
         }
         const result = applyTranslation(article, translated);
@@ -145,7 +159,7 @@ export function useLocalizedArticlePreviews(articles: SeoArticle[], locale: Loca
       setLocalized(new Map());
       return () => { active = false; };
     }
-    const cacheKey = `verosuits-article-previews-v1:${locale}:${articles.map((article) => `${article.slug}:${article.updated}`).join("|")}`;
+    const cacheKey = `verosuits-article-previews-v2:${locale}:${articles.map((article) => `${article.slug}:${article.updated}`).join("|")}`;
     const cached = window.localStorage.getItem(cacheKey);
     if (cached) {
       try {
@@ -165,7 +179,7 @@ export function useLocalizedArticlePreviews(articles: SeoArticle[], locale: Loca
       try {
         const translated = new Map<string, string>();
         for (const chunk of splitEntries(entries)) {
-          const part = await translateChunk(chunk, locale);
+          const part = await translateWithRetry(chunk, locale);
           part.forEach((value, key) => translated.set(key, value));
         }
         const result = new Map<string, Pick<SeoArticle, "title" | "description" | "category" | "readingTime">>();
