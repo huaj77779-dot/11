@@ -35,10 +35,23 @@ export default function NewsPage() {
     <section className="content-section"><div className="landing-wrap article-grid">
       {SEO_ARTICLES.map((article) => {
         const cardImage = article.images?.[0] ?? fallbackCardImage(article.category);
+        const fallbackImage = fallbackCardImage(article.category);
         return (
           <article className="article-card" key={article.slug}>
             <a className="article-card-image" href={`/news/${article.slug}`} aria-label={zh ? article.titleZh : article.title}>
-              <img src={cardImage.src} alt={cardImage.alt} width="1200" height="1600" loading="lazy" decoding="async" />
+              <img
+                src={cardImage.src}
+                alt={cardImage.alt}
+                width="1200"
+                height="1600"
+                loading="lazy"
+                decoding="async"
+                onError={(event) => {
+                  event.currentTarget.onerror = null;
+                  event.currentTarget.src = fallbackImage.src;
+                  event.currentTarget.alt = fallbackImage.alt;
+                }}
+              />
             </a>
             <div className="article-card-meta"><span>{article.category}</span><time dateTime={article.published}>{formatDate(article.published)}</time></div>
             <h2><a href={`/news/${article.slug}`}>{zh ? article.titleZh : article.title}</a></h2>
