@@ -108,7 +108,13 @@ export async function POST(request: Request) {
           numberValue(row.total_spent), row.last_order_at ?? null, textValue(row.created_at), textValue(row.updated_at)
         );
     });
-    if (statements.length) await binding.batch(statements);
+    try {
+      if (statements.length) await binding.batch(statements);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Customer migration failed";
+      console.error("Legacy customer migration failed", error);
+      return Response.json({ error: message }, { status: 500, headers: { "Cache-Control": "no-store" } });
+    }
     return Response.json({ ok: true, inserted: statements.length });
   }
 
@@ -136,7 +142,13 @@ export async function POST(request: Request) {
           textValue(row.updated_at)
         );
     });
-    if (statements.length) await binding.batch(statements);
+    try {
+      if (statements.length) await binding.batch(statements);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Order migration failed";
+      console.error("Legacy order migration failed", error);
+      return Response.json({ error: message }, { status: 500, headers: { "Cache-Control": "no-store" } });
+    }
     return Response.json({ ok: true, inserted: statements.length });
   }
 
