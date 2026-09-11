@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "atelier-os-mtm-supply",
+  "main": "./dist/server/index.js",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "no_bundle": true,
+  "rules": [
+    {
+      "type": "ESModule",
+      "globs": ["**/*.js", "**/*.mjs"]
+    }
+  ],
+  "assets": {
+    "directory": "./dist/client"
+  },
+  "routes": [
+    {
+      "pattern": "verosuits.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.verosuits.com",
+      "custom_domain": true
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "atelier-os-mtm-supply",
+      "database_id": "20020c44-7978-4d21-93fd-734d1c2f47dc"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

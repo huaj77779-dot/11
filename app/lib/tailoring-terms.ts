@@ -2,7 +2,7 @@ import type { Locale } from "./i18n";
 import { shirtOptionImages } from "../shirt-option-images";
 import { suitOptionImages } from "../suit-option-images";
 
-type EuLocale = Exclude<Locale, "zh" | "en" | "de" | "ja">;
+type EuLocale = Exclude<Locale, "zh" | "en" | "en-US" | "de" | "ja">;
 
 const garments: Record<string, Record<EuLocale, string>> = {
   西装上衣: { fr: "Veste", it: "Giacca", es: "Chaqueta", pt: "Casaco", nl: "Colbert", pl: "Marynarka", sv: "Kavaj", da: "Jakke", no: "Dressjakke", cs: "Sako" },
@@ -159,6 +159,65 @@ const englishTerms: Record<string, string> = {
   挺胸: "Erect posture",
   左平溜肩: "Left shoulder slope",
   右平溜肩: "Right shoulder slope",
+  扣型: "Waistband",
+  褶皱: "Pleats",
+  裤脚: "Trouser hem",
+  裤型: "Trouser cut",
+  侧兜: "Side pocket",
+  前表兜: "Front pocket",
+  后斗锁眼: "Back pocket buttonhole",
+  兜中兜: "Pocket-in-pocket",
+  后兜: "Back pocket",
+  圆腰头: "Rounded Waistband",
+  无褶: "Flat Front",
+  裤脚口内折边: "Plain Hem",
+  喇叭裤型: "Flared Leg",
+  裤脚口打开: "Open Hem",
+  斜侧兜: "Slanted Side Pocket",
+  直侧兜: "Straight Side Pocket",
+  双牙: "Double Welt Pocket",
+  有: "Yes",
+  面料: "Main fabric",
+  里料: "Lining",
+  有兜盖: "With flap",
+  左右锁眼: "Both buttonholes",
+  左锁眼: "Left buttonhole",
+  右锁眼: "Right buttonhole",
+  后领条: "Back neck strap",
+  后背面: "Back panel",
+  侧开叉: "Side vents",
+  硬手感: "Firm collar",
+  中手感: "Medium collar",
+  软手感: "Soft collar",
+  无口袋: "No pocket",
+  圆口袋: "Rounded pocket",
+  六角袋: "Hexagonal pocket",
+  三角袋: "Triangle pocket",
+};
+
+/**
+ * Catalogue records use Chinese as the canonical value. Older PI rows and
+ * imports can contain an English display value, so normalize it before
+ * translating to prevent mixed-language order details.
+ */
+const canonicalByEnglishTerm: Record<string, string> = Object.fromEntries(
+  Object.entries(englishTerms).map(([canonical, english]) => [english, canonical]),
+);
+
+const legacyEnglishTailoringTerms: Record<string, string> = {
+  Jacket: "西装上衣",
+  Trousers: "西裤",
+  Waistcoat: "马甲",
+  Shirt: "衬衫",
+  None: "无",
+  "Rounded Waistband": "圆腰头",
+  "Flat Front": "无褶",
+  "Plain Hem": "裤脚口内折边",
+  "Flared Leg": "喇叭裤型",
+  "Open Hem": "裤脚口打开",
+  "Slanted Side Pocket": "斜侧兜",
+  "Straight Side Pocket": "直侧兜",
+  "Double Welt Pocket": "双牙",
 };
 
 function titleCaseSlug(file: string): string {
@@ -182,6 +241,7 @@ const localizedTailoringTerms: Record<string, Partial<Record<Locale, string>>> =
 };
 
 const postureLabels: Record<Locale, string[]> = {
+  "en-US": ["Stooped posture", "Prominent abdomen", "Erect posture", "Left shoulder slope", "Right shoulder slope", "Regular back", "Add to back length", "Regular abdomen", "Add to front abdomen", "Regular chest", "Add to front waist length", "Raise flat shoulder", "Regular shoulder", "Lower slight slope", "Lower medium slope", "Lower pronounced slope"],
   zh: ["驼背", "凸肚", "挺胸", "左肩斜度", "右肩斜度", "正常背型", "后背衣长增加", "正常腹型", "前腹围增加", "正常胸型", "前腰节长增加", "平肩上提", "正常肩型", "轻度溜肩下调", "中度溜肩下调", "重度溜肩下调"],
   en: ["Stooped posture", "Prominent abdomen", "Erect posture", "Left shoulder slope", "Right shoulder slope", "Regular back", "Add to back length", "Regular abdomen", "Add to front abdomen", "Regular chest", "Add to front waist length", "Raise flat shoulder", "Regular shoulder", "Lower slight slope", "Lower medium slope", "Lower pronounced slope"],
   de: ["Gebeugte Haltung", "Ausgeprägter Bauch", "Aufrechte Haltung", "Linke Schulterneigung", "Rechte Schulterneigung", "Normaler Rücken", "Rückenlänge verlängern", "Normaler Bauch", "Vordere Bauchweite vergrößern", "Normale Brust", "Vordere Taillenlänge verlängern", "Flache Schulter anheben", "Normale Schulter", "Leichte Neigung absenken", "Mittlere Neigung absenken", "Starke Neigung absenken"],
@@ -262,18 +322,19 @@ const japaneseTailoringTerms: Record<string, string> = {
 };
 
 export function tailoringTerm(value: string, locale: Locale, group?: string): string {
+  const canonical = canonicalByEnglishTerm[value.trim()] ?? legacyEnglishTailoringTerms[value.trim()] ?? value;
   if (group === "measurement") {
-    if (locale === "zh") return value;
-    return measurementTerms[value]?.[locale] ?? measurementTerms[value]?.en ?? value;
+    if (locale === "zh") return canonical;
+    return measurementTerms[canonical]?.[locale] ?? measurementTerms[canonical]?.en ?? canonical;
   }
-  if (locale === "zh") return value;
-  const posture = postureTerm(value, locale);
+  if (locale === "zh") return canonical;
+  const posture = postureTerm(canonical, locale);
   if (posture) return posture;
-  if (localizedTailoringTerms[value]?.[locale]) return localizedTailoringTerms[value]![locale]!;
-  if (locale === "ja" && japaneseTailoringTerms[value]) return japaneseTailoringTerms[value];
-  const english = englishTerms[value] ?? englishOption(group, value);
-  if (locale === "en" || locale === "de" || locale === "ja") return english;
-  return garments[value]?.[locale] ?? groups[value]?.[locale] ?? english;
+  if (localizedTailoringTerms[canonical]?.[locale]) return localizedTailoringTerms[canonical]![locale]!;
+  if (locale === "ja" && japaneseTailoringTerms[canonical]) return japaneseTailoringTerms[canonical];
+  const english = englishTerms[canonical] ?? englishOption(group, canonical);
+  if (locale === "en" || locale === "en-US" || locale === "de" || locale === "ja") return english;
+  return garments[canonical]?.[locale] ?? groups[canonical]?.[locale] ?? english;
 }
 
 const fabricEnglish: Record<string, string> = {
@@ -375,7 +436,7 @@ const localizedPatterns: Record<string, Partial<Record<Locale, string>>> = {
 export function fabricDisplayName(value: string, locale: Locale, fallbackColor = ""): string {
   if (locale === "zh") return value;
   const direct = fabricTerm(value, locale);
-  if (locale === "en" && !/[\u3400-\u9fff]/.test(direct)) return direct;
+  if ((locale === "en" || locale === "en-US") && !/[\u3400-\u9fff]/.test(direct)) return direct;
   const colors = fallbackColor.split(/[+＋/]/).map((part) => part.trim()).filter(Boolean);
   const colorLabel = colors.map((color) => localizedFabricColors[color]?.[locale] ?? localizedFabricColors[color]?.en).filter(Boolean).join(" / ");
   const patternKey = value.includes("千鸟") ? "houndstooth" : value.includes("窗格") ? "windowpane" : value.includes("格伦") || value.includes("威尔士") ? "glen" : value.includes("人字") ? "herringbone" : value.includes("条") ? "stripe" : value.includes("格") ? "check" : "plain";

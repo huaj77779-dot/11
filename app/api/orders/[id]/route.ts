@@ -39,6 +39,9 @@ export async function GET(
   try {
     const db = getDb();
     await ensureSchema(db);
+    if (!await getSession(db, _request)) {
+      return Response.json({ error: "登录后才能查看订单" }, { status: 401 });
+    }
     const { id } = await params;
     const order = await getOwnedOrder(db, _request, Number(id));
 
@@ -67,6 +70,9 @@ export async function PATCH(
   try {
     const db = getDb();
     await ensureSchema(db);
+    if (!await getSession(db, request)) {
+      return Response.json({ error: "登录后才能修改订单" }, { status: 401 });
+    }
     const { id } = await params;
     const idNum = Number(id);
 
@@ -116,6 +122,9 @@ export async function DELETE(
   try {
     const db = getDb();
     await ensureSchema(db);
+    if (!await getSession(db, _request)) {
+      return Response.json({ error: "登录后才能删除订单" }, { status: 401 });
+    }
     const { id } = await params;
     const idNum = Number(id);
 

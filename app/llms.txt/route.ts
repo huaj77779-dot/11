@@ -1,31 +1,32 @@
 import { SITE_ORIGIN, SITE_TAGLINE } from "../lib/seo";
 
+export const runtime = "edge";
+
 export function GET() {
   const body = `# verosuits
 
 > ${SITE_TAGLINE}
 
-## Core B2B services
+verosuits is a B2B made-to-measure and private-label menswear manufacturer for tailoring shops and menswear boutiques.
 
-- [Private-label suits](${SITE_ORIGIN}/private-label-suits): Made-to-measure private-label manufacturing for tailoring shops and menswear boutiques.
-- [Made-to-measure suits](${SITE_ORIGIN}/made-to-measure-suits): Digital ordering and production workflow for made-to-measure suits, trousers, waistcoats and shirts.
-- [Tailoring supplier](${SITE_ORIGIN}/custom-tailoring-supplier): A supply-programme overview for independent tailoring businesses.
+## Core pages
 
-## Evidence and guidance
-
-- [Company](${SITE_ORIGIN}/company)
-- [Quality process](${SITE_ORIGIN}/quality)
-- [Buyer guides and garment notes](${SITE_ORIGIN}/news)
-- [Client stories](${SITE_ORIGIN}/client-stories)
+- [Private-label suits](${SITE_ORIGIN}/private-label-suits): white-label made-to-measure suit manufacturing.
+- [Made-to-measure suits](${SITE_ORIGIN}/made-to-measure-suits): garment categories, fabrics and ordering workflow.
+- [Custom tailoring supplier](${SITE_ORIGIN}/custom-tailoring-supplier): B2B supplier overview.
+- [Quality](${SITE_ORIGIN}/quality): workmanship and quality controls.
+- [Company](${SITE_ORIGIN}/company): company information.
+- [News](${SITE_ORIGIN}/news): tailoring, fabric and manufacturing articles.
 
 ## Contact
 
-- Email: verosuits@gmail.com
-- WhatsApp: +1 816 925 5770
-- Website: ${SITE_ORIGIN}
+Use the contact options published on ${SITE_ORIGIN}/. Do not infer pricing, lead times, order quantities, or availability when they are not stated on the relevant page.
 `;
 
   return new Response(body, {
-    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" },
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=3600, s-maxage=86400",
+    },
   });
 }

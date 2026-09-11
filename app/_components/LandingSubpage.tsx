@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { BrandLogo } from "./BrandLogo";
 import { useLocale } from "../lib/i18n";
+import { CustomizeLoginLink } from "./CustomizeLoginLink";
 
 export function LandingSubpage({ children }: { children: ReactNode }) {
   const { t } = useLocale();
@@ -18,19 +19,14 @@ export function LandingSubpage({ children }: { children: ReactNode }) {
           <a href="/news">{t("landing.navNews")}</a>
           <a href="/client-stories">{t("landing.navJourney")}</a>
           <a href="/#contact">{t("landing.navContact")}</a>
-          <a href="/customize">{t("landing.navCustomize")}</a>
+          <CustomizeLoginLink>{t("landing.navCustomize")}</CustomizeLoginLink>
         </nav>
-        <div className="landing-nav-actions"><LanguageSwitcher /><a className="landing-link" href="/login">{t("landing.navLogin")}</a><a className="landing-register-link" href="/register">注册账号</a></div>
+        <div className="landing-nav-actions"><LanguageSwitcher /></div>
       </header>
       {children}
       <footer className="landing-footer">
         <div className="landing-wrap landing-footer-inner">
           <a className="landing-brand" href="/"><BrandLogo /></a>
-          <nav className="landing-footer-links" aria-label="Services">
-            <a href="/private-label-suits">Private label suits</a>
-            <a href="/made-to-measure-suits">Made-to-measure suits</a>
-            <a href="/custom-tailoring-supplier">Tailoring supplier</a>
-          </nav>
           <p>{t("landing.footRights")}</p>
         </div>
       </footer>

@@ -7,6 +7,7 @@ import { homepageTranslation } from "./homepage-translations";
 export type Locale =
   | "zh"
   | "en"
+  | "en-US"
   | "de"
   | "ja"
   | "fr"
@@ -23,20 +24,21 @@ export type Locale =
 export const DEFAULT_LOCALE: Locale = "en";
 
 export const LOCALES: { code: Locale; label: string }[] = [
-  { code: "zh", label: "简体中文" },
-  { code: "en", label: "English" },
-  { code: "de", label: "Deutsch" },
-  { code: "ja", label: "日本語" },
-  { code: "fr", label: "Français" },
-  { code: "it", label: "Italiano" },
-  { code: "es", label: "Español" },
-  { code: "pt", label: "Português" },
-  { code: "nl", label: "Nederlands" },
-  { code: "pl", label: "Polski" },
-  { code: "sv", label: "Svenska" },
-  { code: "da", label: "Dansk" },
-  { code: "no", label: "Norsk" },
-  { code: "cs", label: "Čeština" },
+  { code: "zh", label: "中国" },
+  { code: "en", label: "United Kingdom" },
+  { code: "en-US", label: "United States" },
+  { code: "de", label: "Deutschland" },
+  { code: "ja", label: "日本" },
+  { code: "fr", label: "France" },
+  { code: "it", label: "Italia" },
+  { code: "es", label: "España" },
+  { code: "pt", label: "Portugal" },
+  { code: "nl", label: "Nederland" },
+  { code: "pl", label: "Polska" },
+  { code: "sv", label: "Sverige" },
+  { code: "da", label: "Danmark" },
+  { code: "no", label: "Norge" },
+  { code: "cs", label: "Česko" },
 ];
 
 const store: {
@@ -84,6 +86,34 @@ export function subscribeLocale(fn: () => void): () => void {
 type Dict = Record<string, Partial<Record<Locale, string>>>;
 
 export const T: Dict = {
+  "auth.loginTitle": { zh: "登录", en: "Sign in", de: "Anmelden", ja: "ログイン" },
+  "auth.loginLead": { zh: "门店定制下单系统", en: "Store ordering portal", de: "Bestellportal für Geschäfte", ja: "店舗注文ポータル" },
+  "auth.emailOrAccount": { zh: "邮箱或账号", en: "Email or account", de: "E-Mail oder Konto", ja: "メールアドレスまたはアカウント" },
+  "auth.password": { zh: "密码", en: "Password", de: "Passwort", ja: "パスワード" },
+  "auth.signIn": { zh: "登录", en: "Sign in", de: "Anmelden", ja: "ログイン" },
+  "auth.createAccount": { zh: "创建门店账号", en: "Create a store account", de: "Geschäftskonto erstellen", ja: "店舗アカウントを作成" },
+  "auth.createTitle": { zh: "创建账号", en: "Create account", de: "Konto erstellen", ja: "アカウントを作成" },
+  "auth.createLead": { zh: "验证工作邮箱后即可启用独立门店空间。", en: "Verify your work email to activate a private store workspace.", de: "Bestätigen Sie Ihre geschäftliche E-Mail, um Ihren privaten Bereich zu aktivieren.", ja: "業務用メールアドレスを確認して、店舗専用スペースを有効にしてください。" },
+  "auth.storeName": { zh: "门店名称", en: "Store name", de: "Geschäftsname", ja: "店舗名" },
+  "auth.yourName": { zh: "您的姓名", en: "Your name", de: "Ihr Name", ja: "お名前" },
+  "auth.workEmail": { zh: "工作邮箱", en: "Work email", de: "Geschäftliche E-Mail", ja: "業務用メール" },
+  "auth.passwordHint": { zh: "至少 10 个字符", en: "At least 10 characters", de: "Mindestens 10 Zeichen", ja: "10文字以上" },
+  "auth.sendVerification": { zh: "发送 6 位验证码", en: "Send six-digit code", de: "Sechsstelligen Code senden", ja: "6桁の確認コードを送信" },
+  "auth.sending": { zh: "正在发送…", en: "Sending…", de: "Wird gesendet…", ja: "送信中…" },
+  "auth.haveAccount": { zh: "已有账号？去登录", en: "Already have an account? Sign in", de: "Bereits ein Konto? Anmelden", ja: "すでにアカウントをお持ちですか？ログイン" },
+  "auth.verifyTitle": { zh: "邮箱验证", en: "Email verification", de: "E-Mail-Bestätigung", ja: "メール認証" },
+  "auth.verifying": { zh: "正在验证您的邮箱…", en: "Verifying your email…", de: "Ihre E-Mail wird bestätigt…", ja: "メールアドレスを確認中…" },
+  "auth.goSignIn": { zh: "前往登录", en: "Go to sign in", de: "Zur Anmeldung", ja: "ログインへ" },
+  "auth.verificationSent": { zh: "如该邮箱可以注册，验证链接已发送，请查收邮箱。", en: "If the email can be registered, we have sent a verification link.", de: "Falls die E-Mail registriert werden kann, haben wir einen Bestätigungslink gesendet.", ja: "このメールアドレスが登録可能な場合、確認リンクを送信しました。" },
+  "auth.codeSent": { zh: "如该邮箱可以注册，6 位验证码已发送。", en: "If the email can be registered, a six-digit code has been sent.", de: "Falls die E-Mail registriert werden kann, wurde ein sechsstelliger Code gesendet.", ja: "登録可能な場合、6桁の確認コードを送信しました。" },
+  "auth.codeTitle": { zh: "输入验证码", en: "Enter verification code", de: "Bestätigungscode eingeben", ja: "確認コードを入力" },
+  "auth.codeLead": { zh: "请输入发送到您工作邮箱的 6 位验证码。", en: "Enter the six-digit code sent to your work email.", de: "Geben Sie den sechsstelligen Code aus Ihrer geschäftlichen E-Mail ein.", ja: "業務用メールに届いた6桁のコードを入力してください。" },
+  "auth.verificationCode": { zh: "6 位验证码", en: "Six-digit code", de: "Sechsstelliger Code", ja: "6桁の確認コード" },
+  "auth.confirmCode": { zh: "确认并创建账号", en: "Confirm and create account", de: "Bestätigen und Konto erstellen", ja: "確認してアカウント作成" },
+  "auth.verified": { zh: "邮箱已验证，现在可以登录。", en: "Email verified. You can now sign in.", de: "E-Mail bestätigt. Sie können sich jetzt anmelden.", ja: "メールを確認しました。ログインできます。" },
+  "auth.useDifferentEmail": { zh: "使用其他邮箱", en: "Use a different email", de: "Andere E-Mail verwenden", ja: "別のメールを使用" },
+  "auth.codeInvalid": { zh: "验证码无效或已过期。", en: "This verification code is invalid or has expired.", de: "Dieser Bestätigungscode ist ungültig oder abgelaufen.", ja: "この確認コードは無効か期限切れです。" },
+  "auth.registerFailed": { zh: "无法发起注册，请稍后再试。", en: "Unable to start registration. Please try again.", de: "Registrierung konnte nicht gestartet werden. Bitte erneut versuchen.", ja: "登録を開始できません。もう一度お試しください。" },
   // ===== 通用 =====
   "app.title": { zh: "定制订单预览", en: "Order Preview", de: "Bestellvorschau", ja: "注文プレビュー" },
   "common.save": { zh: "保存", en: "Save", de: "Speichern", ja: "保存" },
@@ -445,7 +475,7 @@ export const T: Dict = {
   "landing.news4Tag": { zh: "展会计划", en: "Exhibition", de: "", ja: "" },
   "landing.news4Title": { zh: "下一期海外展会与拜访计划公布", en: "Next overseas exhibitions & visit plan", de: "", ja: "" },
   "landing.news4Excerpt": { zh: "计划参加下一季度欧洲男装展,并开放合作门店到厂参观预约。", en: "Attending next season's European menswear fair; factory visit slots available.", de: "", ja: "" },
-  "pi.exportTable": { zh: "导出 PI 表格", en: "Export PI Spreadsheet", de: "PI-Tabelle exportieren", ja: "PI表をエクスポート" },
+  "pi.exportTable": { zh: "导出 PI Word 文档", en: "Export PI Word Document", de: "PI Word Dokument exportieren", ja: "PI Word 文書を出力" },
   "currency.latestRate": { zh: "最新参考汇率", en: "Latest reference rate", de: "Aktueller Referenzkurs", ja: "最新参考為替レート" },
   "currency.loadingRate": { zh: "正在更新汇率", en: "Updating exchange rate", de: "Wechselkurs wird aktualisiert", ja: "為替レートを更新中" },
   "home.styleNotePlaceholder": { zh: "请填写本件产品的特殊要求、制作说明或其他备注（选填）", en: "Add special requests, making instructions or other notes for this item (optional)", de: "Sonderwünsche, Fertigungshinweise oder weitere Notizen zu diesem Artikel (optional)", ja: "この商品の特別なご要望、縫製指示、その他の備考をご記入ください（任意）" },
@@ -485,6 +515,7 @@ export function translate(key: string, locale?: Locale): string {
 }
 
 const STORE_WORD: Record<Locale, string> = {
+  "en-US": "Store",
   zh: "门店", en: "Store", de: "Filiale", ja: "店舗", fr: "Boutique", it: "Negozio",
   es: "Tienda", pt: "Loja", nl: "Vestiging", pl: "Salon", sv: "Butik", da: "Butik",
   no: "Butikk", cs: "Prodejna",
@@ -499,7 +530,15 @@ export function localizeStoreName(name: string, locale?: Locale): string {
 
 /** 客户端 hook：响应语言切换 */
 export function useLocale(): { loc: Locale; t: (key: string) => string } {
-  const [loc, setLocState] = useState<Locale>(DEFAULT_LOCALE);
+  // Read the persisted choice on the first browser render. PI rows may mount
+  // before another component restores the locale, which previously caused an
+  // English first paint even when Simplified Chinese was already selected.
+  const [loc, setLocState] = useState<Locale>(() => {
+    if (typeof window === "undefined") return DEFAULT_LOCALE;
+    const cookieLocale = document.cookie.match(/(?:^|; )atelier_locale=([^;]+)/)?.[1] as Locale | undefined;
+    const saved = (window.localStorage.getItem("locale") as Locale | null) ?? cookieLocale;
+    return saved && LOCALES.some((item) => item.code === saved) ? saved : getLocale();
+  });
   useEffect(() => {
     const cookieLocale = typeof document !== "undefined" ? document.cookie.match(/(?:^|; )atelier_locale=([^;]+)/)?.[1] as Locale | undefined : undefined;
     const saved = typeof window !== "undefined" ? ((window.localStorage.getItem("locale") as Locale | null) ?? cookieLocale ?? null) : null;

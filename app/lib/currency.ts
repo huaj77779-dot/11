@@ -3,9 +3,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { type Locale, useLocale } from "./i18n";
 
-export type DisplayCurrency = "CNY" | "GBP" | "EUR" | "JPY" | "PLN" | "SEK" | "DKK" | "NOK" | "CZK";
+export type DisplayCurrency = "CNY" | "USD" | "GBP" | "EUR" | "JPY" | "PLN" | "SEK" | "DKK" | "NOK" | "CZK";
 
 const CURRENCY_BY_LOCALE: Record<Locale, DisplayCurrency> = {
+  "en-US": "USD",
   zh: "CNY",
   en: "GBP",
   de: "EUR",
@@ -22,8 +23,20 @@ const CURRENCY_BY_LOCALE: Record<Locale, DisplayCurrency> = {
   cs: "CZK",
 };
 
+const EURO_COUNTRIES = new Set([
+  "AT", "BE", "BG", "HR", "CY", "EE", "FI", "FR", "DE", "GR", "IE", "IT",
+  "LV", "LT", "LU", "MT", "NL", "PT", "RO", "SK", "SI", "ES",
+]);
+
+function currencyForCountry(countryCode?: string): DisplayCurrency | undefined {
+  if (!countryCode) return undefined;
+  if (EURO_COUNTRIES.has(countryCode)) return "EUR";
+  return ({ CN: "CNY", US: "USD", GB: "GBP", JP: "JPY", PL: "PLN", SE: "SEK", DK: "DKK", NO: "NOK", CZ: "CZK" } as const)[countryCode];
+}
+
 const FALLBACK_RATES: Record<DisplayCurrency, number> = {
   CNY: 1,
+  USD: 0.139,
   GBP: 0.105,
   EUR: 0.119,
   JPY: 20.5,
@@ -63,9 +76,9 @@ async function loadRates(): Promise<FxPayload | null> {
   return pendingRequest;
 }
 
-export function useCurrency() {
+export function useCurrency(countryCode?: string) {
   const { loc } = useLocale();
-  const currency = CURRENCY_BY_LOCALE[loc];
+  const currency = currencyForCountry(countryCode) ?? CURRENCY_BY_LOCALE[loc];
   // 初始 state 固定为 null（服务端/客户端首帧一致，均走 FALLBACK_RATES），
   // 避免 hydration mismatch：之前这里在 useState 初始化时读 localStorage，
   // 服务端返回 null、客户端首帧返回缓存汇率 → 首帧价格不同 → React 报错。

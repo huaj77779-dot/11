@@ -139,6 +139,6 @@ const rows: Record<string, Record<EuropeanLocale, string>> = {
 };
 
 export function europeanTranslation(locale: Locale, key: string): string | undefined {
-  if (locale === "zh" || locale === "en" || locale === "de" || locale === "ja") return undefined;
+  if (locale === "zh" || locale === "en" || locale === "en-US" || locale === "de" || locale === "ja") return undefined;
   return rows[key]?.[locale];
 }

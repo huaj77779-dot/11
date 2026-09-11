@@ -16,30 +16,36 @@ export async function GET(request: Request) {
     const db = getDb();
     await ensureSchema(db);
     const user = await getSession(db, request);
+    if (!user) {
+      return Response.json({ error: "登录后才能查看客户档案" }, { status: 401 });
+    }
     const scope = scopeFor(user);
 
     const url = new URL(request.url);
     const q = (url.searchParams.get("q") ?? "").trim();
+    const offset = Math.max(0, Number(url.searchParams.get("offset") ?? 0) || 0);
+    const limit = Math.min(200, Math.max(1, Number(url.searchParams.get("limit") ?? 200) || 200));
+    const where = and(
+      scope != null ? eq(customers.ownerId, scope) : undefined,
+      q
+        ? or(
+            like(customers.name, `%${q}%`),
+            like(customers.channelCode, `%${q}%`),
+            like(customers.city, `%${q}%`)
+          )
+        : undefined
+    );
 
-    const rows = await db
+    const [rows, summary] = await Promise.all([db
       .select()
       .from(customers)
-      .where(
-        and(
-          scope != null ? eq(customers.ownerId, scope) : undefined,
-          q
-            ? or(
-                like(customers.name, `%${q}%`),
-                like(customers.channelCode, `%${q}%`),
-                like(customers.city, `%${q}%`)
-              )
-            : undefined
-        )
-      )
+      .where(where)
       .orderBy(desc(sql`COALESCE(${customers.lastOrderAt}, ${customers.updatedAt})`), desc(customers.id))
-      .limit(200);
+      .limit(limit).offset(offset),
+      db.select({ total: sql<number>`COUNT(*)`, totalOrders: sql<number>`COALESCE(SUM(${customers.totalOrders}), 0)`, totalSpent: sql<number>`COALESCE(SUM(${customers.totalSpent}), 0)` }).from(customers).where(where),
+    ]);
 
-    return Response.json({ customers: rows });
+    return Response.json({ customers: rows, summary: summary[0] ?? { total: 0, totalOrders: 0, totalSpent: 0 }, nextOffset: offset + rows.length });
   } catch (error) {
     return Response.json({ error: toErrorMessage(error) }, { status: 500 });
   }
@@ -50,6 +56,9 @@ export async function POST(request: Request) {
     const db = getDb();
     await ensureSchema(db);
     const user = await getSession(db, request);
+    if (!user) {
+      return Response.json({ error: "登录后才能创建客户档案" }, { status: 401 });
+    }
     const payload = (await request.json()) as Record<string, unknown>;
     const name = typeof payload.name === "string" ? payload.name.trim() : "";
     if (!name) return Response.json({ error: "请填写客户姓名" }, { status: 400 });

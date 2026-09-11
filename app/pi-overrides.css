@@ -15,6 +15,33 @@
 .profile-save-bar small { color:#7b8782; font-size:8px; }
 .profile-save-bar button { border:0; border-radius:8px; background:#234d41; color:#fff; padding:10px 16px; font-size:10px; cursor:pointer; box-shadow:0 5px 14px rgba(35,77,65,.18); }
 .profile-save-bar button:disabled { opacity:.6; cursor:wait; }
+.profile-save-options{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:nowrap}
+.profile-save-options button{white-space:nowrap;padding:9px 11px;font-size:9px}
+.profile-save-bar .keep-order-options{border:1px solid #b9cec5;background:#fff;color:#234d41;box-shadow:none}
+.profile-save-bar .keep-order-options:hover{border-color:#234d41;background:#f0f6f3}
+@media(max-width:700px){.profile-save-options{flex-wrap:wrap}.profile-save-options button{flex:1 1 140px}}
+.profile-save-bar{gap:8px;flex-wrap:nowrap}
+.profile-save-bar>div:first-child{min-width:0;flex:0 1 auto}
+.profile-save-bar small{white-space:nowrap}
+.profile-save-options{flex:0 1 auto;gap:6px;min-width:0}
+.profile-save-bar>.profile-save-options{display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-end;flex-wrap:nowrap}
+@media(max-width:700px){
+  .profile-save-bar{justify-content:flex-start;padding-left:8px;padding-right:8px}
+  .profile-save-bar>.profile-save-options{flex:0 0 auto;gap:4px}
+  .profile-save-options button{flex:0 0 auto;min-width:0;padding:8px 5px;font-size:7px}
+}
+@media(max-width:420px){
+  .profile-save-bar{gap:5px;padding-left:10px;padding-right:10px}
+  .profile-save-bar small{font-size:7px}
+  .profile-save-options{gap:3px}
+  .profile-save-options button{padding:7px 4px;font-size:7px}
+}
+.profile-save-success{position:fixed;z-index:100;left:50%;top:50%;display:flex;align-items:center;gap:12px;min-width:230px;max-width:calc(100vw - 40px);padding:16px 19px;border:1px solid #b9cec5;border-radius:13px;background:#fffdf9;color:#234d41;box-shadow:0 16px 42px rgba(25,54,44,.25);transform:translate(-50%,-50%);animation:profile-save-pop .18s ease-out}
+.profile-save-success>span{display:grid;place-items:center;width:27px;height:27px;flex:none;border-radius:50%;background:#234d41;color:#fff;font-size:16px;font-weight:800}
+.profile-save-success b,.profile-save-success small{display:block}
+.profile-save-success b{font-size:13px;line-height:1.25}
+.profile-save-success small{margin-top:3px;color:#718078;font-size:10px;line-height:1.3}
+@keyframes profile-save-pop{from{opacity:0;transform:translate(-50%,-46%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 .customer-measurements { margin:14px 0; padding:14px; border:1px solid #dfe7e3; border-radius:10px; background:#f8faf9; }
 .customer-measurements-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
 .customer-measurements-head b { font-size:12px; color:#294f44; }
@@ -68,9 +95,10 @@
 .profile-measure-actions button { border:0; border-radius:7px; padding:8px 13px; background:#234d41; color:#fff; font-size:9px; cursor:pointer; }
 .profile-measure-actions button.ghost { border:1px solid #d9e2de; background:#fff; color:#55645e; }
 .profile-measure-actions strong { color:#267255; font-size:9px; }
-.profile-posture-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:7px; margin-top:8px; }
+.profile-measure-editor,.profile-measure-toolbar,.profile-measure-controls { min-width:0; max-width:100%; }
+.profile-posture-grid { display:grid; width:100%; max-width:100%; min-width:0; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:7px; margin-top:8px; }
 .profile-posture-grid section { min-width:0; display:flex; flex-direction:column; gap:7px; padding:10px; border:1px solid #e0e7e3; border-radius:9px; background:#fff; }
-.profile-posture-grid section b { color:#234d41; font-size:9px; }
+.profile-posture-grid section b { color:#234d41; font-size:9px; overflow-wrap:anywhere; }
 .profile-posture-grid select { width:100%; height:31px; min-width:0; border:1px solid #d5dfda; border-radius:6px; background:#fafcfb; color:#46564f; padding:0 22px 0 7px; font-size:8px; }
 .profile-posture-grid select:disabled { color:#234d41; opacity:1; background:#f7faf8; }
 @media(max-width:700px){.profile-posture-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -174,7 +202,7 @@
 @media(max-width:700px){.fabric-book-inline .fabric-card{grid-template-rows:170px auto}.fabric-book-inline .fabric-card .swatch{height:170px!important;min-height:170px}}
 
 /* Compact customer profile: identity and shipping share one horizontal band. */
-@media(min-width:901px){
+@media(min-width:1300px){
   .client.client-form:has(.client-measure){display:grid;grid-template-columns:82px minmax(280px,.9fr) minmax(520px,1.55fr);column-gap:14px;row-gap:10px;align-items:stretch;padding:14px 16px}
   .client.client-form:has(.client-measure) .client-form-top{grid-column:1/-1;margin-bottom:0;padding-bottom:9px}
   .client.client-form:has(.client-measure) .avatar-upload{grid-column:1;width:82px;max-width:82px;align-self:center}

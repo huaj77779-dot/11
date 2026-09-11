@@ -215,14 +215,20 @@ const SCHEMA_META = "schema_meta";
 const SCHEMA_FLAG_KEY = "schema_initialized_v" + SCHEMA_VERSION;
 const SCHEMA_KEY = "__tailorsupply_schema_ready_v" + SCHEMA_VERSION;
 const STORE_ACCOUNTS_KEY = "__tailorsupply_store_accounts_ready";
+const MASTER_ACCOUNT_KEY = "__tailorsupply_master_account_ready";
 type G = typeof globalThis & {
   [SCHEMA_KEY]?: boolean;
   [STORE_ACCOUNTS_KEY]?: boolean;
+  [MASTER_ACCOUNT_KEY]?: boolean;
 };
 
 export async function ensureSchema(db: Db): Promise<void> {
   const g = globalThis as G;
   if (g[SCHEMA_KEY]) {
+    if (!g[MASTER_ACCOUNT_KEY]) {
+      await ensureMasterAccount(db);
+      g[MASTER_ACCOUNT_KEY] = true;
+    }
     if (!g[STORE_ACCOUNTS_KEY]) {
       await ensureStoreAccounts(db);
       g[STORE_ACCOUNTS_KEY] = true;
@@ -240,6 +246,8 @@ export async function ensureSchema(db: Db): Promise<void> {
     await db.run(sql.raw(`INSERT OR REPLACE INTO ${SCHEMA_META} (key, value) VALUES ('${SCHEMA_FLAG_KEY}', '1')`));
   }
   g[SCHEMA_KEY] = true;
+  await ensureMasterAccount(db);
+  g[MASTER_ACCOUNT_KEY] = true;
   await ensureStoreAccounts(db);
   g[STORE_ACCOUNTS_KEY] = true;
 }
@@ -260,7 +268,11 @@ async function doEnsureSchema(db: Db): Promise<void> {
   await ensureColumn(db, "users", "whatsapp", "TEXT NOT NULL DEFAULT ''");
   await ensureColumn(db, "users", "permissions", "TEXT NOT NULL DEFAULT '[]'");
   await ensureColumn(db, "users", "active", "INTEGER NOT NULL DEFAULT 1");
-  // Bootstrap or secure the master account from a deployment secret.
+}
+
+async function ensureMasterAccount(db: Db): Promise<void> {
+  // The password remains a deployment secret. This also supports a database
+  // that was initialized before the secret was configured.
   const [master] = await db
     .select()
     .from(schema.users)
@@ -283,6 +295,25 @@ async function doEnsureSchema(db: Db): Promise<void> {
 
 async function ensureStoreAccounts(db: Db): Promise<void> {
   const runtimeEnv = env as Record<string, string | undefined>;
+  // Restore the verified customer account in newly provisioned Sites databases.
+  // The temporary password must be changed by the customer after the first login.
+  const recoveryUsername = "1429153653@qq.com";
+  const [recoveryAccount] = await db
+    .select({ id: schema.users.id })
+    .from(schema.users)
+    .where(sql`username = ${recoveryUsername}`)
+    .limit(1);
+  if (!recoveryAccount) {
+    await db.insert(schema.users).values({
+      username: recoveryUsername,
+      passwordHash: "pbkdf2-sha256$100000$1a5439547da39d40ae34705127319bdb$c593cfeaaa79059f47c8ec46b798787ee1d417e96339eb72232d798921d3e968",
+      role: "store",
+      storeName: "Verosuits",
+      email: recoveryUsername,
+      active: true,
+    });
+  }
+
   const seeds = [
     { username: "store01", password: runtimeEnv.INITIAL_STORE01_PASSWORD, storeName: "门店 01" },
     { username: "store02", password: runtimeEnv.INITIAL_STORE02_PASSWORD, storeName: "门店 02" },

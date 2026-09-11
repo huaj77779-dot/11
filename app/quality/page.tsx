@@ -20,7 +20,7 @@ export default function QualityPage() {
       <div className="quality-hero-line"><span>01—04</span><i /></div>
     </div></section>
     <section className="quality-page-body"><div className="landing-wrap">
-      <div className="landing-quality-grid">{QUALITY_IMAGES.map(([src, alt], index) => { const n = index + 1; return <article className="quality-card" key={src}><img src={src} alt={alt} width={1672} height={941} loading="lazy" decoding="async"/><div className="quality-card-copy"><i>0{n}</i><h3>{t(`landing.quality${n}`)}</h3><p>{t(`landing.quality${n}Sub`)}</p></div></article>; })}</div>
+      <div className="landing-quality-grid">{QUALITY_IMAGES.map(([src, alt], index) => { const n = index + 1; return <article className="quality-card" key={src}><img src={src} alt={alt} loading="lazy"/><div className="quality-card-copy"><i>0{n}</i><h3>{t(`landing.quality${n}`)}</h3><p>{t(`landing.quality${n}Sub`)}</p></div></article>; })}</div>
       <div className="landing-certs"><span><b>ISO 9001</b><small>{t("landing.cert1Sub")}</small></span><span><b>SGS</b><small>{t("landing.cert2Sub")}</small></span><span><b>◈</b><small>{t("landing.cert3Sub")}</small></span><span><b>QC</b><small>{t("landing.cert4Sub")}</small></span></div>
     </div></section>
   </main></LandingSubpage>;

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { DEFAULT_LOCALE, LOCALES, getLocale, setLocale, subscribeLocale, type Locale } from "../lib/i18n";
 
 const FLAG_CODES: Record<Locale, string> = {
+  "en-US": "us",
   zh: "cn", en: "gb", de: "de", ja: "jp", fr: "fr", it: "it", es: "es",
   pt: "pt", nl: "nl", pl: "pl", sv: "se", da: "dk", no: "no", cs: "cz",
 };

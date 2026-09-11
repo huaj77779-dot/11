@@ -8,6 +8,7 @@ import { apiFetch, clearAuth } from "../lib/api";
 import { useAuthGuard } from "../lib/useAuthGuard";
 import { Shell } from "../_components/Shell";
 import { tailoringTerm } from "../lib/tailoring-terms";
+import { downloadCsv } from "../lib/export-csv";
 import {
   OrderDetailBlock,
   formatDateTime,
@@ -45,6 +46,15 @@ type CustomerDetail = {
 
 type MeasurementGarment = "jacket" | "trousers" | "waistcoat" | "shirt";
 type MeasurementTab = MeasurementGarment | "posture";
+
+function paginationItems(totalPages: number, currentPage: number): Array<number | "…"> {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1);
+  const pages = new Set([1, totalPages, currentPage - 2, currentPage - 1, currentPage, currentPage + 1, currentPage + 2]);
+  if (currentPage <= 5) [2, 3, 4, 5, 6, 7].forEach((page) => pages.add(page));
+  if (currentPage >= totalPages - 4) [totalPages - 6, totalPages - 5, totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1].forEach((page) => pages.add(page));
+  const ordered = [...pages].filter((page) => page >= 1 && page <= totalPages).sort((a, b) => a - b);
+  return ordered.flatMap((page, index) => index > 0 && page - ordered[index - 1] > 1 ? ["…", page] : [page]);
+}
 const CUSTOMER_MEASUREMENT_GROUPS: Record<MeasurementGarment, { name: string; fields: string[] }> = {
   jacket: { name: "西装上衣", fields: ["前衣长", "后中长", "左袖长", "右袖长", "肩宽", "胸围", "中腰", "肚围", "下摆", "袖肥", "袖肘", "袖口", "领窝"] },
   trousers: { name: "西裤", fields: ["腰围", "臀围", "大腿围", "膝围", "小腿围", "裤口", "立裆", "全裆", "裤长 左", "裤长 右"] },
@@ -86,27 +96,33 @@ export default function CustomersPage() {
   const { money } = useCurrency();
   const { user, ready } = useAuthGuard();
   const [rows, setRows] = useState<CustomerRow[]>([]);
+  const [summary, setSummary] = useState({ total: 0, totalOrders: 0, totalSpent: 0 });
+  const [pageOffset, setPageOffset] = useState(0);
+  const [pageSize, setPageSize] = useState(20);
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selected, setSelected] = useState<CustomerDetail | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [exporting, setExporting] = useState(false);
 
   const logout = async () => { try { await fetch("/api/auth/logout", { method: "POST" }); } catch { /* ignore */ } clearAuth(); window.location.href = "/login"; };
 
-  const load = useCallback(async (query: string) => {
+  const load = useCallback(async (query: string, offset = 0, limit = pageSize) => {
     setLoading(true);
     setError("");
     try {
-      const data = await apiFetch<{ customers: CustomerRow[] }>(`/api/customers?q=${encodeURIComponent(query)}`);
+      const data = await apiFetch<{ customers: CustomerRow[]; summary?: { total: number; totalOrders: number; totalSpent: number } }>(`/api/customers?q=${encodeURIComponent(query)}&offset=${offset}&limit=${limit}`);
       setRows(data.customers ?? []);
+      setPageOffset(offset);
+      setSummary(data.summary ?? { total: 0, totalOrders: 0, totalSpent: 0 });
     } catch (e) {
       if (e instanceof Error && e.message === "未登录") return;
       setError(e instanceof Error ? e.message : "加载失败");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [pageSize]);
 
   useEffect(() => {
     if (ready) load("");
@@ -149,8 +165,28 @@ export default function CustomersPage() {
     }
   };
 
-  const totalSpent = rows.reduce((sum, row) => sum + (row.totalSpent ?? 0), 0);
-  const totalOrders = rows.reduce((sum, row) => sum + (row.totalOrders ?? 0), 0);
+  const exportCustomers = async () => {
+    setExporting(true);
+    try {
+      const all: CustomerRow[] = [];
+      for (let offset = 0; ; offset += 200) {
+        const data = await apiFetch<{ customers: CustomerRow[] }>(`/api/customers?offset=${offset}&limit=200`);
+        const batch = data.customers ?? [];
+        all.push(...batch);
+        if (batch.length < 200) break;
+      }
+      downloadCsv(`customers-${new Date().toISOString().slice(0, 10)}.csv`, ["Customer", "Channel", "Country", "Region", "City", "Height (cm)", "Weight (kg)", "Orders", "Total spent", "Last order", "Created"], all.map((row) => [row.name, row.channelCode, row.country, row.region, row.city, row.height, row.weight, row.totalOrders, row.totalSpent, row.lastOrderAt, row.createdAt]));
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Export failed");
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const previousLabel = loc === "zh" ? "上一页" : "Previous";
+  const nextLabel = loc === "zh" ? "下一页" : "Next";
+  const totalPages = Math.max(1, Math.ceil(summary.total / pageSize));
+  const currentPage = Math.min(totalPages, Math.floor(pageOffset / pageSize) + 1);
 
   return (
     <main className="shell">
@@ -163,11 +199,14 @@ export default function CustomersPage() {
           </div>
           <div className="actions">
             <LanguageSwitcher />
-            <button className="mgmt-refresh-btn" onClick={() => load(q)}>
+            <button className="mgmt-refresh-btn" onClick={() => load(q, 0)}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6" />
               </svg>
               {t("common.refresh")}
+            </button>
+            <button className="mgmt-refresh-btn" onClick={exportCustomers} disabled={exporting}>
+              {exporting ? "…" : loc === "zh" ? "导出表格" : "Export CSV"}
             </button>
             <a className="mgmt-new-order" href="/customize">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
@@ -185,13 +224,13 @@ export default function CustomersPage() {
             </div>
             <div className="mgmt-stats">
               <span>
-                {t("cust.count")}<b>{rows.length}</b>
+                {t("cust.count")}<b>{summary.total}</b>
               </span>
               <span>
-                {t("cust.orders")}<b>{totalOrders}</b>
+                {t("cust.orders")}<b>{summary.totalOrders}</b>
               </span>
               <span>
-                {t("cust.spent")}<b>{money(totalSpent)}</b>
+                {t("cust.spent")}<b>{money(summary.totalSpent)}</b>
               </span>
             </div>
           </div>
@@ -273,6 +312,14 @@ export default function CustomersPage() {
             )}
             {loading && <div className="mgmt-empty">…</div>}
             {error && <div className="mgmt-empty" style={{ color: "#a33b3b" }}>{error}</div>}
+            {!loading && summary.total > 0 && <div className="mgmt-empty" style={{ display: "flex", justifyContent: "center", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+              <select aria-label="Rows per page" value={pageSize} onChange={(event) => { const size = Number(event.target.value); setPageSize(size); load(q, 0, size); }} className="mgmt-refresh">
+                <option value={10}>10 / page</option><option value={20}>20 / page</option><option value={50}>50 / page</option>
+              </select>
+              <button className="mgmt-refresh" disabled={currentPage === 1} onClick={() => load(q, (currentPage - 2) * pageSize)}>{previousLabel}</button>
+              {paginationItems(totalPages, currentPage).map((item, index) => item === "…" ? <span key={`ellipsis-${index}`}>…</span> : <button key={item} className="mgmt-refresh" disabled={item === currentPage} onClick={() => load(q, (item - 1) * pageSize)}>{item}</button>)}
+              <button className="mgmt-refresh" disabled={currentPage === totalPages} onClick={() => load(q, currentPage * pageSize)}>{nextLabel}</button>
+            </div>}
           </div>
         </div>
       </section>

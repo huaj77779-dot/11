@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { LanguageSwitcher } from "./_components/LanguageSwitcher";
 import { BrandLogo } from "./_components/BrandLogo";
-import { localizeStoreName, useLocale } from "./lib/i18n";
+import { useLocale } from "./lib/i18n";
 import { useAuthGuard } from "./lib/useAuthGuard";
 import { clearAuth } from "./lib/api";
+import { CustomizeLoginLink } from "./_components/CustomizeLoginLink";
 
 const NEWS = [
   { dateKey: "landing.news1Date", tagKey: "landing.news1Tag", titleKey: "landing.news1Title", excerptKey: "landing.news1Excerpt", tone: "navy" },
@@ -14,23 +15,7 @@ const NEWS = [
   { dateKey: "landing.news4Date", tagKey: "landing.news4Tag", titleKey: "landing.news4Title", excerptKey: "landing.news4Excerpt", tone: "charcoal" },
 ];
 
-const SOCIAL_LINKS = [
-  { name: "WhatsApp", href: "https://wa.me/18169255770", icon: "☎" },
-  { name: "Facebook", href: "https://www.facebook.com/", icon: "f" },
-  { name: "Instagram", href: "https://www.instagram.com/", icon: "◎" },
-  { name: "TikTok", href: "https://www.tiktok.com/", icon: "♪" },
-  { name: "LinkedIn", href: "https://www.linkedin.com/", icon: "in" },
-];
-
-type TurnstileApi = {
-  render: (element: HTMLElement, options: {
-    sitekey: string;
-    action: string;
-    callback: (token: string) => void;
-    "expired-callback": () => void;
-    "error-callback": () => void;
-  }) => void;
-};
+const WHATSAPP_CONTACT = "https://wa.me/18169255770";
 
 export default function LandingPage() {
   const { t, loc } = useLocale();
@@ -39,46 +24,7 @@ export default function LandingPage() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const [form, setForm] = useState({ name: "", contact: "", message: "", website: "" });
-  const [turnstileToken, setTurnstileToken] = useState("");
-  const contactTurnstile = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let active = true;
-    let rendered = false;
-    let loadedScript: HTMLScriptElement | null = null;
-    const render = (siteKey: string) => {
-      const turnstile = (window as Window & { turnstile?: TurnstileApi }).turnstile;
-      if (!active || rendered || !contactTurnstile.current || !turnstile) return;
-      rendered = true;
-      turnstile.render(contactTurnstile.current, {
-        sitekey: siteKey,
-        action: "contact",
-        callback: setTurnstileToken,
-        "expired-callback": () => setTurnstileToken(""),
-        "error-callback": () => setTurnstileToken(""),
-      });
-    };
-    void fetch("/api/auth/turnstile-config", { cache: "no-store" })
-      .then((response) => response.json() as Promise<{ siteKey?: string }>)
-      .then(({ siteKey }) => {
-        if (!siteKey) throw new Error("missing Turnstile site key");
-        const turnstile = (window as Window & { turnstile?: TurnstileApi }).turnstile;
-        if (turnstile) return render(siteKey);
-        loadedScript = document.createElement("script");
-        loadedScript.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-        loadedScript.async = true;
-        loadedScript.onload = () => render(siteKey);
-        document.head.appendChild(loadedScript);
-      })
-      .catch(() => {
-        if (active) setSubmitError("The security check is unavailable. Please refresh and try again.");
-      });
-    return () => {
-      active = false;
-      loadedScript?.remove();
-    };
-  }, []);
+  const [form, setForm] = useState({ name: "", contact: "", message: "" });
 
   const logout = () => {
     void fetch("/api/auth/logout", { method: "POST" }).catch(() => undefined);
@@ -88,17 +34,13 @@ export default function LandingPage() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!turnstileToken) {
-      setSubmitError("Please complete the security check before submitting.");
-      return;
-    }
     setSending(true);
     setSubmitError("");
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, turnstileToken }),
+        body: JSON.stringify(form),
       });
       const result = (await response.json()) as { error?: string };
       if (!response.ok) throw new Error(result.error || "提交失败，请稍后重试");
@@ -124,7 +66,7 @@ export default function LandingPage() {
           <a href="/news">{t("landing.navNews")}</a>
           <a href="/client-stories">{t("landing.navJourney")}</a>
           <a href="#contact">{t("landing.navContact")}</a>
-          <a href="/customize">{t("landing.navCustomize")}</a>
+          <CustomizeLoginLink>{t("landing.navCustomize")}</CustomizeLoginLink>
         </nav>
         <div className="landing-nav-actions">
           <LanguageSwitcher />
@@ -134,13 +76,11 @@ export default function LandingPage() {
               <a className="landing-link" href="/customers">{t("landing.navCustomers")}</a>
               {user.role === "master" && <a className="landing-link" href="/admin">{t("landing.navAdmin")}</a>}
               <button className="landing-account" onClick={logout} title={t("landing.navLogout")}>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M21 4v16" /></svg>
                 <span>{t("landing.navLogout")}</span>
+                <i aria-hidden="true">⇥</i>
               </button>
             </>
-          ) : (
-            <><a className="landing-link" href="/login">{t("landing.navLogin")}</a><a className="landing-register-link" href="/register">注册账号</a></>
-          )}
+          ) : null}
         </div>
       </header>
 
@@ -156,10 +96,10 @@ export default function LandingPage() {
             </h1>
             <p className="landing-hero-sub">{t("landing.heroSub")}</p>
             <div className="landing-hero-ctas">
-              <a className="landing-cta" href="/customize">
+              <CustomizeLoginLink className="landing-cta">
                 <b>{t("landing.heroCta")}</b>
                 <small>{t("landing.heroCtaSub")}</small>
-              </a>
+              </CustomizeLoginLink>
               <a className="landing-cta ghost" href="#contact">
                 {t("landing.heroCta2")}
               </a>
@@ -172,7 +112,7 @@ export default function LandingPage() {
           </div>
           <div className="landing-hero-visual">
             <div className="hero-frame">
-              <img src="/brand/tailorsupply-workshop-hero.webp" alt="Faceless master tailor marking a bespoke pattern on navy wool" width={1672} height={941} fetchPriority="high" />
+              <img src="/brand/tailorsupply-workshop-hero.webp" alt="Faceless master tailor marking a bespoke pattern on navy wool" />
             </div>
           </div>
         </div>
@@ -191,7 +131,7 @@ export default function LandingPage() {
           <p>{t("landing.storyLead")}</p>
         </div>
         <div className="landing-wrap factory-collage">
-          <figure className="factory-main"><img src="/brand/custom-cutting-process.webp" alt="Custom suit paper pattern aligned on wool fabric" width={1536} height={1024} loading="lazy" decoding="async"/><figcaption><span>01</span><div><b>{t("landing.cuttingTitle")}</b><small>{t("landing.cuttingText")}</small></div></figcaption></figure>
+          <figure className="factory-main"><img src="/brand/custom-cutting-process.png" alt="Custom suit paper pattern aligned on wool fabric" loading="lazy" decoding="async"/><figcaption><span>01</span><div><b>{t("landing.cuttingTitle")}</b><small>{t("landing.cuttingText")}</small></div></figcaption></figure>
           <figure className="factory-side"><img src="/brand/jacket-quality-control.webp" alt="Faceless artisan inspecting the lapel and handwork of a brown jacket" loading="lazy" decoding="async"/><figcaption><span>02</span><div><b>{t("landing.qcTitle")}</b><small>{t("landing.qcText")}</small></div></figcaption></figure>
           <aside className="factory-quote"><p>“</p><h3>{t("landing.storyQuote")}</h3><a href="/client-stories">{t("landing.storyLink")}</a></aside>
         </div>
@@ -200,10 +140,10 @@ export default function LandingPage() {
       <section className="custom-advantages"><div className="landing-wrap">
         <div className="landing-section-head"><p className="eyebrow">OUR CUSTOMISATION ADVANTAGE</p><h2>{t("landing.advantageTitle")}</h2></div>
         <div className="advantage-grid">
-          <article><img src="/brand/advantage-one-piece-v2.webp" alt="Tailor marking a single made-to-measure jacket pattern on navy wool" width={1672} height={941} loading="lazy" decoding="async"/><div className="advantage-copy"><span>01</span><h3>{t("landing.advantage1")}</h3><p>{t("landing.advantage1Text")}</p></div></article>
-          <article><img src="/brand/advantage-four-layers.webp" alt="Made-to-measure garments and tailoring forms in the atelier" width={1448} height={1086} loading="lazy" decoding="async"/><div className="advantage-copy"><span>02</span><h3>{t("landing.advantage2")}</h3><p>{t("landing.advantage2Text")}</p></div></article>
-          <article><img src="/brand/advantage-white-label.webp" alt="Private-label suit prepared for delivery" width={1448} height={1086} loading="lazy" decoding="async"/><div className="advantage-copy"><span>03</span><h3>{t("landing.advantage3")}</h3><p>{t("landing.advantage3Text")}</p></div></article>
-          <article><img src="/brand/advantage-reorder.webp" alt="Tailoring records and fabric swatches for repeat orders" width={1448} height={1086} loading="lazy" decoding="async"/><div className="advantage-copy"><span>04</span><h3>{t("landing.advantage4")}</h3><p>{t("landing.advantage4Text")}</p></div></article>
+          <article><img src="/brand/advantage-one-piece-v2.webp" alt="Tailor marking a single made-to-measure jacket pattern on navy wool" loading="lazy"/><div className="advantage-copy"><span>01</span><h3>{t("landing.advantage1")}</h3><p>{t("landing.advantage1Text")}</p></div></article>
+          <article><img src="/brand/advantage-four-layers.webp" alt="Made-to-measure garments and tailoring forms in the atelier" loading="lazy"/><div className="advantage-copy"><span>02</span><h3>{t("landing.advantage2")}</h3><p>{t("landing.advantage2Text")}</p></div></article>
+          <article><img src="/brand/advantage-white-label.webp" alt="Private-label suit prepared for delivery" loading="lazy"/><div className="advantage-copy"><span>03</span><h3>{t("landing.advantage3")}</h3><p>{t("landing.advantage3Text")}</p></div></article>
+          <article><img src="/brand/advantage-reorder.webp" alt="Tailoring records and fabric swatches for repeat orders" loading="lazy"/><div className="advantage-copy"><span>04</span><h3>{t("landing.advantage4")}</h3><p>{t("landing.advantage4Text")}</p></div></article>
         </div>
       </div></section>
 
@@ -222,7 +162,7 @@ export default function LandingPage() {
                 <li><i>03</i>{t("landing.companyPoint3")}</li>
                 <li><i>04</i>{t("landing.companyPoint4")}</li>
               </ul>
-              <a className="landing-cta sm" href="/customize">{t("landing.heroCta")} →</a>
+              <CustomizeLoginLink className="landing-cta sm">{t("landing.heroCta")} →</CustomizeLoginLink>
             </div>
             <div className="landing-company-visual">
               <div className="mill-card">
@@ -331,10 +271,8 @@ export default function LandingPage() {
                   <label><span>{t("landing.contactName")} <i>*</i></span><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
                   <label><span>{t("landing.contactEmail")} <i>*</i></span><input required value={form.contact} onChange={(e) => setForm({ ...form, contact: e.target.value })} /></label>
                   <label><span>{t("landing.contactMsg")}</span><textarea rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} /></label>
-                  <label className="contact-honeypot" aria-hidden="true"><span>Website</span><input tabIndex={-1} autoComplete="off" value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} /></label>
-                  <div className="contact-turnstile" ref={contactTurnstile} aria-label="Security check" />
                   {submitError && <p className="contact-error" role="alert">{submitError}</p>}
-                  <button className="landing-cta" type="submit" disabled={sending || !turnstileToken}>{sending ? t("landing.contactSending") : t("landing.contactSubmit")}</button>
+                  <button className="landing-cta" type="submit" disabled={sending}>{sending ? t("landing.contactSending") : t("landing.contactSubmit")}</button>
                 </>
               )}
             </form>
@@ -343,30 +281,17 @@ export default function LandingPage() {
       </section>
 
       <aside className="landing-socials" aria-label="联系我们">
-        {SOCIAL_LINKS.filter((item) => item.name === "WhatsApp").map((item) => (
-          <a key={item.name} className={`social-icon social-${item.name.toLowerCase()}`} href={item.href} target="_blank" rel="noreferrer" aria-label={item.name} title={item.name}>
-            {item.name === "LinkedIn" ? (
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.56V9h3.56v11.45Z" />
-              </svg>
-            ) : (
-              <img src={`https://cdn.simpleicons.org/${item.name.toLowerCase()}/fff`} alt="" aria-hidden="true" />
-            )}
-            <span>联系我们</span>
-          </a>
-        ))}
+        <a className="social-icon social-whatsapp" href={WHATSAPP_CONTACT} target="_blank" rel="noreferrer" aria-label="通过 WhatsApp 联系我们" title="联系我们">
+          <img src="https://cdn.simpleicons.org/whatsapp/fff" alt="" aria-hidden="true" />
+          <span>联系我们</span>
+        </a>
       </aside>
 
       {/* ===== 页脚 ===== */}
       <footer className="landing-footer">
         <div className="landing-wrap landing-footer-inner">
           <a className="landing-brand" href="#top"><BrandLogo /></a>
-          <nav className="landing-footer-links" aria-label="Services">
-            <a href="/private-label-suits">Private label suits</a>
-            <a href="/made-to-measure-suits">Made-to-measure suits</a>
-            <a href="/custom-tailoring-supplier">Tailoring supplier</a>
             <a href="/client-stories">{t("landing.navJourney")}</a>
-          </nav>
           <p>{t("landing.footRights")}</p>
         </div>
       </footer>

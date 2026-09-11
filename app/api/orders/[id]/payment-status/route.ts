@@ -19,6 +19,9 @@ export async function GET(
   try {
     const db = getDb();
     await ensureSchema(db);
+    if (!await getSession(db, _request)) {
+      return Response.json({ error: "登录后才能查看收款状态" }, { status: 401 });
+    }
     const { id } = await params;
     const idNum = Number(id);
 

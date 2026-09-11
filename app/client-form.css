@@ -76,6 +76,12 @@
 .cm-table.bw .cm-tr label:hover{background:#faf5e8}
 .cm-table.bw .cm-tr label input:focus{background:#fff;box-shadow:inset 0 0 0 1.5px #b88a43;border-bottom-color:transparent}
 .cm-table.bw .cm-tr label em{color:#a89e89}@media(max-width:700px){.client-measure-head{flex-direction:column;align-items:flex-start}}
+/* Measure panels respond to their own available width, including browser zoom and a narrow app pane. */
+.client-measure{container-type:inline-size}
+@container (max-width:1200px){.cm-table-wrap{overflow-x:auto}.cm-table,.cm-table.bw{display:grid;min-width:0!important;width:100%}.cm-tr{display:contents}.cm-tr>*:first-child{grid-column:auto;min-height:37px}.cm-tr.head>*{min-height:48px;white-space:normal;text-align:center;line-height:1.25;overflow-wrap:break-word;word-break:normal}.cm-tr label,.cm-tr label input{min-width:0}.cm-tr label input{min-height:37px}.cm-tr.ease{margin-top:0}.posture-register{height:auto;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));overflow:visible}}
+@container (max-width:620px){.cm-table-wrap{overflow-x:auto}.cm-table,.cm-table.bw{min-width:700px!important}.cm-tr{display:contents}.cm-tr>*{font-size:8px}.cm-tr.head>*{font-size:8px}.posture-register{grid-template-columns:1fr}}
+
+.client-form .avatar-upload,.client-form .client-fields{order:0}.client-shipping-address{order:1;flex-basis:100%;width:100%;margin-top:4px;padding:15px 14px 14px;border:1px solid #e5ddce;border-radius:10px;background:#fcfaf5}.client-measure{order:2}.client-address-title{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px dashed #ddd3bf}.client-address-title h3{margin:0;font:14px Georgia,"Microsoft YaHei",serif;color:#203b33}.client-address-title small{font-size:7px;color:#8a9691}.client-shipping-address .address-fields{margin-top:11px}.client-shipping-address .address-fields input{background:#fff}.client-shipping-address .address-fields input:focus{border-color:#3f7062;background:#fff}@media(max-width:700px){.client-address-title{align-items:flex-start;flex-direction:column;gap:4px}}
 
 .client-form .avatar-upload,.client-form .client-fields{order:0}.client-shipping-address{order:1;flex-basis:100%;width:100%;margin-top:4px;padding:15px 14px 14px;border:1px solid #e5ddce;border-radius:10px;background:#fcfaf5}.client-measure{order:2}.client-address-title{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px dashed #ddd3bf}.client-address-title h3{margin:0;font:14px Georgia,"Microsoft YaHei",serif;color:#203b33}.client-address-title small{font-size:7px;color:#8a9691}.client-shipping-address .address-fields{margin-top:11px}.client-shipping-address .address-fields input{background:#fff}.client-shipping-address .address-fields input:focus{border-color:#3f7062;background:#fff}@media(max-width:700px){.client-address-title{align-items:flex-start;flex-direction:column;gap:4px}}
 
@@ -89,3 +95,13 @@
 .mtabs .unit-toggle{position:static;transform:none;display:flex;align-items:center;flex:0 0 auto;gap:2px;margin:0 2px 0 0;padding:2px;border:1px solid #e4dccb;border-radius:7px;background:#faf7ef}
 .mtabs .unit-toggle button{min-width:34px;border:0;border-radius:5px;padding:4px 8px;background:transparent;color:#a59d8d;font-size:8px;box-shadow:none}
 .mtabs .unit-toggle button.on{border:0;background:#eef3ef;color:#234d41;font-weight:700;box-shadow:none}
+
+/* In a narrow order panel, each half remains a complete measurement table. */
+.cm-table-split{display:none}
+@container (max-width:1050px){
+  .cm-table-full{display:none}
+  .cm-table-split{display:grid;gap:10px}
+  .cm-table-split .cm-table-wrap{overflow:visible}
+  .cm-table-split .cm-table,.cm-table-split .cm-table.bw{min-width:0!important;width:100%}
+  .cm-table-split .cm-tr.head>*{min-height:48px;white-space:normal;overflow-wrap:break-word;word-break:normal;line-height:1.2}
+}

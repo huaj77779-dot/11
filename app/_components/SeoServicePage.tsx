@@ -1,5 +1,3 @@
-import { LanguageSwitcher } from "./LanguageSwitcher";
-
 type SeoServicePageProps = {
   eyebrow: string;
   title: string;
@@ -21,7 +19,6 @@ export function SeoServicePage({
   process,
   faqs,
 }: SeoServicePageProps) {
-  const whatsappHref = "https://wa.me/18169255770?text=Hello%20Vero%20Suits%2C%20I%20would%20like%20to%20discuss%20a%20made-to-measure%20supply%20programme.";
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -30,21 +27,6 @@ export function SeoServicePage({
       name: faq.question,
       acceptedAnswer: { "@type": "Answer", text: faq.answer },
     })),
-  };
-  const serviceJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: title,
-    description: intro,
-    provider: {
-      "@type": "Organization",
-      name: "verosuits",
-      url: "https://verosuits.com",
-    },
-    audience: {
-      "@type": "Audience",
-      audienceType: audience.join(", "),
-    },
   };
 
   return (
@@ -57,7 +39,6 @@ export function SeoServicePage({
           <a href="/private-label-suits">Private label suits</a>
           <a href="/made-to-measure-suits">Made-to-measure</a>
           <a href="/custom-tailoring-supplier">For tailoring shops</a>
-          <LanguageSwitcher />
           <a className="seo-nav-cta" href="/#contact">Discuss cooperation</a>
         </nav>
       </header>
@@ -68,24 +49,14 @@ export function SeoServicePage({
           <h1>{title}</h1>
           <p className="seo-lead">{intro}</p>
           <div className="seo-actions">
-            <a href={whatsappHref} target="_blank" rel="noreferrer">WhatsApp Vero Suits</a>
-            <a className="secondary" href="/customize">Customize online</a>
+            <a href="/#contact">Request supplier information</a>
+            <a className="secondary" href="/customize">Open ordering portal</a>
           </div>
         </div>
         <figure>
           <img src="/ai-previews/jacket.png" alt="Made-to-measure navy suit produced for a tailoring business" />
           <figcaption>Private-label production · Italian fabrics · Digital ordering</figcaption>
         </figure>
-      </section>
-
-      <section className="seo-section seo-guides">
-        <p className="seo-kicker">PRACTICAL GUIDES</p>
-        <h2>Useful reading before you begin</h2>
-        <div>
-          <a href="/news/start-private-label-suit-line"><b>Starting a private-label suit line</b><span>Test a clear first offer before committing to unnecessary stock.</span></a>
-          <a href="/news/white-label-vs-private-label-tailoring"><b>White label or private label?</b><span>Choose the model that fits the customer experience you want to own.</span></a>
-          <a href="/news/custom-suit-production-lead-time"><b>Planning a custom suit lead time</b><span>Separate production, delivery and fitting time before promising a date.</span></a>
-        </div>
       </section>
 
       <section className="seo-section seo-summary">
@@ -138,7 +109,7 @@ export function SeoServicePage({
 
       <section className="seo-final-cta">
         <div><p className="seo-kicker">START WITH ONE CUSTOMER ORDER</p><h2>Build a reliable made-to-measure supply workflow for your store.</h2></div>
-        <div className="seo-final-actions"><a href={whatsappHref} target="_blank" rel="noreferrer">WhatsApp Vero Suits</a><a className="secondary" href="/customize">Customize online</a></div>
+        <a href="/#contact">Contact verosuits</a>
       </section>
 
       <footer className="seo-footer">
@@ -148,8 +119,6 @@ export function SeoServicePage({
       </footer>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
-      <a className="seo-whatsapp-float" href={whatsappHref} target="_blank" rel="noreferrer" aria-label="WhatsApp Vero Suits">WhatsApp</a>
     </main>
   );
 }

@@ -203,7 +203,7 @@ const optionsByGarment = {
     { title: "扣眼方向", items: ["直扣眼", "斜扣眼"] },
     { title: "穿着习惯", items: ["紧身", "很修身", "修身", "合体偏瘦", "合体", "合体偏松", "宽松", "很宽松", "非常宽松"] },
     { title: "色丁位置", items: ["无", "过面", "过面+腰兜牙", "过面+胸兜+腰兜牙", "领面", "领面+腰兜牙", "领面+胸兜+腰兜牙", "可脱卸假驳头", "可脱卸假青果领", "过面+领面", "过面+领面+腰兜牙", "过面+领面+胸兜", "过面+领面+胸兜+腰兜牙"] },
-    { title: "驳头宽", items: ["根据体型默认", "5.5cm", "6cm", "6.5cm", "7cm", "7.5cm", "8cm", "8.5cm", "9cm", "9.5cm", "10cm", "10.5cm", "11cm", "11.5cm", "12cm", "12.5cm", "13cm", "13.5cm", "14cm", "14.5cm", "15cm"] },
+    { title: "驳头宽", items: ["5.5cm", "6cm", "6.5cm", "7cm", "7.5cm", "8cm", "8.5cm", "9cm", "9.5cm", "10cm", "10.5cm", "11cm", "11.5cm", "12cm", "12.5cm", "13cm", "13.5cm", "14cm", "14.5cm", "15cm"] },
     { title: "里兜左", items: ["里大兜+笔兜+烟兜", "里大兜+烟兜", "里大兜+钻石兜+烟兜", "里大兜+票兜+笔兜+烟兜", "里大兜+票兜+烟兜", "里大兜+票兜+钻石兜+烟兜"] },
     { title: "里兜右", items: ["里大兜", "无"] },
     { title: "过面", items: ["A宝剑头过面", "B圆过面", "C弯过面", "D直过面", "E拼接耳皮"] },
@@ -360,6 +360,15 @@ const POSTURE_GROUPS = [
   { title: "右平溜肩", options: ["平肩上提 2cm", "平肩上提 1.5cm", "平肩上提 1cm", "平肩上提 0.5cm", "正常肩", "微溜肩下调 0.5cm", "中溜肩下调 0.8cm", "重溜肩下调 1.2cm"] },
 ] as const;
 type GarmentKey = keyof typeof garments;
+type CustomerLookup = {
+  id: number;
+  name: string;
+  height: string;
+  weight: string;
+  channelCode: string;
+  avatarUrl: string | null;
+  measurements: string | null;
+};
 type PiItem = {
   key: string;
   kind: "product" | "fabric";
@@ -390,7 +399,9 @@ function validPiOptions(item: Pick<PiItem, "garmentType" | "options">) {
     items: string[];
   }>;
   return item.options.filter((option) => {
-    if (option.group === "刺绣文字") return item.garmentType === "shirt";
+    // Customer-entered embroidery information is valid for every garment.
+    // It does not live in the fixed option catalogue, so keep it explicitly.
+    if (option.group === "刺绣文字" || option.group === "刺绣颜色") return true;
     if (option.group === "备注") return true;
     const group = groups.find((candidate) => candidate.title === option.group);
     return Boolean(group?.items.includes(option.item));
@@ -585,6 +596,68 @@ function shippingQuote(country: string, weightKg: number) {
   };
 }
 
+function piOptionLabel(group: string, loc: string) {
+  if (group === "备注") return loc === "zh" ? "备注" : "Notes";
+  if (group === "刺绣文字") return loc === "zh" ? "刺绣文字" : "Embroidery text";
+  if (group === "刺绣颜色") return loc === "zh" ? "刺绣颜色" : "Embroidery colour";
+  return tailoringTerm(group, loc);
+}
+
+function piOptionValue(
+  option: { group: string; item: string; price: number },
+  loc: string,
+) {
+  return option.group === "备注" ||
+    option.group === "刺绣文字" ||
+    option.group === "刺绣颜色"
+    ? option.item
+    : tailoringTerm(option.item, loc, option.group);
+}
+
+function shippingFormula(country: string, weightKg: number, loc: string) {
+  const grams = Math.ceil(weightKg * 1000);
+  if (country === "US") return loc === "zh" ? "计费重：最低 2000g，之后每 500g 向上取整；美国专线价表 + ¥30" : "Chargeable weight: 2,000g minimum, then rounded up per 500g; US rate table + ¥30";
+  if (country === "GB") {
+    const rate = weightKg <= 2.5 ? 55 : 58;
+    const charged = Math.ceil(weightKg * 10) / 10 * 1000;
+    return loc === "zh" ? `计费重：${charged}g（100g 向上取整）；¥${rate}/kg × 计费重 + ¥16` : `Chargeable: ${charged}g (100g rounding); ¥${rate}/kg × chargeable weight + ¥16`;
+  }
+  if (EUROPE_SHIPPING_FIRST_KG[country]) return loc === "zh" ? `计费重：最低 1000g，按整公斤向上取整；首重 ¥${EUROPE_SHIPPING_FIRST_KG[country]} + 续重 ¥39/kg` : `Chargeable: 1,000g minimum, rounded up to full kg; ¥${EUROPE_SHIPPING_FIRST_KG[country]} first kg + ¥39/kg`;
+  const rate = shippingRates[country] || shippingRates.OTHER;
+  return loc === "zh" ? `计费重：${grams}g；首重 500g ¥${rate.base}，续重每 500g ¥${rate.half}` : `Chargeable: ${grams}g; first 500g ¥${rate.base}, then ¥${rate.half} per 500g`;
+}
+
+function localizedShippingFormula(
+  country: string,
+  weightKg: number,
+  loc: string,
+  money: (cnyValue: number) => string,
+) {
+  const grams = Math.ceil(weightKg * 1000);
+  const label = loc === "zh" ? "计费重量" : "Chargeable weight";
+  if (country === "US") {
+    return loc === "zh"
+      ? `${label}：最低 2,000g，之后每 500g 向上取整；美国专线价表 + ${money(30)}`
+      : `${label}: 2,000g minimum, then rounded up per 500g; US rate table + ${money(30)}`;
+  }
+  if (country === "GB") {
+    const rate = weightKg <= 2.5 ? 55 : 58;
+    const charged = Math.ceil(weightKg * 10) / 10 * 1000;
+    return loc === "zh"
+      ? `${label}：${charged}g，100g 向上取整；${money(rate)}/kg + 操作费 ${money(16)}`
+      : `${label}: ${charged}g (100g rounding); ${money(rate)}/kg + ${money(16)} handling`;
+  }
+  if (EUROPE_SHIPPING_FIRST_KG[country]) {
+    return loc === "zh"
+      ? `${label}：最低 1,000g，整公斤向上取整；首重 ${money(EUROPE_SHIPPING_FIRST_KG[country])}，续重 ${money(39)}/kg`
+      : `${label}: 1,000g minimum, rounded to full kg; ${money(EUROPE_SHIPPING_FIRST_KG[country])} first kg, ${money(39)}/kg thereafter`;
+  }
+  const rate = shippingRates[country] || shippingRates.OTHER;
+  return loc === "zh"
+    ? `${label}：${grams}g；首重 500g ${money(rate.base)}，续重每 500g ${money(rate.half)}`
+    : `${label}: ${grams}g; ${money(rate.base)} first 500g, then ${money(rate.half)} per 500g`;
+}
+
 const SHIRT_OPTION_SURCHARGES: Record<string, number> = {
   "领型\u0000古巴领": 20,
   "领型\u0000针孔领(11.5)": 30,
@@ -605,12 +678,17 @@ const SHIRT_OPTION_SURCHARGES: Record<string, number> = {
   "礼服打条\u0000礼服打条": 70,
 };
 
+const syncedStyleSurcharges = new Map<string, number>();
+const styleSyncKey = (garment: string, group: string, item: string) => `${garment}\u0000${group}\u0000${item}`;
+
 function optionSurcharge(
   garment: GarmentKey,
   groupIndex: number,
   itemIndex: number,
 ) {
   if (itemIndex < 0) return 0;
+  const synced = syncedStyleSurcharges.get(styleSyncKey(garment, optionsByGarment[garment][groupIndex]?.title ?? "", optionsByGarment[garment][groupIndex]?.items[itemIndex] ?? ""));
+  if (synced !== undefined) return synced;
   if (garment === "shirt") {
     const group = optionsByGarment.shirt[groupIndex];
     const item = group?.items[itemIndex];
@@ -840,6 +918,9 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
   const [fabricZoom, setFabricZoom] = useState(false);
   const [styleZoom, setStyleZoom] = useState<{ src: string; label: string } | null>(null);
   const [embroideryFont, setEmbroideryFont] = useState("");
+  const [embroideryDetails, setEmbroideryDetails] = useState<
+    Partial<Record<GarmentKey, { text: string; color: string }>>
+  >({});
   const [embroideryImageUrl, setEmbroideryImageUrl] = useState<string>();
   const [styleNotes, setStyleNotes] = useState<Partial<Record<GarmentKey, string>>>({});
   const [garment, setGarment] = useState<GarmentKey>("jacket");
@@ -859,7 +940,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
     });
     init["jacket:纽扣数量"] = "4";
     init["jacket:扣眼方向"] = "直扣眼";
-    init["jacket:驳头宽"] = "根据体型默认";
+    init["jacket:驳头宽"] = "5.5cm";
     return init;
   });
   const [measurements, setMeasurements] =
@@ -868,6 +949,55 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
     Partial<Record<GarmentKey, string>>
   >({});
   const [fabricSearch, setFabricSearch] = useState("");
+  const [, setCatalogRevision] = useState(0);
+  useEffect(() => {
+    let cancelled = false;
+    void fetch("/api/catalog")
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error("catalog unavailable")))
+      .then((data: { fabrics?: Array<Record<string, unknown>>; styles?: Array<Record<string, unknown>> }) => {
+        if (cancelled || !Array.isArray(data.fabrics) || !Array.isArray(data.styles)) return;
+        const defaultFabrics = Object.fromEntries((Object.keys(fabricsByGarment) as GarmentKey[]).map((key) => [key, new Map(fabricsByGarment[key].map((fabric) => [fabric.code, fabric]))]));
+        const nextFabrics = Object.fromEntries((Object.keys(fabricsByGarment) as GarmentKey[]).map((key) => [key, [] as Array<Record<string, unknown>>])) as Record<GarmentKey, Array<Record<string, unknown>>>;
+        for (const row of data.fabrics) {
+          const garmentType = row.garmentType as GarmentKey;
+          const code = String(row.code ?? "");
+          if (!nextFabrics[garmentType] || !code) continue;
+          const fallback = defaultFabrics[garmentType].get(code) ?? {};
+          nextFabrics[garmentType].push({ ...fallback, ...row });
+        }
+        for (const key of Object.keys(fabricsByGarment) as GarmentKey[]) {
+          fabricsByGarment[key].splice(0, fabricsByGarment[key].length, ...(nextFabrics[key] as typeof fabricsByGarment[typeof key]));
+        }
+        const grouped = new Map<string, Array<Record<string, unknown>>>();
+        for (const row of data.styles) {
+          const key = `${row.garmentType}\u0000${row.groupTitle}`;
+          const rows = grouped.get(key) ?? [];
+          rows.push(row);
+          grouped.set(key, rows);
+          syncedStyleSurcharges.set(styleSyncKey(String(row.garmentType), String(row.groupTitle), String(row.item)), Number(row.surcharge ?? 0));
+        }
+        for (const garmentType of Object.keys(optionsByGarment) as GarmentKey[]) {
+          for (const group of optionsByGarment[garmentType]) {
+            const rows = grouped.get(`${garmentType}\u0000${group.title}`);
+            if (rows?.length) group.items = rows.map((row) => String(row.item));
+          }
+        }
+        setSelected((previous) => {
+          const next = { ...previous };
+          for (const garmentType of Object.keys(optionsByGarment) as GarmentKey[]) {
+            for (const group of optionsByGarment[garmentType]) {
+              const key = `${garmentType}:${group.title}`;
+              if (next[key] && group.items.includes(next[key])) continue;
+              if (group.items[0]) next[key] = group.items[0];
+            }
+          }
+          return next;
+        });
+        setCatalogRevision((revision) => revision + 1);
+      })
+      .catch(() => undefined);
+    return () => { cancelled = true; };
+  }, []);
   const active = garments[garment];
   const optionGroups = optionsByGarment[garment];
   const groupRows =
@@ -898,19 +1028,13 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                 ["文字位置"],
               ]
             : null;
-  const visibleGroupTitles = new Set<string>(
-    groupRows?.flat() ?? optionGroups.map((group) => group.title),
-  );
-  const visibleOptionGroups = optionGroups.filter((group) =>
-    visibleGroupTitles.has(group.title),
-  );
   const currentFabric = [
     ...fabricsByGarment.jacket,
     ...fabricsByGarment.trousers,
     ...fabricsByGarment.waistcoat,
     ...fabricsByGarment.shirt,
   ].find((f) => f.code === fabricByGarment[garment]);
-  const optionExtra = visibleOptionGroups.reduce((sum, group) => {
+  const optionExtra = optionGroups.reduce((sum, group) => {
     const item = selected[`${garment}:${group.title}`];
     const itemIndex = group.items.indexOf(item);
     const groupIndex = optionGroups.findIndex(
@@ -1027,17 +1151,8 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
   >({});
   const [customerMode, setCustomerMode] = useState<"new" | "returning">("new");
   const [lookupName, setLookupName] = useState("");
-  const [lookupResults, setLookupResults] = useState<
-    {
-      id: number;
-      name: string;
-      height: string;
-      weight: string;
-      channelCode: string;
-      avatarUrl: string | null;
-      measurements: string | null;
-    }[]
-  >([]);
+  const [lookupResults, setLookupResults] = useState<CustomerLookup[]>([]);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [loadedCustomer, setLoadedCustomer] = useState<{
     id: number;
     name: string;
@@ -1045,6 +1160,24 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
     weight: string;
     channelCode: string;
   } | null>(null);
+  useEffect(() => {
+    if (!user?.id) {
+      setRecentSearches([]);
+      setLookupResults([]);
+      setLookupOpen(false);
+      return;
+    }
+    try {
+      const saved = JSON.parse(localStorage.getItem(`verosuits:recent-customer-searches:${user.id}`) || "[]");
+      setRecentSearches(
+        Array.isArray(saved)
+          ? saved.filter((entry): entry is string => typeof entry === "string" && entry.trim().length > 0).slice(0, 10)
+          : [],
+      );
+    } catch {
+      setRecentSearches([]);
+    }
+  }, [user?.id]);
   const cmToIn = (v: string) => {
     const n = parseFloat(v);
     return Number.isFinite(n) ? (n / 2.54).toFixed(1) : "";
@@ -1084,63 +1217,99 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
     setImperialMeasurementDrafts((prev) => ({ ...prev, [key]: cleaned }));
     setMeasureTab(target, field, slot, cleaned ? inToCm(cleaned) : "");
   };
-  const searchCustomers = async () => {
-    if (!lookupName.trim()) return;
+  const searchCustomersFor = async (query: string) => {
+    if (!user?.id) {
+      setLookupResults([]);
+      setLookupOpen(false);
+      window.location.href = "/login";
+      return;
+    }
+    setRecentSearches((previous) => {
+      const next = [query, ...previous.filter((entry) => entry.toLowerCase() !== query.toLowerCase())].slice(0, 10);
+      if (user?.id) localStorage.setItem(`verosuits:recent-customer-searches:${user.id}`, JSON.stringify(next));
+      return next;
+    });
     try {
       const data = await apiFetch<{
-        customers: {
-          id: number;
-          name: string;
-          height: string;
-          weight: string;
-          channelCode: string;
-          avatarUrl: string | null;
-          measurements: string | null;
-        }[];
+        customers: CustomerLookup[];
       }>(
-        `/api/customers?q=${encodeURIComponent(lookupName.trim())}&t=${Date.now()}`,
+        `/api/customers?q=${encodeURIComponent(query)}&t=${Date.now()}`,
       );
       setLookupResults(data.customers ?? []);
     } catch (e) {
       alert(e instanceof Error ? e.message : t("common.searchFailed"));
     }
   };
-  const loadCustomer = (c: {
-    id: number;
-    name: string;
-    height: string;
-    weight: string;
-    channelCode: string;
-    avatarUrl: string | null;
-    measurements: string | null;
-  }) => {
-    setCustomerName(c.name);
-    setCustomerHeight(c.height || "");
-    setCustomerWeight(c.weight || "");
-    setChannelCode(c.channelCode || "");
-    if (c.avatarUrl) setAvatarUrl(c.avatarUrl);
+  const loadCustomer = async (c: CustomerLookup) => {
+    if (!user?.id) {
+      setLookupResults([]);
+      setLookupOpen(false);
+      window.location.href = "/login";
+      return;
+    }
     try {
-      const m = JSON.parse(c.measurements || "{}");
-      if (m && typeof m === "object") {
-        const { __posture, ...sizeValues } = m as Record<string, unknown>;
-        setMeasurements(sizeValues as Record<string, [string, string]>);
-        setPostureSelections(
-          __posture && typeof __posture === "object"
-            ? (__posture as Record<string, string>)
-            : {},
-        );
-      }
-    } catch {}
-    setLoadedCustomer(c);
-    setLookupResults([]);
-    setLookupName("");
-    setLookupOpen(false);
-    setFormOpen(true);
+      const data = await apiFetch<{
+        customer: typeof c & {
+          country: string;
+          region: string;
+          city: string;
+          street: string;
+          postalCode: string;
+          measurementsSavedAt: string | null;
+        };
+      }>(`/api/customers/${c.id}`);
+      const profile = data.customer;
+      setCustomerName(profile.name);
+      setCustomerHeight(profile.height || "");
+      setCustomerWeight(profile.weight || "");
+      setChannelCode(profile.channelCode || "");
+      setAvatarUrl(profile.avatarUrl ?? undefined);
+      setCountry(profile.country || "");
+      setRegion(profile.region || "");
+      setCity(profile.city || "");
+      setStreet(profile.street || "");
+      setPostalCode(profile.postalCode || "");
+
+      let profileMeasurements: Record<string, [string, string]> = {};
+      let profilePostures: Record<string, string> = {};
+      try {
+        const saved = JSON.parse(profile.measurements || "{}");
+        if (saved && typeof saved === "object") {
+          const { __posture, ...sizeValues } = saved as Record<string, unknown>;
+          profileMeasurements = Object.fromEntries(
+            Object.entries(sizeValues).filter(([, value]) =>
+              Array.isArray(value) && value.length === 2 && value.every((part) => typeof part === "string"),
+            ),
+          ) as Record<string, [string, string]>;
+          if (__posture && typeof __posture === "object" && !Array.isArray(__posture)) {
+            profilePostures = Object.fromEntries(
+              Object.entries(__posture as Record<string, unknown>).filter(([, value]) => typeof value === "string"),
+            );
+          }
+        }
+      } catch { /* Start with a clean measurement form if the legacy record is malformed. */ }
+      setMeasurements({ ...emptyMeasurements(), ...profileMeasurements });
+      setPostureSelections(profilePostures);
+      setLoadedCustomer(profile);
+      setProfileSavedAt(profile.measurementsSavedAt || "");
+      setLookupResults([]);
+      setLookupName("");
+      setLookupOpen(false);
+      setFormOpen(true);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : t("common.searchFailed"));
+    }
+  };
+  const searchCustomers = async () => {
+    const query = lookupName.trim();
+    if (!query) return;
+    await searchCustomersFor(query);
   };
   const [formOpen, setFormOpen] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileSavedAt, setProfileSavedAt] = useState("");
   const [profileSaveMessage, setProfileSaveMessage] = useState("");
+  const [profileKeptForOrder, setProfileKeptForOrder] = useState(false);
   useEffect(() => {
     if (formOpen && !loadedCustomer) {
       setMeasurements(emptyMeasurements());
@@ -1159,6 +1328,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
     }
     setProfileSaving(true);
     setProfileSaveMessage("");
+    setProfileKeptForOrder(false);
     try {
       const savedAt = new Date().toISOString();
       const payload = {
@@ -1215,6 +1385,11 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
       setProfileSaving(false);
     }
   };
+  const keepCustomerProfileForOrder = () => {
+    setProfileSaveMessage("");
+    setProfileKeptForOrder(true);
+    setTimeout(() => setProfileKeptForOrder(false), 3000);
+  };
   const [lookupOpen, setLookupOpen] = useState(false);
   const [imp, setImp] = useState<{ ft: string; in: string }>({
     ft: "",
@@ -1242,7 +1417,10 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
     return Number.isFinite(n) ? (n / 2.20462).toFixed(2) : "";
   };
   const buildItem = (): PiItem => {
-    const options = visibleOptionGroups.flatMap((group) => {
+    // Use the complete garment catalogue here, rather than only the groups
+    // currently laid out on screen. This makes PI the canonical record of
+    // every selected jacket, trouser, waistcoat and shirt option.
+    const options = optionGroups.flatMap((group) => {
       const item = selected[`${garment}:${group.title}`];
       const itemIndex = group.items.indexOf(item);
       const groupIndex = optionGroups.findIndex(
@@ -1260,6 +1438,13 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
     });
     if (garment === "shirt" && embroideryFont.trim()) {
       options.push({ group: "刺绣文字", item: embroideryFont.trim(), price: 0 });
+    }
+    const embroidery = embroideryDetails[garment];
+    if (embroidery?.text.trim()) {
+      options.push({ group: "刺绣文字", item: embroidery.text.trim(), price: 0 });
+    }
+    if (embroidery?.color.trim()) {
+      options.push({ group: "刺绣颜色", item: embroidery.color.trim(), price: 0 });
     }
     const styleNote = styleNotes[garment]?.trim();
     if (styleNote) {
@@ -1713,6 +1898,8 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                         setPostalCode("");
                         setAvatarUrl(undefined);
                         setStyleNotes({});
+                        setEmbroideryDetails({});
+                        setEmbroideryFont("");
                       }}
                     >
                       <i>＋</i>
@@ -1722,7 +1909,10 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                     <button
                       type="button"
                       className="entry-return"
-                      onClick={() => setLookupOpen(true)}
+                      onClick={() => {
+                        if (user?.id) setLookupOpen(true);
+                        else window.location.href = "/login";
+                      }}
                     >
                       <i>⌕</i>
                       <b>{t("home.searchExistingCustomer")}</b>
@@ -1953,6 +2143,55 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                         mTab === "trousers" ||
                         mTab === "waistcoat";
                       const shownFields = garments[mTab].fields;
+                      const renderSplitMeasurementTable = (fields: string[], tableCorner: string) => (
+                        <div
+                          className={`cm-table ${isPaper ? "bw" : ""}`}
+                          style={{
+                            gridTemplateColumns: `90px repeat(${fields.length}, 1fr)`,
+                          }}
+                        >
+                          <div className="cm-tr head">
+                            <b>{tailoringTerm(tableCorner, loc)}</b>
+                            {fields.map((field) => (
+                              <span key={field}>{tailoringTerm(field, loc, "measurement")}</span>
+                            ))}
+                          </div>
+                          {[0, 1].map((measurementIndex) => (
+                            <div className="cm-tr" key={measurementIndex}>
+                              <b>{measurementIndex === 0 ? t("cust.body") : t("cust.finished")}</b>
+                              {fields.map((field) => {
+                                const fieldIndex = garments[mTab].fields.indexOf(field);
+                                const measure = measurements[`${mTab}:${field}`] ?? [
+                                  String(garments[mTab].values[fieldIndex][0]),
+                                  String(garments[mTab].values[fieldIndex][1]),
+                                ];
+                                return (
+                                  <label key={field}>
+                                    <input
+                                      inputMode="decimal"
+                                      value={measurementInputValue(
+                                        mTab,
+                                        field,
+                                        measurementIndex,
+                                        measure[measurementIndex],
+                                      )}
+                                      onChange={(event) =>
+                                        changeMeasurementInput(
+                                          mTab,
+                                          field,
+                                          measurementIndex,
+                                          event.target.value,
+                                        )
+                                      }
+                                    />
+                                    <em>{unit}</em>
+                                  </label>
+                                );
+                              })}
+                            </div>
+                          ))}
+                        </div>
+                      );
                       const corner =
                         mTab === "shirt"
                           ? "衬衫"
@@ -1968,7 +2207,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                           <p className="cm-req">
                             ※ {t("cust.measureHint")}
                           </p>
-                          <div className="cm-table-wrap">
+                          <div className="cm-table-wrap cm-table-full">
                             <div
                               className={`cm-table ${isPaper ? "bw" : ""}`}
                               style={{
@@ -2073,6 +2312,18 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                                 </div>
                               )}
                             </div>
+                          </div>
+                          <div className="cm-table-split">
+                            {[
+                              shownFields.slice(0, Math.ceil(shownFields.length / 2)),
+                              shownFields.slice(Math.ceil(shownFields.length / 2)),
+                            ]
+                              .filter((fields) => fields.length > 0)
+                              .map((fields, index) => (
+                                <div className="cm-table-wrap" key={`measurement-group-${index}`}>
+                                  {renderSplitMeasurementTable(fields, corner)}
+                                </div>
+                              ))}
                           </div>
                         </>
                       );
@@ -2185,6 +2436,26 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                         ))}
                       </div>
                     )}
+                    {recentSearches.length > 0 && (
+                      <div className="recent-customer-searches">
+                        <small>{loc === "zh" ? "最近搜索" : "Recent searches"}</small>
+                        <div className="recent-customer-searches-list">
+                          {recentSearches.map((query) => (
+                            <button
+                              key={query}
+                              type="button"
+                              className="recent-customer-search"
+                              onClick={() => {
+                                setLookupName(query);
+                                void searchCustomersFor(query);
+                              }}
+                            >
+                              {query}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -2192,11 +2463,9 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
             {formOpen && (
               <div className="profile-save-bar">
                 <div>
-                  {profileSaveMessage && (
+                  {profileSaveMessage && profileSaveMessage !== t("cust.saved") && (
                     <b
-                      className={
-                        profileSaveMessage === t("cust.saved") ? "saved" : "error"
-                      }
+                      className="error"
                     >
                       {profileSaveMessage}
                     </b>
@@ -2208,9 +2477,38 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                     </small>
                   )}
                 </div>
-                <button onClick={saveCustomerProfile} disabled={profileSaving}>
-                  {profileSaving ? t("cust.saving") : t("cust.saveProfile")}
-                </button>
+                {loadedCustomer ? (
+                  <div className="profile-save-options">
+                    <button onClick={saveCustomerProfile} disabled={profileSaving}>
+                      {profileSaving
+                        ? t("cust.saving")
+                        : loc === "zh"
+                          ? "替换旧档案"
+                          : "Replace saved profile"}
+                    </button>
+                    <button
+                      type="button"
+                      className="keep-order-options"
+                      onClick={keepCustomerProfileForOrder}
+                      disabled={profileSaving}
+                    >
+                      {loc === "zh" ? "保留新档案" : "Keep new profile"}
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={saveCustomerProfile} disabled={profileSaving}>
+                    {profileSaving ? t("cust.saving") : t("cust.saveProfile")}
+                  </button>
+                )}
+              </div>
+            )}
+            {(profileSaveMessage === t("cust.saved") || profileKeptForOrder) && (
+              <div className="profile-save-success" role="status" aria-live="polite">
+                <span aria-hidden="true">✓</span>
+                <div>
+                  <b>{profileKeptForOrder ? (loc === "zh" ? "已保留本次新选项" : "Kept for this order") : loc === "zh" ? "档案保存成功" : "Profile saved"}</b>
+                  <small>{profileKeptForOrder ? (loc === "zh" ? "老客户档案未被修改" : "The saved customer profile was not changed") : loc === "zh" ? "客户资料已同步" : "Customer details are up to date"}</small>
+                </div>
               </div>
             )}
             <div hidden={!fabricFirst}>
@@ -2719,6 +3017,47 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                                     })(group)
                                   : null;
                               })}
+                              {garment === "jacket" &&
+                              row.includes("穿着习惯") &&
+                              row.includes("香水垫") ? (
+                                <div className="jacket-embroidery-fields">
+                                  <h3>{loc === "zh" ? "刺绣信息" : "Embroidery"}</h3>
+                                  <div className="jacket-embroidery-inputs">
+                                    <label>
+                                      <span>{loc === "zh" ? "刺绣文字" : "Text"}</span>
+                                      <input
+                                        value={embroideryDetails.jacket?.text ?? ""}
+                                        onChange={(event) =>
+                                          setEmbroideryDetails((previous) => ({
+                                            ...previous,
+                                            jacket: {
+                                              text: event.target.value,
+                                              color: previous.jacket?.color ?? "",
+                                            },
+                                          }))
+                                        }
+                                        placeholder={loc === "zh" ? "输入文字" : "Enter text"}
+                                      />
+                                    </label>
+                                    <label>
+                                      <span>{loc === "zh" ? "刺绣颜色" : "Colour"}</span>
+                                      <input
+                                        value={embroideryDetails.jacket?.color ?? ""}
+                                        onChange={(event) =>
+                                          setEmbroideryDetails((previous) => ({
+                                            ...previous,
+                                            jacket: {
+                                              text: previous.jacket?.text ?? "",
+                                              color: event.target.value,
+                                            },
+                                          }))
+                                        }
+                                        placeholder={loc === "zh" ? "例如：金色" : "e.g. Gold"}
+                                      />
+                                    </label>
+                                  </div>
+                                </div>
+                              ) : null}
                             </div>
                           );
                         })
@@ -2809,12 +3148,9 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                         fabricCode={fabricByGarment[garment]}
                         fabricMeters={fabricMeters}
                         fabricUnitPrice={fabricUnitPrice}
-                        optionGroups={visibleOptionGroups}
+                        optionGroups={optionGroups}
                         selected={selected}
-                        shippingFee={shippingFee}
-                        orderWeight={orderWeight}
-                        hasShippingAddress={hasShippingAddress}
-                        total={totalPrice}
+                        total={productPrice}
                       />
                     </div>
                     <div className="notice pi-add" style={{ marginTop: 10 }}>
@@ -2895,15 +3231,32 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                     ),
                   );
                   validPiOptions(item).forEach((option) => {
-                    if (option.group !== "刺绣文字" && option.group !== "备注") {
+                    if (
+                      option.group !== "刺绣文字" &&
+                      option.group !== "刺绣颜色" &&
+                      option.group !== "备注"
+                    ) {
                       next[`${item.garmentType}:${option.group}`] = option.item;
                     }
                   });
                   return next;
                 });
                 setEmbroideryFont(
-                  validPiOptions(item).find((option) => option.group === "刺绣文字")?.item ?? "",
+                  item.garmentType === "shirt"
+                    ? validPiOptions(item).find((option) => option.group === "刺绣文字")?.item ?? ""
+                    : "",
                 );
+                setEmbroideryDetails((previous) => ({
+                  ...previous,
+                  [item.garmentType!]: {
+                    text:
+                      validPiOptions(item).find((option) => option.group === "刺绣文字")?.item ??
+                      "",
+                    color:
+                      validPiOptions(item).find((option) => option.group === "刺绣颜色")?.item ??
+                      "",
+                  },
+                }));
                 setStyleNotes((prev) => ({
                   ...prev,
                   [item.garmentType!]:
@@ -2967,9 +3320,6 @@ function PriceBreakdown({
   fabricUnitPrice,
   optionGroups,
   selected,
-  shippingFee,
-  orderWeight,
-  hasShippingAddress,
   total,
 }: {
   garment: GarmentKey;
@@ -2978,9 +3328,6 @@ function PriceBreakdown({
   fabricUnitPrice: number;
   optionGroups: (typeof optionsByGarment)[GarmentKey];
   selected: Record<string, string>;
-  shippingFee: number;
-  orderWeight: number;
-  hasShippingAddress: boolean;
   total: number;
 }) {
   const { loc, t } = useLocale();
@@ -3031,23 +3378,10 @@ function PriceBreakdown({
             <b>+{money(extra.price)}</b>
           </span>
         ))}
-        <span className="shipping-line">
-          <i>
-            {t("pi.shipping")} · {orderWeight.toFixed(1)} kg
-          </i>
-          <b>
-            {hasShippingAddress
-              ? money(shippingFee)
-              : loc === "zh"
-                ? "还未填写收货地址"
-                : "Shipping address not entered"}
-          </b>
-        </span>
       </div>
       <small className="fx-rate-note">
         {updatedAt ? `${t("currency.latestRate")} · ${new Date(updatedAt).toLocaleDateString(loc)} · ${source}` : t("currency.loadingRate")}
       </small>
-      <p className="price-note">{t("pi.priceNote")}</p>
     </section>
   );
 }
@@ -3239,7 +3573,7 @@ function PiPreview({
   rateLabel: string;
 }) {
   const { loc, t } = useLocale();
-  const { currency, money } = useCurrency();
+  const { currency, money } = useCurrency(countryCode);
   const currentItems = items.map(normalizePiItem);
   const productTotal = currentItems.reduce(
     (sum, item) => sum + item.productPrice,
@@ -3268,8 +3602,7 @@ function PiPreview({
           .join(" · ");
         const styles = validPiOptions(item)
           .map(
-            (option) =>
-              `${option.group === "备注" ? t("cust.notes") : tailoringTerm(option.group, loc)}: ${option.group === "备注" ? option.item : tailoringTerm(option.item, loc, option.group)}`,
+            (option) => `${piOptionLabel(option.group, loc)}: ${piOptionValue(option, loc)}`,
           )
           .join("<br>");
         return `<tr>
@@ -3315,6 +3648,35 @@ function PiPreview({
       .trim();
     anchor.href = url;
     anchor.download = `PI-${dateLabel}-${safeCustomer || "customer"}.xls`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  };
+  const exportPiDocument = () => {
+    if (currentItems.length === 0) return;
+    const dateLabel = new Date().toISOString().slice(0, 10);
+    const exportCountryLabel = countryCode === "OTHER"
+      ? (loc === "zh" ? "其他国家/地区" : "Other countries / regions")
+      : countryLabel;
+    const address = [street, city, region, exportCountryLabel, postalCode].filter(Boolean).join(", ");
+    const safe = (value: string) => spreadsheetEscape(value || "—");
+    const rows = currentItems.map((item) => {
+      const garment = item.kind === "fabric" ? t("pi.fabric") : tailoringTerm(item.garmentName ?? "", loc);
+      const fabricName = item.fabricName ? fabricDisplayName(item.fabricName, loc) : "";
+      const fabric = [item.fabricMill, item.fabricCode, fabricName].filter(Boolean).join(" · ");
+      const options = validPiOptions(item).map((option) => `${piOptionLabel(option.group, loc)}: ${piOptionValue(option, loc)}`).join("<br>");
+      return `<tr><td>${safe(garment)}<br><small>${safe(fabric)}${options ? `<br>${options}` : ""}</small></td><td class="center">1</td><td class="right">${safe(money(item.productPrice))}</td><td class="right">${safe(money(item.productPrice + item.shippingFee))}</td></tr>`;
+    }).join("");
+    const piNo = `PI-${dateLabel.replaceAll("-", "")}-${(channelCode || "ORDER").replace(/[^A-Za-z0-9-]/g, "")}`;
+    const html = `<!doctype html><html><head><meta charset="UTF-8"><style>
+      @page{size:A4;margin:14mm 16mm}body{font-family:"Times New Roman",serif;color:#111;font-size:11pt;line-height:1.25}.seller{text-align:center}.seller h1{font-size:17pt;text-decoration:underline;margin:0 0 5px}.seller p{margin:2px 0;font-size:9.5pt;font-weight:bold}.title{text-align:center;font-size:17pt;font-weight:bold;margin:20px 0 28px}table{border-collapse:collapse;width:100%}.info{margin-bottom:22px}.info td{border:0;padding:2px 0;vertical-align:top}.date{padding-left:24px;white-space:nowrap}.items th,.items td{border:1px solid #222;padding:7px 8px;vertical-align:top}.items th{text-align:center;font-weight:normal}.items small{font-size:9pt;line-height:1.35}.center{text-align:center}.right{text-align:right}.total-label{text-align:right;font-weight:bold}.total-amount{font-weight:bold;text-align:right}.terms{margin:8px 0 25px;padding-left:21px}.terms li{padding:1px 0}.bank{margin-left:36px}.bank h3{font-size:11pt;font-weight:normal;margin:0 0 10px}.bank p{margin:0}.muted{font-size:9pt;color:#555}
+    </style></head><body><section class="seller"><h1>VEROSUITS</h1><p>MADE TO MEASURE AND PRIVATE LABEL TAILORING</p></section><div class="title">PROFORMA INVOICE</div><table class="info"><tr><td><b>BUYER:</b>&nbsp;&nbsp;${safe(customerName)}</td><td class="date"><b>DATE:</b>&nbsp;&nbsp;${dateLabel}</td></tr><tr><td><b>ADD:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${safe(address)}</td><td></td></tr><tr><td><b>TEL:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${safe(channelCode)}</td><td></td></tr><tr><td><b>PI NO.:</b>&nbsp;&nbsp;${safe(piNo)}</td><td></td></tr><tr><td><b>CONTRACT NO.:</b>&nbsp;&nbsp;${safe(channelCode)}</td><td></td></tr></table><table class="items"><thead><tr><th style="width:48%">COMMODITY &amp; SPECIFICATION</th><th style="width:13%">QUANTITY<br>(PCS)</th><th style="width:19%">UNIT PRICE<br>(${safe(currency)}/PC)</th><th style="width:20%">TOTAL AMOUNT<br>(${safe(currency)})</th></tr></thead><tbody>${rows}<tr><td colspan="3" class="total-label">TOTAL AMOUNT</td><td class="total-amount">${safe(money(total))}</td></tr></tbody></table><ol class="terms"><li>PACKING &amp; QUANTITY: TO BE CONFIRMED</li><li>LOADING PORT: CHINA</li><li>DISCHARGE PORT: ${safe(exportCountryLabel || "TO BE CONFIRMED")}</li><li>DELIVERY: TO BE CONFIRMED</li><li>PRODUCT ORIGIN: CHINA</li><li>PAYMENT TERMS: TO BE CONFIRMED</li><li>HS CODE: TO BE CONFIRMED</li><li>PRICE VALIDITY: 15 DAYS FROM INVOICE DATE</li></ol><section class="bank"><h3>BANK INFORMATION:</h3><p class="muted">Bank beneficiary details will be added when merchant payment settings are configured.</p></section></body></html>`;
+    const blob = new Blob(["\ufeff", html], { type: "application/msword;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `${piNo}.doc`;
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
@@ -3695,13 +4057,13 @@ function PiPreview({
           <span>{t("pi.product")}</span>
           <span>{t("pi.fabric")}</span>
           <span>{t("pi.styles")}</span>
-          <span>{t("pi.aiPreview")}</span>
           <span>{t("pi.price")}</span>
         </div>
         {currentItems.map((item, idx) => (
           <PiRow
             key={item.key}
             item={item}
+            countryCode={countryCode}
             onRemove={onRemove}
             onReselectFabric={onReselectFabric}
             onReselectStyle={onReselectStyle}
@@ -3714,10 +4076,27 @@ function PiPreview({
         ) : (
           <>
             <div className="pi-shipping">
-              <span>
-                {t("pi.shipping")}（{currentItems.length}）
-              </span>
-              <b>{money(shippingTotal)}</b>
+              <div className="pi-shipping-head">
+                <span>{t("pi.shipping")}（{currentItems.length}）</span>
+                <b>{money(shippingTotal)}</b>
+              </div>
+              <div className="pi-shipping-items">
+                {currentItems.map((item, index) => (
+                  <div className="pi-shipping-item" key={`shipping:${item.key}`}>
+                    <b>
+                      {index + 1}. {item.kind === "fabric" ? t("pi.fabric") : tailoringTerm(item.garmentName ?? "", loc)} · {Math.ceil(item.weightKg * 1000)} g
+                    </b>
+                    <small>
+                      {countryCode
+                        ? localizedShippingFormula(countryCode, item.weightKg, loc, money)
+                        : loc === "zh"
+                          ? "请先填写收货地址后计算国际快递费"
+                          : "Enter a shipping address to calculate international shipping."}
+                      {countryCode ? ` · ${money(item.shippingFee)}` : ""}
+                    </small>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="pi-total">
               <span>{t("pi.total")}</span>
@@ -3725,37 +4104,37 @@ function PiPreview({
             </div>
             <div className="pi-actions">
               <div className="pi-actions-btns">
-                <button
+                {false && <button
                   className="pi-gen-btn"
                   onClick={generateAll}
                   disabled={genBusy}
                 >
                   {genBusy ? t("pi.generating") : t("pi.generateOne")}
-                </button>
-                <button
+                </button>}
+                {false && <button
                   className="pi-gen-btn pi-gen-suite"
                   onClick={generateSuite}
                   disabled={suiteLoading}
                 >
                   {suiteLoading ? t("pi.generatingNow") : t("pi.generateSuite")}
-                </button>
+                </button>}
                 <button
                   type="button"
                   className="pi-gen-btn pi-export-btn"
-                  onClick={exportPiSpreadsheet}
+                  onClick={exportPiDocument}
                 >
                   {t("pi.exportTable")}
                 </button>
               </div>
-              <label className="pi-suite-select">
+              {false && <label className="pi-suite-select">
                 <span>{t("pi.suiteRef")}</span>
                 <input
                   value={suiteSelect}
                   onChange={(e) => setSuiteSelect(e.target.value)}
                   placeholder={t("pi.suiteDefault")}
                 />
-              </label>
-              {suiteImage && (
+              </label>}
+              {false && suiteImage && (
                 <div className="pi-suite">
                   <img
                     src={suiteImage}
@@ -3767,7 +4146,7 @@ function PiPreview({
                 </div>
               )}
             </div>
-            {suiteZoom && suiteImage && (
+            {false && suiteZoom && suiteImage && (
               <div className="ai-zoom" onClick={() => setSuiteZoom(false)}>
                 <img src={suiteImage} alt="Full Set" />
                 <span>{t("common.close")}</span>
@@ -3802,6 +4181,7 @@ const TONE_EN: Record<string, string> = {
 
 function PiRow({
   item,
+  countryCode,
   onRemove,
   onReselectFabric,
   onReselectStyle,
@@ -3809,6 +4189,7 @@ function PiRow({
   index,
 }: {
   item: PiItem;
+  countryCode: string;
   onRemove: (key: string) => void;
   onReselectFabric: (item: PiItem) => void;
   onReselectStyle: (item: PiItem) => void;
@@ -3816,8 +4197,9 @@ function PiRow({
   index: number;
 }) {
   const { loc, t } = useLocale();
-  const { money } = useCurrency();
+  const { money } = useCurrency(countryCode);
   const [zoom, setZoom] = useState(false);
+  const [fabricZoom, setFabricZoom] = useState(false);
   const loading = result?.loading ?? false;
   const image = result?.image ?? null;
   const error = result?.error ?? "";
@@ -3856,9 +4238,6 @@ function PiRow({
           <b>
             <span className="pi-index">{index + 1}</span>
             {tailoringTerm(item.garmentName ?? "", loc)}
-            <small>
-              {item.garmentType ? garments[item.garmentType].en : ""}
-            </small>
           </b>
           <span>
             {item.fabricCode ? (
@@ -3868,6 +4247,8 @@ function PiRow({
                     className="pi-fabric-thumb"
                     src={selectedFabricImage}
                     alt={`${item.fabricName ?? "面料"} ${item.fabricCode}`}
+                    onClick={() => setFabricZoom(true)}
+                    title={t("pi.zoom")}
                   />
                 ) : null}
                 <strong>{item.fabricCode}</strong>
@@ -3890,8 +4271,8 @@ function PiRow({
           </span>
           <span className="pi-styles">
             {currentOptions.map((style) => (
-              <small key={`${style.group}:${style.item}`}>
-                {style.group === "备注" ? t("cust.notes") : tailoringTerm(style.group, loc)}：{style.group === "备注" ? style.item : tailoringTerm(style.item, loc, style.group)}
+              <small className={style.group === "备注" || style.group === "刺绣文字" || style.group === "刺绣颜色" ? "pi-style-note" : undefined} key={`${style.group}:${style.item}`}>
+                {piOptionLabel(style.group, loc)}：{piOptionValue(style, loc)}
               </small>
             ))}
             <button
@@ -3904,7 +4285,7 @@ function PiRow({
           </span>
         </>
       )}
-      <span className="pi-ai">
+      {false && <span className="pi-ai">
         {loading ? (
           <span className="pi-ai-loading">{t("pi.generatingNow")}</span>
         ) : image ? (
@@ -3921,7 +4302,7 @@ function PiRow({
         ) : item.kind === "fabric" ? null : (
           <span className="pi-ai-holder" />
         )}
-      </span>
+      </span>}
       <strong className="pi-price">
         {item.kind === "fabric" ? (
           <>
@@ -3956,13 +4337,19 @@ function PiRow({
           ×
         </button>
       </strong>
-      {zoom && image && (
+      {false && zoom && image && (
         <div className="ai-zoom" onClick={() => setZoom(false)}>
           <img src={image} alt="AI" />
           <span>{t("common.close")}</span>
         </div>
       )}
-      {error && <p className="pi-ai-error">{error}</p>}
+      {fabricZoom && selectedFabricImage && (
+        <div className="ai-zoom" onClick={() => setFabricZoom(false)}>
+          <img src={selectedFabricImage} alt={`${item.fabricName ?? "Fabric"} ${item.fabricCode}`} />
+          <span>{t("common.close")}</span>
+        </div>
+      )}
+      {false && error && <p className="pi-ai-error">{error}</p>}
     </div>
   );
 }

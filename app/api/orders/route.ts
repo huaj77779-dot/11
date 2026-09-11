@@ -25,11 +25,19 @@ export async function GET(request: Request) {
     const db = getDb();
     await ensureSchema(db);
     const user = await getSession(db, request);
+    if (!user) {
+      return Response.json({ error: "登录后才能查看订单" }, { status: 401 });
+    }
     const scope = scopeFor(user);
     const url = new URL(request.url);
     const customerId = url.searchParams.get("customerId");
+    const offset = Math.max(0, Number(url.searchParams.get("offset") ?? 0) || 0);
+    const limit = Math.min(200, Math.max(1, Number(url.searchParams.get("limit") ?? 200) || 200));
+    const where = customerId
+      ? sql`${orders.customerId} = ${Number(customerId)}${scope != null ? sql` AND ${orders.ownerId} = ${scope}` : sql``}`
+      : scope != null ? sql`${orders.ownerId} = ${scope}` : undefined;
 
-    const rows = await db
+    const [rows, summary] = await Promise.all([db
       .select({
         id: orders.id,
         orderNo: orders.orderNo,
@@ -52,15 +60,11 @@ export async function GET(request: Request) {
       })
       .from(orders)
       .leftJoin(customers, eq(orders.customerId, customers.id))
-      .where(
-        customerId
-          ? sql`${orders.customerId} = ${Number(customerId)}${scope != null ? sql` AND ${orders.ownerId} = ${scope}` : sql``}`
-          : scope != null
-            ? sql`${orders.ownerId} = ${scope}`
-            : undefined
-      )
+      .where(where)
       .orderBy(desc(orders.createdAt), desc(orders.id))
-      .limit(200);
+      .limit(limit).offset(offset),
+      db.select({ total: sql<number>`COUNT(*)`, totalAmount: sql<number>`COALESCE(SUM(${orders.totalPrice}), 0)`, pending: sql<number>`COALESCE(SUM(CASE WHEN ${orders.status} = 'pending' THEN 1 ELSE 0 END), 0)`, unpaidAmount: sql<number>`COALESCE(SUM(CASE WHEN ${orders.paymentStatus} <> 'paid' THEN ${orders.totalPrice} ELSE 0 END), 0)` }).from(orders).where(where),
+    ]);
 
     // 将 customerSnapshot 解析为对象返回，供前端直接展示客户姓名
     return Response.json({
@@ -68,6 +72,8 @@ export async function GET(request: Request) {
         ...row,
         customerSnapshot: parseJson(row.customerSnapshot, {}),
       })),
+      summary: summary[0] ?? { total: 0, totalAmount: 0, pending: 0, unpaidAmount: 0 },
+      nextOffset: offset + rows.length,
     });
   } catch (error) {
     return Response.json({ error: toErrorMessage(error) }, { status: 500 });
@@ -97,6 +103,9 @@ export async function POST(request: Request) {
     const db = getDb();
     await ensureSchema(db);
     const user = await getSession(db, request);
+    if (!user) {
+      return Response.json({ error: "登录后才能创建订单" }, { status: 401 });
+    }
     const ownerId = user?.id ?? 0;
 
     const payload = (await request.json()) as {

@@ -2,7 +2,7 @@
 
 import { getLocale, useLocale, type Locale } from "../lib/i18n";
 import { useCurrency } from "../lib/currency";
-import { tailoringTerm } from "../lib/tailoring-terms";
+import { fabricDisplayName, tailoringTerm } from "../lib/tailoring-terms";
 
 export type OrderDetailRow = {
   id: number;
@@ -53,7 +53,7 @@ export function paymentPill(paymentStatus?: string): string {
   return PAYMENT_LABELS[key]?.[getLocale()] ?? key;
 }
 
-export function formatDateTime(value?: string): string {
+export function formatDateTime(value?: string, locale: Locale = getLocale()): string {
   if (!value) return "—";
   // D1 CURRENT_TIMESTAMP 为 UTC "YYYY-MM-DD HH:MM:SS"
   const iso = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value)
@@ -61,7 +61,7 @@ export function formatDateTime(value?: string): string {
     : value;
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString("zh-CN", {
+  return date.toLocaleString(locale === "zh" ? "zh-CN" : locale, {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -100,14 +100,14 @@ export function OrderDetailBlock({ order }: { order: OrderDetailRow }) {
         ) : null}
         <span>
           <i>{t("order.time")}</i>
-          <b>{formatDateTime(order.createdAt)}</b>
+          <b>{formatDateTime(order.createdAt, loc)}</b>
         </span>
       </div>
       {order.fabricCode || order.fabricName ? (
         <span style={{ marginTop: 8 }}>
           <i>{t("pi.fabric")}</i>
           <b>
-            {order.fabricName || "—"} · {order.fabricCode || ""}
+            {order.fabricName ? fabricDisplayName(order.fabricName, loc) : "—"} · {order.fabricCode || ""}
             {order.fabricMill ? ` · ${order.fabricMill}` : ""}
           </b>
         </span>
@@ -120,7 +120,7 @@ export function OrderDetailBlock({ order }: { order: OrderDetailRow }) {
           <div className="order-options">
             {options.map((option) => (
               <em key={`${option.group}:${option.item}`}>
-                {option.group}：{option.item}
+                {tailoringTerm(option.group, loc)}：{tailoringTerm(option.item, loc, option.group)}
               </em>
             ))}
           </div>
