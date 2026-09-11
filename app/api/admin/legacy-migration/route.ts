@@ -59,7 +59,18 @@ export async function POST(request: Request) {
 
   const db = getDb();
   await ensureSchema(db);
-  const payload = (await request.json()) as { phase?: string; rows?: LegacyRow[] };
+  let payload: { phase?: string; rows?: LegacyRow[] };
+  try {
+    const rawBody = await request.text();
+    const decodedBody = request.headers.get("X-Legacy-Migration-Encoding") === "base64"
+      ? atob(rawBody)
+      : rawBody;
+    payload = JSON.parse(decodedBody) as { phase?: string; rows?: LegacyRow[] };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Invalid migration payload";
+    console.error(`Legacy migration payload parse failed: ${message}`);
+    return Response.json({ error: message }, { status: 400, headers: { "Cache-Control": "no-store" } });
+  }
   const phase = textValue(payload.phase);
   const rows = Array.isArray(payload.rows) ? payload.rows : [];
   if (phase === "preflight" || phase === "verify") {
