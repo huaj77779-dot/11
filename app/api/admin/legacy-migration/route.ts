@@ -91,11 +91,12 @@ export async function POST(request: Request) {
 
   if (phase === "customers") {
     if (rows.length > 100) return Response.json({ error: "Too many customers" }, { status: 400 });
-    const owners = await targetOwnerMap(db);
-    const statements = rows.map((row) => {
-      const ownerId = owners.get(numberValue(row.owner_id));
-      if (!ownerId) throw new Error(`Missing target owner for legacy owner ${row.owner_id}`);
-      return binding.prepare(`INSERT OR IGNORE INTO customers (
+    try {
+      const owners = await targetOwnerMap(db);
+      const statements = rows.map((row) => {
+        const ownerId = owners.get(numberValue(row.owner_id));
+        if (!ownerId) throw new Error(`Missing target owner for legacy owner ${row.owner_id}`);
+        return binding.prepare(`INSERT OR IGNORE INTO customers (
         id, owner_id, name, height, weight, channel_code, avatar_url, country, region, city,
         street, postal_code, notes, measurements, measurements_saved_at, total_orders,
         total_spent, last_order_at, created_at, updated_at
@@ -106,25 +107,25 @@ export async function POST(request: Request) {
           textValue(row.city), textValue(row.street), textValue(row.postal_code), textValue(row.notes),
           textValue(row.measurements, "{}"), row.measurements_saved_at ?? null, numberValue(row.total_orders),
           numberValue(row.total_spent), row.last_order_at ?? null, textValue(row.created_at), textValue(row.updated_at)
-        );
-    });
-    try {
+          );
+      });
       if (statements.length) await binding.batch(statements);
+      return Response.json({ ok: true, inserted: statements.length });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Customer migration failed";
       console.error("Legacy customer migration failed", error);
       return Response.json({ error: message }, { status: 500, headers: { "Cache-Control": "no-store" } });
     }
-    return Response.json({ ok: true, inserted: statements.length });
   }
 
   if (phase === "orders") {
     if (rows.length > 100) return Response.json({ error: "Too many orders" }, { status: 400 });
-    const owners = await targetOwnerMap(db);
-    const statements = rows.map((row) => {
-      const ownerId = owners.get(numberValue(row.owner_id));
-      if (!ownerId) throw new Error(`Missing target owner for legacy owner ${row.owner_id}`);
-      return binding.prepare(`INSERT OR IGNORE INTO orders (
+    try {
+      const owners = await targetOwnerMap(db);
+      const statements = rows.map((row) => {
+        const ownerId = owners.get(numberValue(row.owner_id));
+        if (!ownerId) throw new Error(`Missing target owner for legacy owner ${row.owner_id}`);
+        return binding.prepare(`INSERT OR IGNORE INTO orders (
         id, owner_id, order_no, customer_id, customer_snapshot, status, payment_status,
         garment_type, garment_name, fabric_code, fabric_name, fabric_mill, base_price,
         fabric_price, option_extra, shipping_fee, total_price, currency, weight_kg,
@@ -140,16 +141,15 @@ export async function POST(request: Request) {
           numberValue(row.weight_kg), textValue(row.options, "[]"), textValue(row.measurements, "[]"),
           textValue(row.shipping_address, "{}"), textValue(row.channel_code), textValue(row.created_at),
           textValue(row.updated_at)
-        );
-    });
-    try {
+          );
+      });
       if (statements.length) await binding.batch(statements);
+      return Response.json({ ok: true, inserted: statements.length });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Order migration failed";
       console.error("Legacy order migration failed", error);
       return Response.json({ error: message }, { status: 500, headers: { "Cache-Control": "no-store" } });
     }
-    return Response.json({ ok: true, inserted: statements.length });
   }
 
   return Response.json({ error: "Unknown phase" }, { status: 400 });
