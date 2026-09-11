@@ -295,25 +295,6 @@ async function ensureMasterAccount(db: Db): Promise<void> {
 
 async function ensureStoreAccounts(db: Db): Promise<void> {
   const runtimeEnv = env as Record<string, string | undefined>;
-  // Restore the verified customer account in newly provisioned Sites databases.
-  // The temporary password must be changed by the customer after the first login.
-  const recoveryUsername = "1429153653@qq.com";
-  const [recoveryAccount] = await db
-    .select({ id: schema.users.id })
-    .from(schema.users)
-    .where(sql`username = ${recoveryUsername}`)
-    .limit(1);
-  if (!recoveryAccount) {
-    await db.insert(schema.users).values({
-      username: recoveryUsername,
-      passwordHash: "pbkdf2-sha256$100000$1a5439547da39d40ae34705127319bdb$c593cfeaaa79059f47c8ec46b798787ee1d417e96339eb72232d798921d3e968",
-      role: "store",
-      storeName: "Verosuits",
-      email: recoveryUsername,
-      active: true,
-    });
-  }
-
   const seeds = [
     { username: "store01", password: runtimeEnv.INITIAL_STORE01_PASSWORD, storeName: "门店 01" },
     { username: "store02", password: runtimeEnv.INITIAL_STORE02_PASSWORD, storeName: "门店 02" },
