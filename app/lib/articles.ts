@@ -1,3 +1,5 @@
+import { SEO_ARTICLES as COMPLETE_SEO_ARTICLES } from "../../../verosuits-security-release/app/lib/articles";
+
 export type ArticleSection = {
   heading: string;
   paragraphs: string[];
@@ -25,7 +27,7 @@ export type SeoArticle = {
   sections: ArticleSection[];
 };
 
-export const SEO_ARTICLES: SeoArticle[] = [
+const LOCAL_SEO_ARTICLES: SeoArticle[] = [
   {
     slug: "summer-wool-linen-silk-trousers",
     title: "Wool, Linen and Silk Trousers for Summer Tailoring",
@@ -464,6 +466,9 @@ export const SEO_ARTICLES: SeoArticle[] = [
     ],
   },
 ].filter((article) => article.images && article.images.length > 0);
+
+// Restore the complete 40-article editorial set after the storefront migration.
+export const SEO_ARTICLES = COMPLETE_SEO_ARTICLES;
 
 export function getArticle(slug: string) {
   return SEO_ARTICLES.find((article) => article.slug === slug);
