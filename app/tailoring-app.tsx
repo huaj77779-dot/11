@@ -956,17 +956,22 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
       .then((response) => response.ok ? response.json() : Promise.reject(new Error("catalog unavailable")))
       .then((data: { fabrics?: Array<Record<string, unknown>>; styles?: Array<Record<string, unknown>> }) => {
         if (cancelled || !Array.isArray(data.fabrics) || !Array.isArray(data.styles)) return;
-        const defaultFabrics = Object.fromEntries((Object.keys(fabricsByGarment) as GarmentKey[]).map((key) => [key, new Map(fabricsByGarment[key].map((fabric) => [fabric.code, fabric]))]));
-        const nextFabrics = Object.fromEntries((Object.keys(fabricsByGarment) as GarmentKey[]).map((key) => [key, [] as Array<Record<string, unknown>>])) as Record<GarmentKey, Array<Record<string, unknown>>>;
-        for (const row of data.fabrics) {
-          const garmentType = row.garmentType as GarmentKey;
-          const code = String(row.code ?? "");
-          if (!nextFabrics[garmentType] || !code) continue;
-          const fallback = defaultFabrics[garmentType].get(code) ?? {};
-          nextFabrics[garmentType].push({ ...fallback, ...row });
-        }
-        for (const key of Object.keys(fabricsByGarment) as GarmentKey[]) {
-          fabricsByGarment[key].splice(0, fabricsByGarment[key].length, ...(nextFabrics[key] as typeof fabricsByGarment[typeof key]));
+        // An empty D1 catalog means no managed catalog has been configured yet.
+        // Do not replace the built-in STYLBIELLA collection in that case: doing so
+        // leaves the storefront with no brands or fabrics to choose from.
+        if (data.fabrics.length > 0) {
+          const defaultFabrics = Object.fromEntries((Object.keys(fabricsByGarment) as GarmentKey[]).map((key) => [key, new Map(fabricsByGarment[key].map((fabric) => [fabric.code, fabric]))]));
+          const nextFabrics = Object.fromEntries((Object.keys(fabricsByGarment) as GarmentKey[]).map((key) => [key, [] as Array<Record<string, unknown>>])) as Record<GarmentKey, Array<Record<string, unknown>>>;
+          for (const row of data.fabrics) {
+            const garmentType = row.garmentType as GarmentKey;
+            const code = String(row.code ?? "");
+            if (!nextFabrics[garmentType] || !code) continue;
+            const fallback = defaultFabrics[garmentType].get(code) ?? {};
+            nextFabrics[garmentType].push({ ...fallback, ...row });
+          }
+          for (const key of Object.keys(fabricsByGarment) as GarmentKey[]) {
+            fabricsByGarment[key].splice(0, fabricsByGarment[key].length, ...(nextFabrics[key] as typeof fabricsByGarment[typeof key]));
+          }
         }
         const grouped = new Map<string, Array<Record<string, unknown>>>();
         for (const row of data.styles) {
