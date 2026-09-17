@@ -80,8 +80,8 @@ function isSameOrigin(request: Request): boolean {
 
 function isProtectedPath(pathname: string): boolean {
   return [
-    "/admin", "/customers", "/customize", "/orders", "/login", "/register", "/verify-email",
-    "/api/auth/", "/api/admin/", "/api/customers", "/api/orders", "/api/generate-image",
+    "/admin", "/accessories", "/customers", "/customize", "/orders", "/login", "/register", "/verify-email",
+    "/api/auth/", "/api/accessories", "/api/admin/", "/api/customers", "/api/orders", "/api/generate-image",
   ].some((prefix) => pathname === prefix || pathname.startsWith(prefix));
 }
 
