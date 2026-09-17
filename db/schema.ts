@@ -105,6 +105,30 @@ export const styleOptions = sqliteTable("style_options", {
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
+/** Curated 1688 accessories collected by the local browser workflow. */
+export const accessoryProducts = sqliteTable("accessory_products", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  ownerId: integer("owner_id").notNull().default(0),
+  category: text("category").notNull(),
+  title: text("title").notNull().default(""),
+  supplierName: text("supplier_name").notNull().default(""),
+  sourceUrl: text("source_url").notNull(),
+  offerId: text("offer_id").notNull().default(""),
+  imageUrl: text("image_url"),
+  sourceMaterial: text("source_material").notNull().default(""),
+  materialGroup: text("material_group").notNull().default("unknown"),
+  sourceColor: text("source_color").notNull().default(""),
+  colorGroup: text("color_group").notNull().default("unknown"),
+  moq: integer("moq"),
+  priceTiers: text("price_tiers").notNull().default("[]"),
+  skus: text("skus").notNull().default("[]"),
+  status: text("status").notNull().default("pending"),
+  checkedAt: text("checked_at"),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
 /** 客户档案表 */
 export const customers = sqliteTable("customers", {
   id: integer("id").primaryKey({ autoIncrement: true }),
@@ -176,6 +200,8 @@ export type Fabric = typeof fabrics.$inferSelect;
 export type NewFabric = typeof fabrics.$inferInsert;
 export type StyleOption = typeof styleOptions.$inferSelect;
 export type NewStyleOption = typeof styleOptions.$inferInsert;
+export type AccessoryProduct = typeof accessoryProducts.$inferSelect;
+export type NewAccessoryProduct = typeof accessoryProducts.$inferInsert;
 export type SiteContent = typeof siteContent.$inferSelect;
 export type NewsArticle = typeof newsArticles.$inferSelect;
 export type Inquiry = typeof inquiries.$inferSelect;

@@ -1594,10 +1594,29 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
       alert(missingMeasurementMessage);
       return;
     }
+    type AccessoryCartLine = { productId: number; skuId: string; title: string; skuLabel: string; quantity: number; unitPrice: number | null; sourceUrl: string };
+    let accessoryCart: AccessoryCartLine[] = [];
+    try {
+      accessoryCart = JSON.parse(localStorage.getItem("verosuits-accessory-cart") || "[]") as AccessoryCartLine[];
+    } catch {
+      accessoryCart = [];
+    }
+    setSubmitting(true);
+    setSubmitMsg(null);
+    try {
+      await Promise.all(accessoryCart.map((line) => apiFetch("/api/accessories/check-stock", {
+        method: "POST",
+        body: JSON.stringify({ productId: line.productId, skuId: line.skuId, quantity: line.quantity }),
+      })));
+    } catch (e) {
+      setSubmitting(false);
+      alert(e instanceof Error ? `配件库存复查失败：${e.message}` : "配件库存复查失败，请返回配件采购页刷新");
+      return;
+    }
     const submitItems = (piItems.length ? piItems : [buildItem()]).map(
       normalizePiItem,
     );
-    const items = submitItems.map((item) =>
+    const garmentItems = submitItems.map((item) =>
       item.kind === "fabric"
         ? {
             garmentType: "fabric",
@@ -1646,8 +1665,25 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
             },
           },
     );
-    setSubmitting(true);
-    setSubmitMsg(null);
+    const accessoryItems = accessoryCart.map((line) => ({
+      garmentType: "accessory",
+      garmentName: line.title,
+      basePrice: (line.unitPrice ?? 0) * line.quantity,
+      fabricPrice: 0,
+      optionExtra: 0,
+      shippingFee: 0,
+      totalPrice: (line.unitPrice ?? 0) * line.quantity,
+      currency: "CNY",
+      weightKg: 0,
+      options: [
+        { group: "1688 SKU", item: line.skuLabel, price: 0 },
+        { group: "采购数量", item: String(line.quantity), price: 0 },
+        { group: "1688 商品", item: line.sourceUrl, price: 0 },
+      ],
+      measurements: [],
+      shippingAddress: { country: selectedCountryName, region, city, street, postalCode },
+    }));
+    const items = [...garmentItems, ...accessoryItems];
     try {
       const data = await apiFetch<{
         orders?: unknown[];
@@ -1696,6 +1732,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
         } catch {}
       }
       const count = data.orders?.length ?? 1;
+      if (accessoryCart.length) localStorage.removeItem("verosuits-accessory-cart");
       setSubmitMsg(t("home.submitted").replace("{n}", String(count)));
       setTimeout(() => {
         window.location.href = "/orders";
@@ -1717,6 +1754,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
           <a className="on" href="/customize">
             ▦　{t("home.newOrder")}
           </a>
+          <a href="/accessories">◇　{t("home.accessories")}</a>
           <a href="/customers">♙　{t("home.customers")}</a>
           <a href="/orders">▤　{t("home.orders")}</a>
           {ready && user?.role === "master" && (

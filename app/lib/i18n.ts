@@ -129,6 +129,7 @@ export const T: Dict = {
   // ===== 首页 =====
   "home.eyebrow": { zh: "新建定制订单", en: "New Made-to-Measure Order", de: "Neue Maßanfertigung", ja: "新規オーダーメイド注文" },
   "home.newOrder": { zh: "新建订单", en: "New Order", de: "Neue Bestellung", ja: "新規注文" },
+  "home.accessories": { zh: "配件采购", en: "Accessories", de: "Accessoires", ja: "アクセサリー" },
   "home.storeLocation": { zh: "伦敦 · 门店 01", en: "London · Store 01", de: "London · Filiale 01", ja: "ロンドン · 店舗 01" },
   "home.watermark": { zh: "水印", en: "Watermark", de: "Wasserzeichen", ja: "透かし" },
   "home.switchAccount": { zh: "切换账号", en: "Switch account", de: "Konto wechseln", ja: "アカウント切替" },

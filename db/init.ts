@@ -100,6 +100,29 @@ const DDL_STATEMENTS = [
     active INTEGER NOT NULL DEFAULT 1,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`,
+  `CREATE TABLE IF NOT EXISTS accessory_products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    owner_id INTEGER NOT NULL DEFAULT 0,
+    category TEXT NOT NULL,
+    title TEXT NOT NULL DEFAULT '',
+    supplier_name TEXT NOT NULL DEFAULT '',
+    source_url TEXT NOT NULL,
+    offer_id TEXT NOT NULL DEFAULT '',
+    image_url TEXT,
+    source_material TEXT NOT NULL DEFAULT '',
+    material_group TEXT NOT NULL DEFAULT 'unknown',
+    source_color TEXT NOT NULL DEFAULT '',
+    color_group TEXT NOT NULL DEFAULT 'unknown',
+    moq INTEGER,
+    price_tiers TEXT NOT NULL DEFAULT '[]',
+    skus TEXT NOT NULL DEFAULT '[]',
+    status TEXT NOT NULL DEFAULT 'pending',
+    checked_at TEXT,
+    active INTEGER NOT NULL DEFAULT 1,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`,
+  `CREATE INDEX IF NOT EXISTS idx_accessories_owner_category ON accessory_products(owner_id, category, status)`,
   `CREATE TABLE IF NOT EXISTS customers (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -210,7 +233,7 @@ export async function verifyPassword(password: string, stored: string): Promise<
  * SCHEMA_VERSION：修改 DDL_STATEMENTS / ensureColumn 清单后必须 +1，
  * 否则已有库会因标记命中而跳过新迁移。
  */
-const SCHEMA_VERSION = 6;
+const SCHEMA_VERSION = 7;
 const SCHEMA_META = "schema_meta";
 const SCHEMA_FLAG_KEY = "schema_initialized_v" + SCHEMA_VERSION;
 const SCHEMA_KEY = "__tailorsupply_schema_ready_v" + SCHEMA_VERSION;

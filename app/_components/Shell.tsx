@@ -3,20 +3,23 @@
 import { useLocale } from "../lib/i18n";
 import { BrandLogo } from "./BrandLogo";
 
-export function Shell({ active }: { active: "new" | "customers" | "orders" }) {
+export function Shell({ active }: { active: "new" | "accessories" | "customers" | "orders" }) {
   const { t } = useLocale();
   return (
     <aside className="side">
       <div className="brand"><BrandLogo compact /></div>
       <nav>
         <a href="/customize" className={active === "new" ? "on" : ""}>
-          ▦　{t("home.newOrder")}
+          ▦ {t("home.newOrder")}
+        </a>
+        <a href="/accessories" className={active === "accessories" ? "on" : ""}>
+          ◇ {t("home.accessories")}
         </a>
         <a href="/customers" className={active === "customers" ? "on" : ""}>
-          ♙　{t("home.customers")}
+          ♙ {t("home.customers")}
         </a>
         <a href="/orders" className={active === "orders" ? "on" : ""}>
-          ▤　{t("home.orders")}
+          ▤ {t("home.orders")}
         </a>
       </nav>
       <div className="store">

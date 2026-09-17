@@ -18,6 +18,7 @@ import "./landing.css";
 import "./seo-pages.css";
 import "./content-pages.css";
 import "./news-media.css";
+import "./accessories.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_ORIGIN),
