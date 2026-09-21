@@ -12,7 +12,7 @@ import { useCurrency } from "../lib/currency";
 type PriceTier = { minQuantity: number; unitPrice: number };
 type Sku = { skuId: string; attributes?: Array<{ name: string; value: string }>; imageUrl?: string | null; imageFallback?: boolean; sourceColor?: string; colorGroup?: string; sourceMaterial?: string; materialGroup?: string; styleGroup?: string; stockQuantity?: number | null; stockStatus?: string; priceTiers?: PriceTier[] };
 type Product = { id: number; category: string; title: string; supplierName: string; sourceUrl: string; offerId: string; imageUrl?: string | null; sourceMaterial: string; materialGroup: string; sourceColor: string; colorGroup: string; moq?: number | null; priceTiers: PriceTier[]; skus: Sku[]; status: string; checkedAt?: string | null };
-type CartLine = { productId: number; skuId: string; title: string; skuLabel: string; quantity: number; unitPrice: number | null; sourceUrl: string; checkedAt: string };
+type CartLine = { productId: number; offerId: string; skuId: string; title: string; skuLabel: string; imageUrl: string | null; quantity: number; unitPrice: number | null; sourceUrl: string; checkedAt: string };
 type StyleCard = { key: string; product: Product; sku: Sku };
 
 const CATEGORIES = [
@@ -96,7 +96,7 @@ export default function AccessoriesPage() {
     setCheckingKey(key);
     try {
       const check = await apiFetch<{ checkedAt: string; unitPrice: number | null }>("/api/accessories/check-stock", { method: "POST", body: JSON.stringify({ productId: product.id, skuId, quantity }) });
-      const line: CartLine = { productId: product.id, skuId, title: product.title, skuLabel: sku?.attributes?.map((a) => a.value).join(" / ") || sku?.sourceColor || skuId, quantity, unitPrice: check.unitPrice, sourceUrl: product.sourceUrl, checkedAt: check.checkedAt };
+      const line: CartLine = { productId: product.id, offerId: product.offerId, skuId, title: product.title, skuLabel: sku?.attributes?.map((a) => a.value).join(" / ") || sku?.sourceColor || skuId, imageUrl: sku.imageUrl || product.imageUrl || null, quantity, unitPrice: check.unitPrice, sourceUrl: product.sourceUrl, checkedAt: check.checkedAt };
       const next = [...cart.filter((item) => !(item.productId === product.id && item.skuId === skuId)), line];
       setCart(next); localStorage.setItem("verosuits-accessory-cart", JSON.stringify(next));
     } catch (e) { alert(e instanceof Error ? e.message : "库存检查失败"); }

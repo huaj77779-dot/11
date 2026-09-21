@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   if (guard.error) return guard.error;
   const [customerRows, orderRows] = await Promise.all([
     guard.db.select().from(customers).orderBy(desc(customers.updatedAt), desc(customers.id)).limit(300),
-    guard.db.select({ id: orders.id, orderNo: orders.orderNo, customerId: orders.customerId, status: orders.status, paymentStatus: orders.paymentStatus, garmentName: orders.garmentName, totalPrice: orders.totalPrice, currency: orders.currency, createdAt: orders.createdAt }).from(orders).orderBy(desc(orders.createdAt), desc(orders.id)).limit(300),
+    guard.db.select({ id: orders.id, orderNo: orders.orderNo, customerId: orders.customerId, status: orders.status, paymentStatus: orders.paymentStatus, garmentType: orders.garmentType, garmentName: orders.garmentName, options: orders.options, totalPrice: orders.totalPrice, currency: orders.currency, createdAt: orders.createdAt }).from(orders).orderBy(desc(orders.createdAt), desc(orders.id)).limit(300),
   ]);
   return Response.json({ customers: customerRows, orders: orderRows }, { headers: { "Cache-Control": "no-store" } });
 }

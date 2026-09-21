@@ -77,6 +77,8 @@ export function OrderDetailBlock({ order }: { order: OrderDetailRow }) {
   const snapshot = order.customerSnapshot ?? {};
   const address = order.shippingAddress ?? {};
   const options = order.options ?? [];
+  const procurement = Object.fromEntries(options.filter((option) => option.group.startsWith("1688") || ["采购款式", "采购数量", "配件图片"].includes(option.group)).map((option) => [option.group, option.item]));
+  const displayOptions = options.filter((option) => !option.group.startsWith("1688") && !["采购款式", "采购数量", "配件图片"].includes(option.group));
   const measurements = order.measurements ?? [];
 
   return (
@@ -112,13 +114,26 @@ export function OrderDetailBlock({ order }: { order: OrderDetailRow }) {
           </b>
         </span>
       ) : null}
-      {options.length ? (
+      {order.garmentType === "accessory" ? (
+        <div className="full procurement-detail">
+          <h4>{loc === "zh" ? "配件采购信息" : "Accessory procurement"}</h4>
+          {procurement["配件图片"] ? <img src={procurement["配件图片"]} alt={order.garmentName} /> : null}
+          <div>
+            <span><i>{loc === "zh" ? "采购款式" : "Style"}</i><b>{procurement["采购款式"] || procurement["1688 SKU"] || "—"}</b></span>
+            <span><i>{loc === "zh" ? "采购数量" : "Quantity"}</i><b>{procurement["采购数量"] || "—"}</b></span>
+            <span><i>Offer ID</i><b>{procurement["1688 Offer ID"] || "—"}</b></span>
+            <span><i>SKU ID</i><b>{procurement["1688 SKU ID"] || "—"}</b></span>
+            {procurement["1688采购链接"] || procurement["1688 商品"] ? <a href={procurement["1688采购链接"] || procurement["1688 商品"]} target="_blank" rel="noreferrer">{loc === "zh" ? "打开1688原商品" : "Open 1688 product"} ↗</a> : null}
+          </div>
+        </div>
+      ) : null}
+      {displayOptions.length ? (
         <div>
           <span>
             <i>{t("order.styleOptions")}</i>
           </span>
           <div className="order-options">
-            {options.map((option) => (
+            {displayOptions.map((option) => (
               <em key={`${option.group}:${option.item}`}>
                 {tailoringTerm(option.group, loc)}：{tailoringTerm(option.item, loc, option.group)}
               </em>

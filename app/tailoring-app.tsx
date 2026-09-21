@@ -1594,7 +1594,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
       alert(missingMeasurementMessage);
       return;
     }
-    type AccessoryCartLine = { productId: number; skuId: string; title: string; skuLabel: string; quantity: number; unitPrice: number | null; sourceUrl: string };
+    type AccessoryCartLine = { productId: number; offerId?: string; skuId: string; title: string; skuLabel: string; imageUrl?: string | null; quantity: number; unitPrice: number | null; sourceUrl: string };
     let accessoryCart: AccessoryCartLine[] = [];
     try {
       accessoryCart = JSON.parse(localStorage.getItem("verosuits-accessory-cart") || "[]") as AccessoryCartLine[];
@@ -1676,9 +1676,12 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
       currency: "CNY",
       weightKg: 0,
       options: [
-        { group: "1688 SKU", item: line.skuLabel, price: 0 },
+        { group: "采购款式", item: line.skuLabel, price: 0 },
         { group: "采购数量", item: String(line.quantity), price: 0 },
-        { group: "1688 商品", item: line.sourceUrl, price: 0 },
+        { group: "1688 Offer ID", item: line.offerId || line.sourceUrl.match(/offer\/(\d+)/)?.[1] || "—", price: 0 },
+        { group: "1688 SKU ID", item: line.skuId, price: 0 },
+        { group: "1688采购链接", item: line.sourceUrl, price: 0 },
+        ...(line.imageUrl ? [{ group: "配件图片", item: line.imageUrl, price: 0 }] : []),
       ],
       measurements: [],
       shippingAddress: { country: selectedCountryName, region, city, street, postalCode },
