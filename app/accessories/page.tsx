@@ -14,8 +14,14 @@ type Product = { id: number; category: string; title: string; supplierName: stri
 type CartLine = { productId: number; skuId: string; title: string; skuLabel: string; quantity: number; unitPrice: number | null; sourceUrl: string; checkedAt: string };
 
 const CATEGORIES = [
-  ["all", "全部配件", "All"], ["cufflinks", "袖扣", "Cufflinks"], ["tie", "领带", "Ties"],
-  ["bow_tie", "领结", "Bow ties"], ["packaging_bag", "包装袋", "Packaging"], ["label", "商标", "Labels"],
+  ["all", "全部配件", "All"],
+  ["cufflinks", "袖扣", "Cufflinks"],
+  ["tie", "领带", "Ties"],
+  ["brooch", "胸针", "Brooches"],
+  ["packaging_bag", "包装袋", "Packaging bags"],
+  ["pocket_square", "口袋巾", "Pocket squares"],
+  ["bow_tie", "领结", "Bow ties"],
+  ["tie_pin", "领针", "Tie pins"],
 ] as const;
 const STATUS_LABEL: Record<string, string> = { pending: "等待采集", collecting: "采集中", ready: "库存已同步", error: "采集异常" };
 
