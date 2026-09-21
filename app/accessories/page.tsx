@@ -23,8 +23,6 @@ const CATEGORIES = [
   ["bow_tie", "领结", "Bow ties"],
   ["tie_pin", "领针", "Tie pins"],
 ] as const;
-const STATUS_LABEL: Record<string, string> = { pending: "等待采集", collecting: "采集中", ready: "库存已同步", error: "采集异常" };
-
 function effectivePrice(tiers: PriceTier[], quantity = 1) {
   return [...tiers].sort((a, b) => a.minQuantity - b.minQuantity).filter((tier) => quantity >= tier.minQuantity).at(-1)?.unitPrice ?? tiers[0]?.unitPrice ?? null;
 }
@@ -41,9 +39,6 @@ export default function AccessoriesPage() {
   const [color, setColor] = useState("all");
   const [material, setMaterial] = useState("all");
   const [sort, setSort] = useState("default");
-  const [sourceUrl, setSourceUrl] = useState("");
-  const [importCategory, setImportCategory] = useState("cufflinks");
-  const [importing, setImporting] = useState(false);
   const [selectedSku, setSelectedSku] = useState<Record<number, string>>({});
   const [quantities, setQuantities] = useState<Record<number, number>>({});
   const [checkingId, setCheckingId] = useState<number | null>(null);
@@ -66,30 +61,22 @@ export default function AccessoriesPage() {
     try { setCart(JSON.parse(localStorage.getItem("verosuits-accessory-cart") || "[]") as CartLine[]); } catch { setCart([]); }
   }, []);
 
+  const customerProducts = useMemo(() => products.filter((product) => product.status === "ready" && product.title), [products]);
+
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    const next = products.filter((product) =>
+    const next = customerProducts.filter((product) =>
       (category === "all" || product.category === category) &&
       (color === "all" || product.colorGroup === color || product.skus.some((sku) => sku.colorGroup === color)) &&
       (material === "all" || product.materialGroup === material || product.skus.some((sku) => sku.materialGroup === material)) &&
-      (!needle || `${product.title} ${product.supplierName} ${product.offerId}`.toLowerCase().includes(needle))
+      (!needle || product.title.toLowerCase().includes(needle))
     );
     if (sort !== "default") next.sort((a, b) => (effectivePrice(a.priceTiers) ?? Number.MAX_VALUE) - (effectivePrice(b.priceTiers) ?? Number.MAX_VALUE));
     return sort === "price_desc" ? next.reverse() : next;
-  }, [products, category, query, color, material, sort]);
+  }, [customerProducts, category, query, color, material, sort]);
 
-  const colors = [...new Set(products.flatMap((p) => [p.colorGroup, ...p.skus.map((s) => s.colorGroup ?? "unknown")]).filter((v) => v && v !== "unknown"))];
-  const materials = [...new Set(products.flatMap((p) => [p.materialGroup, ...p.skus.map((s) => s.materialGroup ?? "unknown")]).filter((v) => v && v !== "unknown"))];
-
-  const submitImport = async () => {
-    if (!sourceUrl.trim()) return;
-    setImporting(true);
-    try {
-      await apiFetch("/api/accessories", { method: "POST", body: JSON.stringify({ sourceUrl, category: importCategory }) });
-      setSourceUrl(""); await load();
-    } catch (e) { alert(e instanceof Error ? e.message : "提交失败"); }
-    finally { setImporting(false); }
-  };
+  const colors = [...new Set(customerProducts.flatMap((p) => [p.colorGroup, ...p.skus.map((s) => s.colorGroup ?? "unknown")]).filter((v) => v && v !== "unknown"))];
+  const materials = [...new Set(customerProducts.flatMap((p) => [p.materialGroup, ...p.skus.map((s) => s.materialGroup ?? "unknown")]).filter((v) => v && v !== "unknown"))];
 
   const addToCart = async (product: Product) => {
     const skuId = selectedSku[product.id] || product.skus[0]?.skuId;
@@ -118,21 +105,13 @@ export default function AccessoriesPage() {
       </header>
       <div className="accessory-page">
         <section className="accessory-intro">
-          <div><p className="eyebrow">ACCESSORY PROCUREMENT</p><h1>{zh ? "配件采购" : "Accessory procurement"}</h1><p>{zh ? "从精选1688货源中选择配件。加入采购单前会重新检查SKU、价格与库存。" : "Select from curated 1688 sources. SKU, price and stock are checked before adding."}</p></div>
-          <div className="accessory-cart-summary"><span>采购单</span><b>{cart.length}</b><small>{zh ? "件已确认配件" : "confirmed items"}</small></div>
-        </section>
-
-        <section className="accessory-import">
-          <div><b>{zh ? "导入1688商品" : "Import a 1688 product"}</b><small>{zh ? "提交后由本地采集器整理颜色、成分、SKU、阶梯价和库存。" : "The local collector will normalize colour, material, SKUs, tier pricing and stock."}</small></div>
-          <select value={importCategory} onChange={(e) => setImportCategory(e.target.value)}>{CATEGORIES.slice(1).map(([key, cn, en]) => <option key={key} value={key}>{zh ? cn : en}</option>)}</select>
-          <input aria-label="1688 product URL" value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} placeholder="https://detail.1688.com/offer/…" />
-          <button disabled={importing || !sourceUrl.trim()} onClick={submitImport}>{importing ? "…" : zh ? "加入采集队列" : "Queue import"}</button>
+          <div><p className="eyebrow">CURATED ACCESSORIES</p><h1>{zh ? "精选配件" : "Curated accessories"}</h1><p>{zh ? "选择适合本次定制的配件，按颜色、成分与价格快速筛选。" : "Choose accessories for this order and filter by colour, material or price."}</p></div>
         </section>
 
         <section className="accessory-catalog">
-          <div className="accessory-categories">{CATEGORIES.map(([key, cn, en]) => <button key={key} className={category === key ? "on" : ""} onClick={() => setCategory(key)}>{zh ? cn : en}<small>{key === "all" ? products.length : products.filter((p) => p.category === key).length}</small></button>)}</div>
+          <div className="accessory-categories">{CATEGORIES.map(([key, cn, en]) => <button key={key} className={category === key ? "on" : ""} onClick={() => setCategory(key)}>{zh ? cn : en}<small>{key === "all" ? customerProducts.length : customerProducts.filter((p) => p.category === key).length}</small></button>)}</div>
           <div className="accessory-filters">
-            <label><span>⌕</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={zh ? "搜索商品、供应商或商品ID" : "Search products, suppliers or offer ID"} /></label>
+            <label><span>⌕</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={zh ? "搜索配件名称" : "Search accessories"} /></label>
             <select value={color} onChange={(e) => setColor(e.target.value)}><option value="all">{zh ? "全部颜色" : "All colours"}</option>{colors.map((v) => <option key={v}>{v}</option>)}</select>
             <select value={material} onChange={(e) => setMaterial(e.target.value)}><option value="all">{zh ? "全部成分" : "All materials"}</option>{materials.map((v) => <option key={v}>{v}</option>)}</select>
             <select value={sort} onChange={(e) => setSort(e.target.value)}><option value="default">{zh ? "默认排序" : "Default"}</option><option value="price_asc">{zh ? "价格从低到高" : "Price low to high"}</option><option value="price_desc">{zh ? "价格从高到低" : "Price high to low"}</option></select>
@@ -140,14 +119,14 @@ export default function AccessoriesPage() {
 
           {loading && <div className="accessory-empty">正在加载…</div>}
           {error && <div className="accessory-empty error">{error}<button onClick={load}>{zh ? "重试" : "Retry"}</button></div>}
-          {!loading && !error && filtered.length === 0 && <div className="accessory-empty"><i>◇</i><h2>{products.length ? (zh ? "没有匹配的配件" : "No matching accessories") : (zh ? "还没有配件商品" : "No accessories yet")}</h2><p>{zh ? "在上方粘贴1688商品链接，提交后本地采集器会补全SKU、颜色、成分、价格和库存。" : "Paste a 1688 product link above. The local collector will complete SKU, colour, material, price and stock data."}</p></div>}
+          {!loading && !error && filtered.length === 0 && <div className="accessory-empty"><i>◇</i><h2>{customerProducts.length ? (zh ? "没有匹配的配件" : "No matching accessories") : (zh ? "配件正在准备中" : "Accessories are being prepared")}</h2><p>{zh ? "请稍后再查看，或联系门店了解可选配件。" : "Please check again later or contact the store for available accessories."}</p></div>}
           <div className="accessory-grid">{filtered.map((product) => {
             const price = effectivePrice(product.priceTiers, quantities[product.id] || product.moq || 1);
             return <article key={product.id} className={`accessory-card status-${product.status}`}>
-              <div className="accessory-photo">{product.imageUrl ? <img src={product.imageUrl} alt={product.title} /> : <span>{product.status === "ready" ? "◇" : "1688"}</span>}<em>{STATUS_LABEL[product.status] || product.status}</em></div>
-              <div className="accessory-card-body"><small>{product.supplierName || `1688 · ${product.offerId}`}</small><h3>{product.title || (zh ? "等待采集商品信息" : "Waiting for collection")}</h3>
+              <div className="accessory-photo">{product.imageUrl ? <img src={product.imageUrl} alt={product.title} /> : <span>◇</span>}</div>
+              <div className="accessory-card-body"><h3>{product.title}</h3>
                 <div className="accessory-tags"><span>{product.sourceColor || product.colorGroup || "颜色待识别"}</span><span>{product.sourceMaterial || product.materialGroup || "成分待识别"}</span></div>
-                {product.status === "ready" ? <><select value={selectedSku[product.id] || product.skus[0]?.skuId || ""} onChange={(e) => setSelectedSku((prev) => ({ ...prev, [product.id]: e.target.value }))}>{product.skus.map((sku) => <option key={sku.skuId} value={sku.skuId}>{sku.attributes?.map((a) => a.value).join(" / ") || sku.sourceColor || sku.skuId}</option>)}</select><div className="accessory-buy"><label>{zh ? "数量" : "Qty"}<input type="number" min={product.moq || 1} value={quantities[product.id] || product.moq || 1} onChange={(e) => setQuantities((prev) => ({ ...prev, [product.id]: Math.max(1, Number(e.target.value)) }))} /></label><strong>{price == null ? "待询价" : `¥${price.toFixed(2)}`}</strong></div><button className="accessory-add" disabled={checkingId === product.id} onClick={() => addToCart(product)}>{checkingId === product.id ? (zh ? "正在核对库存…" : "Checking stock…") : (zh ? "核对库存并加入" : "Check stock & add")}</button></> : <div className="accessory-pending"><span>{zh ? "采集队列已接收" : "Queued for collection"}</span><a href={product.sourceUrl} target="_blank" rel="noreferrer">{zh ? "查看1688原链接 ↗" : "Open 1688 source ↗"}</a></div>}
+                <select value={selectedSku[product.id] || product.skus[0]?.skuId || ""} onChange={(e) => setSelectedSku((prev) => ({ ...prev, [product.id]: e.target.value }))}>{product.skus.map((sku) => <option key={sku.skuId} value={sku.skuId}>{sku.attributes?.map((a) => a.value).join(" / ") || sku.sourceColor || sku.skuId}</option>)}</select><div className="accessory-buy"><label>{zh ? "数量" : "Qty"}<input type="number" min={product.moq || 1} value={quantities[product.id] || product.moq || 1} onChange={(e) => setQuantities((prev) => ({ ...prev, [product.id]: Math.max(1, Number(e.target.value)) }))} /></label><strong>{price == null ? (zh ? "价格待确认" : "Price on request") : `¥${price.toFixed(2)}`}</strong></div><button className="accessory-add" disabled={checkingId === product.id} onClick={() => addToCart(product)}>{checkingId === product.id ? (zh ? "正在确认…" : "Confirming…") : (zh ? "加入选购单" : "Add to selection")}</button>
               </div>
             </article>;
           })}</div>
