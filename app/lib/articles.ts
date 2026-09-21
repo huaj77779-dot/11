@@ -1,4 +1,4 @@
-import { SEO_ARTICLES as COMPLETE_SEO_ARTICLES } from "../../../verosuits-security-release/app/lib/articles";
+import { SEO_ARTICLES as COMPLETE_SEO_ARTICLES } from "./articles-complete";
 
 export type ArticleSection = {
   heading: string;
@@ -466,6 +466,10 @@ const LOCAL_SEO_ARTICLES: SeoArticle[] = [
     ],
   },
 ].filter((article) => article.images && article.images.length > 0);
+
+// Keep the migrated subset available for rollback while the complete catalogue
+// is the public source below.
+void LOCAL_SEO_ARTICLES;
 
 // Restore the complete 40-article editorial set after the storefront migration.
 export const SEO_ARTICLES = COMPLETE_SEO_ARTICLES;
