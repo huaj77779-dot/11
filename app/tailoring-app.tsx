@@ -1594,25 +1594,8 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
       alert(missingMeasurementMessage);
       return;
     }
-    type AccessoryCartLine = { productId: number; offerId?: string; skuId: string; title: string; skuLabel: string; imageUrl?: string | null; quantity: number; unitPrice: number | null; sourceUrl: string };
-    let accessoryCart: AccessoryCartLine[] = [];
-    try {
-      accessoryCart = JSON.parse(localStorage.getItem("verosuits-accessory-cart") || "[]") as AccessoryCartLine[];
-    } catch {
-      accessoryCart = [];
-    }
     setSubmitting(true);
     setSubmitMsg(null);
-    try {
-      await Promise.all(accessoryCart.map((line) => apiFetch("/api/accessories/check-stock", {
-        method: "POST",
-        body: JSON.stringify({ productId: line.productId, skuId: line.skuId, quantity: line.quantity }),
-      })));
-    } catch (e) {
-      setSubmitting(false);
-      alert(e instanceof Error ? `配件库存复查失败：${e.message}` : "配件库存复查失败，请返回配件采购页刷新");
-      return;
-    }
     const submitItems = (piItems.length ? piItems : [buildItem()]).map(
       normalizePiItem,
     );
@@ -1665,89 +1648,20 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
             },
           },
     );
-    const accessoryItems = accessoryCart.map((line) => ({
-      garmentType: "accessory",
-      garmentName: line.title,
-      basePrice: (line.unitPrice ?? 0) * line.quantity,
-      fabricPrice: 0,
-      optionExtra: 0,
-      shippingFee: 0,
-      totalPrice: (line.unitPrice ?? 0) * line.quantity,
-      currency: "CNY",
-      weightKg: 0,
-      options: [
-        { group: "采购款式", item: line.skuLabel, price: 0 },
-        { group: "采购数量", item: String(line.quantity), price: 0 },
-        { group: "1688 Offer ID", item: line.offerId || line.sourceUrl.match(/offer\/(\d+)/)?.[1] || "—", price: 0 },
-        { group: "1688 SKU ID", item: line.skuId, price: 0 },
-        { group: "1688采购链接", item: line.sourceUrl, price: 0 },
-        ...(line.imageUrl ? [{ group: "配件图片", item: line.imageUrl, price: 0 }] : []),
-      ],
-      measurements: [],
-      shippingAddress: { country: selectedCountryName, region, city, street, postalCode },
-    }));
-    const items = [...garmentItems, ...accessoryItems];
-    try {
-      const data = await apiFetch<{
-        orders?: unknown[];
-        customer?: { id: number };
-      }>(`/api/orders?t=${Date.now()}`, {
-        method: "POST",
-        body: JSON.stringify({
-          customer: {
-            name: customerName.trim(),
-            height: customerHeight,
-            weight: customerWeight,
-            channelCode,
-            avatarUrl,
-            country,
-            region,
-            city,
-            street,
-            postalCode,
-          },
-          order: { items },
-        }),
-      });
-      const cid = data.customer?.id;
-      if (cid) {
-        try {
-          const m: Record<string, [string, string]> = {};
-          for (const g of Object.keys(garments) as GarmentKey[]) {
-            for (const f of garments[g].fields) {
-              const v = measurements[`${g}:${f}`];
-              if (v && (v[0] || v[1])) m[`${g}:${f}`] = v;
-            }
-          }
-          await apiFetch(`/api/customers/${cid}`, {
-            method: "PATCH",
-            body: JSON.stringify({
-              measurements: JSON.stringify({
-                ...m,
-                __posture: postureSelections,
-              }),
-              height: customerHeight,
-              weight: customerWeight,
-              name: customerName.trim(),
-              channelCode,
-            }),
-          });
-        } catch {}
+    const measurementProfile: Record<string, [string, string]> = {};
+    for (const g of Object.keys(garments) as GarmentKey[]) {
+      for (const f of garments[g].fields) {
+        const value = measurements[`${g}:${f}`];
+        if (value && (value[0] || value[1])) measurementProfile[`${g}:${f}`] = value;
       }
-      const count = data.orders?.length ?? 1;
-      if (accessoryCart.length) localStorage.removeItem("verosuits-accessory-cart");
-      setSubmitMsg(t("home.submitted").replace("{n}", String(count)));
-      setTimeout(() => {
-        window.location.href = "/orders";
-      }, 900);
-    } catch (e) {
-      setSubmitting(false);
-      alert(
-        e instanceof Error
-          ? e.message
-          : t("home.submitFailed"),
-      );
     }
+    localStorage.setItem("verosuits-order-draft", JSON.stringify({
+      customer: { name: customerName.trim(), height: customerHeight, weight: customerWeight, channelCode, avatarUrl, country, region, city, street, postalCode },
+      order: { items: garmentItems },
+      profilePatch: { measurements: JSON.stringify({ ...measurementProfile, __posture: postureSelections }), height: customerHeight, weight: customerWeight, name: customerName.trim(), channelCode },
+    }));
+    setSubmitting(false);
+    window.location.href = "/selection";
   };
   return (
     <main className={`shell ${whiteLabel ? "white-label-mode" : ""}`}>
@@ -1758,6 +1672,7 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
             ▦　{t("home.newOrder")}
           </a>
           <a href="/accessories">◇　{t("home.accessories")}</a>
+          <a href="/selection">▣　{t("home.selection")}</a>
           <a href="/customers">♙　{t("home.customers")}</a>
           <a href="/orders">▤　{t("home.orders")}</a>
           {ready && user?.role === "master" && (

@@ -116,6 +116,7 @@ export default function AccessoriesPage() {
       <div className="accessory-page">
         <section className="accessory-intro">
           <div><p className="eyebrow">CURATED ACCESSORIES</p><h1>{zh ? "精选配件" : "Curated accessories"}</h1><p>{zh ? "选择适合本次定制的配件，按颜色、成分与价格快速筛选。" : "Choose accessories for this order and filter by colour, material or price."}</p></div>
+          <a className="accessory-selection-link" href="/selection"><span>{zh ? "选购单" : "Selection"}</span><strong>{cart.length}</strong><small>{zh ? "件已选配件" : "items selected"}</small></a>
         </section>
 
         <section className="accessory-catalog">
