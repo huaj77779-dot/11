@@ -3,7 +3,7 @@ import { getDb } from "../../../db";
 import { accessoryProducts } from "../../../db/schema";
 import { ensureSchema } from "../../../db/init";
 import { getSession, scopeFor } from "../../lib/auth";
-import { cufflinkCatalog } from "../../lib/cufflinks-catalog";
+import { accessoryCatalog } from "../../lib/cufflinks-catalog";
 
 const CATEGORIES = new Set([
   "cufflinks",
@@ -37,8 +37,8 @@ export async function GET(request: Request) {
     .where(and(eq(accessoryProducts.active, true), scope == null ? undefined : eq(accessoryProducts.ownerId, scope)))
     .orderBy(desc(accessoryProducts.updatedAt), desc(accessoryProducts.id));
   const collectedOfferIds = new Set(rows.map((row) => row.offerId).filter(Boolean));
-  const curatedCufflinks = cufflinkCatalog.filter((product) => !collectedOfferIds.has(product.offerId));
-  return Response.json({ products: [...curatedCufflinks, ...rows.map(serialize)] }, { headers: { "Cache-Control": "private, no-store" } });
+  const curatedAccessories = accessoryCatalog.filter((product) => !collectedOfferIds.has(product.offerId));
+  return Response.json({ products: [...curatedAccessories, ...rows.map(serialize)] }, { headers: { "Cache-Control": "private, no-store" } });
 }
 
 export async function POST(request: Request) {

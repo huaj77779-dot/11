@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const [sourceDir, outputFile = "app/data/cufflinks-catalog.json"] = process.argv.slice(2);
+const [sourceDir, outputFile = "app/data/cufflinks-catalog.json", category = "cufflinks", expectedProductsArg = "55", expectedSkusArg = "1037", expectedImagesArg = "1035", idOffsetArg = "0"] = process.argv.slice(2);
 if (!sourceDir) {
-  console.error("Usage: node scripts/import-1688-cufflinks.mjs <source-dir> [output-file]");
+  console.error("Usage: node scripts/import-1688-cufflinks.mjs <source-dir> [output-file] [category] [expected-products] [expected-skus] [expected-images] [id-offset]");
   process.exit(1);
 }
 
@@ -64,9 +64,9 @@ const products = details.map((detail, index) => {
   const firstSku = skus[0] || {};
   const fallbackImage = offer.image || null;
   return {
-    id: -(index + 1),
+    id: -(Number(idOffsetArg) + index + 1),
     ownerId: 0,
-    category: "cufflinks",
+    category,
     title: String(offer.title || detail.title || "袖扣").trim(),
     supplierName: "",
     sourceUrl: offer.url || `https://detail.1688.com/offer/${offerId}.html`,
@@ -100,7 +100,10 @@ const products = details.map((detail, index) => {
 
 const skuCount = products.reduce((sum, product) => sum + product.skus.length, 0);
 const imageCount = products.reduce((sum, product) => sum + product.skus.filter((sku) => !sku.imageFallback).length, 0);
-if (products.length !== 55 || skuCount !== 1037 || imageCount !== 1035) {
+const expectedProducts = Number(expectedProductsArg);
+const expectedSkus = Number(expectedSkusArg);
+const expectedImages = Number(expectedImagesArg);
+if (products.length !== expectedProducts || skuCount !== expectedSkus || imageCount !== expectedImages) {
   throw new Error(`Integrity check failed: offers=${products.length}, skus=${skuCount}, images=${imageCount}`);
 }
 if (products.some((product) => product.priceTiers.length === 0)) throw new Error("One or more products are missing price tiers");

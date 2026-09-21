@@ -1,0 +1,5438 @@
+{
+  "generatedAt": "2026-09-21T16:51:23.583Z",
+  "markup": 1.5,
+  "products": [
+    {
+      "id": -2000001,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "复古男士胸针商务西装衬衫简约挂饰襟章领针领扣徽章",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/696002499957.html",
+      "offerId": "696002499957",
+      "imageUrl": "/accessories/brooches/24ed3b297c8791a5b6f7723f350c669276108879.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "皇冠银色胸针",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 11.85
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 11.55
+        },
+        {
+          "minQuantity": 100,
+          "unitPrice": 11.25
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "5110712831797",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠银色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/a341c3c2c8b65d3c66ddc680694ddf4d5a3c883b.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠银色胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 972,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831815",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "眼镜金色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/f9425e3bbe5c8b32fc223c8970485939e7071f3b.webp",
+          "imageFallback": false,
+          "sourceColor": "眼镜金色胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 993,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831799",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵银色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/6b537237fdbeaaa825acbe6aa94a9e4539293a3e.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵银色胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 964,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831802",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠金链胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/62f7d925e91e4439aaa1288475691f4c408db43f.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠金链胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 987,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831810",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色钻石麋鹿胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/ed5a6ad89c17d298cb6f9dd0c91c3ee2334d57e5.webp",
+          "imageFallback": false,
+          "sourceColor": "金色钻石麋鹿胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 978,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831806",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色天使羽翼王者之剑"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/c019930a94157344231f77c5d2a1d0e06e9d0606.webp",
+          "imageFallback": false,
+          "sourceColor": "金色天使羽翼王者之剑",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 994,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831794",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "六芒星金色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/7d323315873fdf064fbd43708e3e84e0beeba974.webp",
+          "imageFallback": false,
+          "sourceColor": "六芒星金色胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 980,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831795",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "六芒星银色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/dd16d801d9bc4662d9669937a59d9dd5048cbf07.webp",
+          "imageFallback": false,
+          "sourceColor": "六芒星银色胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 944,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831798",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵金色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/11489ef54cca6d768bd15eb66bab45cb7f5a2161.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵金色胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 958,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831805",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色精灵羽翼胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/d44d1bd2e19854db50c33494cf5ecc03171129db.webp",
+          "imageFallback": false,
+          "sourceColor": "银色精灵羽翼胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 983,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831796",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠金色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/8bb79106120567aae1232808d6ef02ea5b1019ae.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠金色胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 981,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831808",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "老鹰金色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/56d1e6a1e1633fa41dea398e6e87531ccd00be44.webp",
+          "imageFallback": false,
+          "sourceColor": "老鹰金色胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 977,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831801",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "帆船银色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/251554208290ddbd2785342f62f2d02f1f577cf6.webp",
+          "imageFallback": false,
+          "sourceColor": "帆船银色胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 978,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831800",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "帆船金色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/ab0fe523e9dd5d7ff23bb8f37592b8840e3d0068.webp",
+          "imageFallback": false,
+          "sourceColor": "帆船金色胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 977,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831812",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小皇冠金色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/8e6b80cc3c96d1d17096c66cf8ee8d37c1edc32b.webp",
+          "imageFallback": false,
+          "sourceColor": "小皇冠金色胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 977,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831804",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色精灵羽翼胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/0b0327da19871352248b922119c49048fc92e246.webp",
+          "imageFallback": false,
+          "sourceColor": "金色精灵羽翼胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 969,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831813",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小皇冠银色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/28a3b5da703926a44474c4c40cd4c4f49251b947.webp",
+          "imageFallback": false,
+          "sourceColor": "小皇冠银色胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 959,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831809",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "老鹰银色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/8965316ed7c754e2e586f18f2493b78ef5c0c806.webp",
+          "imageFallback": false,
+          "sourceColor": "老鹰银色胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 980,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831807",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色天使羽翼王者之剑"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/a3f08f2f584d74be45b35c6559ebf963d168e18a.webp",
+          "imageFallback": false,
+          "sourceColor": "银色天使羽翼王者之剑",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 991,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831814",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小皇冠蓝灰色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/d05db271ebe67cafa097e871ed98b036d43d0c80.webp",
+          "imageFallback": false,
+          "sourceColor": "小皇冠蓝灰色胸针",
+          "colorGroup": "grey",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 984,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831803",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠银链胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/fb8af9c9f38598a9f180188d7c9e4ce9d2d9b1ae.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠银链胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 988,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "5110712831811",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色钻石麋鹿胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/e604f04c9f394855a4c3c0dd89c09e03651a3551.webp",
+          "imageFallback": false,
+          "sourceColor": "银色钻石麋鹿胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 993,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:37:01.745Z",
+      "active": true
+    },
+    {
+      "id": -2000002,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "男士英皇爵迹水钻领环夹领带箍复古骑士领带箍商务衬衫领带扣",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/695492525168.html",
+      "offerId": "695492525168",
+      "imageUrl": "/accessories/brooches/73c9051d2457c8b58f18957d2f15677757f14d82.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "双头老鹰银色",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 13.35
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 13.05
+        },
+        {
+          "minQuantity": 22,
+          "unitPrice": 12.75
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "4938515209956",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "双头老鹰银色"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/055241ca34911eb79cc91970638adcfa4491a6d3.webp",
+          "imageFallback": false,
+          "sourceColor": "双头老鹰银色",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9996,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209968",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵白钻金色"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/ba19b514ff73b81bacae4a0eb5fe88d7c624ce87.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵白钻金色",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9999,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209963",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古银色白钻"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/5a86302223757892be0decb576db85b8ad8f808e.webp",
+          "imageFallback": false,
+          "sourceColor": "复古银色白钻",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9996,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209967",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵白钻银色"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/96d5c53e44be8ef62e2a305780a273e8343275bb.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵白钻银色",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9998,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209962",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古银色蓝钻"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/9a85ecb599225855c764bc5a9fc08bc2671a3b15.webp",
+          "imageFallback": false,
+          "sourceColor": "复古银色蓝钻",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9993,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209954",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆金色香槟宝石"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/c8a7be18ff55ea88e749859485803ead52656116.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆金色香槟宝石",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9992,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209957",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "双头老鹰金色"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/3d7675639de4f9fcfb38e8ae43db36450ad851ad.webp",
+          "imageFallback": false,
+          "sourceColor": "双头老鹰金色",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9997,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209958",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰银色蓝钻"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/183097f9e89976d2821b499a3c3d5ac3df5cd0b3.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰银色蓝钻",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9994,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209952",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆银色蓝宝石"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/71f47f6cac869a1ce934477823c89eaf955d83b3.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆银色蓝宝石",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9995,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209965",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵黑钻银色"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/b2bbabf424b1649ff12c575c36c68fff7189dc4a.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵黑钻银色",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9994,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209955",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆金色黑宝石"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/72c653c221494773100f0b6c8dc1b55c9abd320c.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆金色黑宝石",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9995,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209966",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵黑钻金色"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/8b2a8c83b434144fec46b7dcc1f36eecba48e916.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵黑钻金色",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9998,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209959",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰银色黑钻"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/0e9c6e26af2a45844dc07e77e1f7b86bed69b7c6.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰银色黑钻",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9992,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209964",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古金色蓝钻"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/021db59844e9af6f0b6ac25f1e00a3bfdd6fd5ff.webp",
+          "imageFallback": false,
+          "sourceColor": "复古金色蓝钻",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9998,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209961",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰金色黑钻"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/7a8d562a0e46bd81ea1bf381627e39266746e357.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰金色黑钻",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9997,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209953",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆银色黑宝石"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/1625e87aa2f5ef2814fcfb8d8a936aeeec07a4a3.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆银色黑宝石",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9987,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209951",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古金色白钻"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/af3996cc83c93c9bba42d9b78e7297234b681b12.webp",
+          "imageFallback": false,
+          "sourceColor": "复古金色白钻",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9956,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        },
+        {
+          "skuId": "4938515209960",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰金色香槟钻"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/aadb111a0e7a9e785433082a3d1b1ffeac3267ce.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰金色香槟钻",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9998,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 13.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 13.05
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 12.75
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:37:01.754Z",
+      "active": true
+    },
+    {
+      "id": -2000003,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "男士时尚英皇爵迹水钻领环夹领带箍复古骑士商务衬衫领带扣",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/679257035097.html",
+      "offerId": "679257035097",
+      "imageUrl": "/accessories/brooches/266afcf64678502e10a17680ba29964d46434bbb.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "复古金色白钻领带箍+白色腰果手打",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 43.5
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 42
+        },
+        {
+          "minQuantity": 22,
+          "unitPrice": 40.5
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "5614848217053",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古金色白钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/ca64708a734b98bc45f9e5fc78988add6b1799ff.webp",
+          "imageFallback": false,
+          "sourceColor": "复古金色白钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9969,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217059",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆银色蓝宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/c431212ef9f11c39c42beeab7ae3a34e60179c19.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆银色蓝宝石领带箍+红蓝腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9967,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217057",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆金色黑宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/568b2c69ca52959165e66f48f8e21da159b074a6.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆金色黑宝石领带箍+红蓝腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9966,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000637606",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰银色黑钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/ebaa295c68756c2ae3d9dba1035a5d39e8c710da.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰银色黑钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9964,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000637605",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰银色蓝钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/21de571e23a17a11fd63e1620f90348515f1bbe4.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰银色蓝钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9964,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000637607",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰金色黑钻领带箍+新款蓝色腰果手打带"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/3f2d99ef2f98eee3682a91ada64f0234078a8e7e.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰金色黑钻领带箍+新款蓝色腰果手打带",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9966,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000637608",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "双头老鹰金色领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/6220e8c1c990179ad57ef420c59a42af6617acab.webp",
+          "imageFallback": false,
+          "sourceColor": "双头老鹰金色领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9965,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217049",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵白钻金色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/e0a1a4f5e3251368c810f2ec1032307ea5c3d752.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵白钻金色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9966,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217056",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古银色蓝钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/67e553097e078519ad0c4c5557a2bc27cfc251e1.webp",
+          "imageFallback": false,
+          "sourceColor": "复古银色蓝钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9963,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217058",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆银色黑宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/a68dad9e19ebd527ea6c12b63eb53568361adad8.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆银色黑宝石领带箍+红蓝腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9966,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000637604",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰金色香槟钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/73dd83b1971dc7c1b46306f97418cc8377932872.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰金色香槟钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9961,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217050",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵白钻银色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/89c8d43c9669bdd678aa8e9ab4a2c3b485b0dd5a.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵白钻银色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9969,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217055",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古银色白钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/5825c311d32d297029f6c89ed473c51d4f18fb1b.webp",
+          "imageFallback": false,
+          "sourceColor": "复古银色白钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9966,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217051",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵黑钻金色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/2e1fc32041fedbd59fcf4b3a42b81cd6ba34d971.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵黑钻金色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9966,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217066",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆金色香槟宝石领带箍+红蓝腰果手打带"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/48a7d1fb1a109b8d0bec3b3181de53885ced8470.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆金色香槟宝石领带箍+红蓝腰果手打带",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9968,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000637609",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "双头老鹰银色领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/96735e91478bbd4a81e5d17f9826596d0258b681.webp",
+          "imageFallback": false,
+          "sourceColor": "双头老鹰银色领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9963,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217054",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古金色蓝钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/3900e8dc685b67f956ae6b9d8537e52ed9e90a08.webp",
+          "imageFallback": false,
+          "sourceColor": "复古金色蓝钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9963,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614848217052",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵黑钻银色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/fc5da98f07ff169b93753b55f68375ca3eb9f949.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵黑钻银色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9967,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:37:01.766Z",
+      "active": true
+    },
+    {
+      "id": -2000004,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "礼盒装】男士时尚胸针领针西服胸花西装胸章个性潮流徽章配饰",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/775627829218.html",
+      "offerId": "775627829218",
+      "imageUrl": "/accessories/brooches/6a596e48b0e872d874cf9ca2f5678a447c3d9c98.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "小蓝皇冠胸针【礼盒装】",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 14.85
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 14.77
+        },
+        {
+          "minQuantity": 100,
+          "unitPrice": 14.7
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "5302892628371",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小蓝皇冠胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/0305d9c603196985c753833096d4f0fdf8bff2f8.webp",
+          "imageFallback": false,
+          "sourceColor": "小蓝皇冠胸针【礼盒装】",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628365",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "老鹰金色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/e8bebbf818fbb244958fbd24a3dc78b576099422.webp",
+          "imageFallback": false,
+          "sourceColor": "老鹰金色胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628368",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "六芒星银色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/9486d67e70102807839bddb5dfd766f0cedf7efc.webp",
+          "imageFallback": false,
+          "sourceColor": "六芒星银色胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628356",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "帆船银色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/43714dcd929a145fc1fd3dae41ea4f58da116517.webp",
+          "imageFallback": false,
+          "sourceColor": "帆船银色胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628361",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色精灵羽翼胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/6af74e4ecd244a2ae86e7b40f2ae560e25d696b4.webp",
+          "imageFallback": false,
+          "sourceColor": "金色精灵羽翼胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 9999,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628359",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠银链胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/803058596800b6809753d8e7108831642660567f.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠银链胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628355",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "帆船金色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/6e7983d636764048726ba376d60f76983b7ef0ab.webp",
+          "imageFallback": false,
+          "sourceColor": "帆船金色胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628357",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠金链胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/086d31ec45f5836de8808ae3bbe24827d645f560.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠金链胸针【礼盒奖励】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628363",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色天使羽翼王者之剑胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/89f74fe97482bfa3a5386cf214dfa3b602a7fe7c.webp",
+          "imageFallback": false,
+          "sourceColor": "金色天使羽翼王者之剑胸针【礼盒奖励】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628370",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小金皇冠胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/558694fddb501285b017914fee59e5a9fadc6a86.webp",
+          "imageFallback": false,
+          "sourceColor": "小金皇冠胸针【礼盒奖励】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628375",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色大麋鹿胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/cecbfb4f5c4fae88a639ef0c08a3b42ac1cbad55.webp",
+          "imageFallback": false,
+          "sourceColor": "银色大麋鹿胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628353",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵金色胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/f72f90965542f928859243ae866fbf881927cf71.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵金色胸针【礼盒奖励】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 9999,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628377",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色天使羽翼王者之剑胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/23fee47463653fffb8e46aa24858000c82236171.webp",
+          "imageFallback": false,
+          "sourceColor": "银色天使羽翼王者之剑胸针【礼盒奖励】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628364",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色钻石麋鹿胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/127d05889b0cca75f6f017fe49bb3b1247cb4ba5.webp",
+          "imageFallback": false,
+          "sourceColor": "金色钻石麋鹿胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628376",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色精灵羽翼胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/5364c474f4be59a94d4a2aafa889bb4a17ae70cd.webp",
+          "imageFallback": false,
+          "sourceColor": "银色精灵羽翼胸针【礼盒奖励】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628358",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠金色胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/fddb0b33ed280417d4e793875e2ea0c34e269628.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠金色胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628369",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小皇冠蓝灰色胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/1cfd262fb55081fafe935ebba45fe47eec28ab13.webp",
+          "imageFallback": false,
+          "sourceColor": "小皇冠蓝灰色胸针【礼盒奖励】",
+          "colorGroup": "grey",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628373",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "眼镜金色胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/e703b3418a87ae3d8a458d61c7c0a262c316f08d.webp",
+          "imageFallback": false,
+          "sourceColor": "眼镜金色胸针【礼盒奖励】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628354",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵银色胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/1ad9b0299ee8c48e8736b4a99150a88a0847a3ca.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵银色胸针【礼盒奖励】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628378",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色钻石麋鹿胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/2eb04e92e9b8bcb29f5ffe76d60a999c9a010156.webp",
+          "imageFallback": false,
+          "sourceColor": "银色钻石麋鹿胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628360",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠银色胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/cb8d1db5ac5d0ae478e9fe01e76adc4182b1986c.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠银色胸针【礼盒奖励】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 9999,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628366",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "老鹰银色胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/264005583dc12e79e3029f2c01baaf253b587e58.webp",
+          "imageFallback": false,
+          "sourceColor": "老鹰银色胸针【礼盒奖励】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 9999,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628372",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小银皇冠胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/4e6dd23cf4a4d09ded4ce28d406b43ff69e96ff6.webp",
+          "imageFallback": false,
+          "sourceColor": "小银皇冠胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628362",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色大麋鹿胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/04b3530fb2ce6276b116364efab3e0149d9618c1.webp",
+          "imageFallback": false,
+          "sourceColor": "金色大麋鹿胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628367",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "六芒星金色胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/a19c4c35994b3dfe2ddb33b0cc11e21a8d57c083.webp",
+          "imageFallback": false,
+          "sourceColor": "六芒星金色胸针【礼盒奖励】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 9999,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5302892628374",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "眼镜银色胸针【礼盒奖励】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/7e1de073d05d277b39042be66c7498b813653f19.webp",
+          "imageFallback": false,
+          "sourceColor": "眼镜银色胸针【礼盒奖励】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:38:32.385Z",
+      "active": true
+    },
+    {
+      "id": -2000005,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "礼盒装】男士时尚胸针领针西服胸花西装胸章个性潮流徽章配饰",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/775148109643.html",
+      "offerId": "775148109643",
+      "imageUrl": "/accessories/brooches/876a00df3776fe59b70d4984cf6ba5c522b2af3c.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "小蓝皇冠胸针【礼盒装】",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 14.85
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 14.77
+        },
+        {
+          "minQuantity": 100,
+          "unitPrice": 14.7
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "5470604906731",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小蓝皇冠胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/6c8848b5c074e9fd25c99fa37fb1921bf990ce9b.webp",
+          "imageFallback": false,
+          "sourceColor": "小蓝皇冠胸针【礼盒装】",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906726",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "老鹰金色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/e44751433fe4c4d935c925e7b30b7690eb865ab3.webp",
+          "imageFallback": false,
+          "sourceColor": "老鹰金色胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 9999,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906729",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "六芒星银色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/6f06cb9e9f5e2bf845eb1de42f719ddb89ae85b7.webp",
+          "imageFallback": false,
+          "sourceColor": "六芒星银色胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906717",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "帆船银色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/aa6d48d79b68ec3a83c73f1da755fb375cfc1e5a.webp",
+          "imageFallback": false,
+          "sourceColor": "帆船银色胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906722",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色精灵羽翼胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/53ed8f8e483a05baf2794f6fc5d5478ba0349b1e.webp",
+          "imageFallback": false,
+          "sourceColor": "金色精灵羽翼胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906720",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠银链胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/667b4248c87490fad2c6912ced853d2f332a286b.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠银链胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 9999,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906718",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠金链胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/9305375b4978e9a3b32b1ecda6f4ba9a54af99a1.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠金链胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906716",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "帆船金色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/27170d7af31220d0951395c6503968c418e26ed5.webp",
+          "imageFallback": false,
+          "sourceColor": "帆船金色胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906724",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色天使羽翼王者之剑胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/363c40f137ad919ea8ffeb70e0462d68ca521ad1.webp",
+          "imageFallback": false,
+          "sourceColor": "金色天使羽翼王者之剑胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 9998,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906733",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小金皇冠胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/a5857bb0e175b0ab9bc9f98628c38502f963d668.webp",
+          "imageFallback": false,
+          "sourceColor": "小金皇冠胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906736",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色大麋鹿胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/e79feeca636dc3c97c3c322987037107c840091e.webp",
+          "imageFallback": false,
+          "sourceColor": "银色大麋鹿胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906714",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵金色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/c0988d206b82fa26f1df0dfadb2289034eff01fb.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵金色胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906738",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色天使羽翼王者之剑胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/d28d98221428f47be4475156a9a821581fd988e5.webp",
+          "imageFallback": false,
+          "sourceColor": "银色天使羽翼王者之剑胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906725",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色钻石麋鹿胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/e60749a66655f332e583d9f652c6b292d41a5975.webp",
+          "imageFallback": false,
+          "sourceColor": "金色钻石麋鹿胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906737",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色精灵羽翼胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/9dbe615e1359c2cd9a9211930f665d551286ade3.webp",
+          "imageFallback": false,
+          "sourceColor": "银色精灵羽翼胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906719",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠金色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/a2884e01dfe687c13df8fa0c829601127fb37062.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠金色胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906715",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵银色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/faf27082b817a7a9bad53ab4afdbb5d4d0b3753f.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵银色胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906734",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "眼镜金色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/3c344f2b734213261cbfd9bb93e8c31d77038cef.webp",
+          "imageFallback": false,
+          "sourceColor": "眼镜金色胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906730",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小皇冠蓝灰色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/b2e46bbdd477de3b9c8f473f1e21c4226e2b5ad2.webp",
+          "imageFallback": false,
+          "sourceColor": "小皇冠蓝灰色胸针【礼盒装】",
+          "colorGroup": "grey",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906739",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "银色钻石麋鹿胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/694892c37a6f504b59e45500280df83c12e0d7cc.webp",
+          "imageFallback": false,
+          "sourceColor": "银色钻石麋鹿胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906721",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠银色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/b379b2a786193c56e1edeccf3f76b25136261015.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠银色胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906727",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "老鹰银色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/9d1695d29385d68368c533d4a498ef33e87da328.webp",
+          "imageFallback": false,
+          "sourceColor": "老鹰银色胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 9999,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906732",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "小银皇冠胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/bafb6b22fd2b92ede9028bb412cb049fa33b4812.webp",
+          "imageFallback": false,
+          "sourceColor": "小银皇冠胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906728",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "六芒星金色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/f6733c05246694197d35e15b067a980cefaedec6.webp",
+          "imageFallback": false,
+          "sourceColor": "六芒星金色胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906723",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色大麋鹿胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/b3ac399ac0a8541b245cde13fc558570b90dddf5.webp",
+          "imageFallback": false,
+          "sourceColor": "金色大麋鹿胸针【礼盒装】",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        },
+        {
+          "skuId": "5470604906735",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "眼镜银色胸针【礼盒装】"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/7e1de073d05d277b39042be66c7498b813653f19.webp",
+          "imageFallback": false,
+          "sourceColor": "眼镜银色胸针【礼盒装】",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "set",
+          "stockQuantity": 10000,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 14.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 14.77
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 14.7
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:38:32.395Z",
+      "active": true
+    },
+    {
+      "id": -2000006,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "男士英皇爵迹水钻领环夹领带箍复古骑士领带箍商务衬衫领带扣胸针",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/678617953574.html",
+      "offerId": "678617953574",
+      "imageUrl": "/accessories/brooches/dee64600f6eb07c0b8ba3c90a0de82776b2a912e.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "复古金色白钻领带箍+白色腰果手打",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 43.5
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 42
+        },
+        {
+          "minQuantity": 22,
+          "unitPrice": 40.5
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "5612477876309",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古金色白钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/ca64708a734b98bc45f9e5fc78988add6b1799ff.webp",
+          "imageFallback": false,
+          "sourceColor": "复古金色白钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9946,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876314",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆金色香槟宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/48a7d1fb1a109b8d0bec3b3181de53885ced8470.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆金色香槟宝石领带箍+红蓝腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9918,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876316",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆银色蓝宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/c431212ef9f11c39c42beeab7ae3a34e60179c19.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆银色蓝宝石领带箍+红蓝腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9918,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876313",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆金色黑宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/568b2c69ca52959165e66f48f8e21da159b074a6.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆金色黑宝石领带箍+红蓝腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9913,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000573273",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰银色黑钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/ebaa295c68756c2ae3d9dba1035a5d39e8c710da.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰银色黑钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9935,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000573272",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰银色蓝钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/21de571e23a17a11fd63e1620f90348515f1bbe4.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰银色蓝钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9868,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000573275",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "双头老鹰金色领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/6220e8c1c990179ad57ef420c59a42af6617acab.webp",
+          "imageFallback": false,
+          "sourceColor": "双头老鹰金色领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9909,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876312",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古银色蓝钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/67e553097e078519ad0c4c5557a2bc27cfc251e1.webp",
+          "imageFallback": false,
+          "sourceColor": "复古银色蓝钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9936,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876305",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵白钻金色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/e0a1a4f5e3251368c810f2ec1032307ea5c3d752.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵白钻金色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9920,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876315",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆银色黑宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/a68dad9e19ebd527ea6c12b63eb53568361adad8.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆银色黑宝石领带箍+红蓝腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9917,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000573271",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰金色香槟钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/73dd83b1971dc7c1b46306f97418cc8377932872.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰金色香槟钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9831,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876306",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵白钻银色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/89c8d43c9669bdd678aa8e9ab4a2c3b485b0dd5a.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵白钻银色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9924,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876311",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古银色白钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/5825c311d32d297029f6c89ed473c51d4f18fb1b.webp",
+          "imageFallback": false,
+          "sourceColor": "复古银色白钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9919,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876307",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵黑钻金色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/2e1fc32041fedbd59fcf4b3a42b81cd6ba34d971.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵黑钻金色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9896,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000573276",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "双头老鹰银色领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/96735e91478bbd4a81e5d17f9826596d0258b681.webp",
+          "imageFallback": false,
+          "sourceColor": "双头老鹰银色领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9938,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876310",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古金色蓝钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/3900e8dc685b67f956ae6b9d8537e52ed9e90a08.webp",
+          "imageFallback": false,
+          "sourceColor": "复古金色蓝钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9914,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5648000573274",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰金色黑钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/3f2d99ef2f98eee3682a91ada64f0234078a8e7e.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰金色黑钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9918,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5612477876308",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵黑钻银色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/fc5da98f07ff169b93753b55f68375ca3eb9f949.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵黑钻银色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9920,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:38:32.404Z",
+      "active": true
+    },
+    {
+      "id": -2000007,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "天使胸针链饰品男士女西装西服衬衫气质领针领扣胸花别针配饰",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/668091271301.html",
+      "offerId": "668091271301",
+      "imageUrl": "/accessories/brooches/3ca3fe2b820fdc9a0e6b3817709ca033846a43be.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "羽翼精灵金色",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 7.35
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 7.2
+        },
+        {
+          "minQuantity": 100,
+          "unitPrice": 7.05
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "4812236313409",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "羽翼精灵金色"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/1cb848f1edf705faf7f97bc2b2eb581a394567bc.webp",
+          "imageFallback": false,
+          "sourceColor": "羽翼精灵金色",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 994,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 7.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 7.2
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 7.05
+            }
+          ]
+        },
+        {
+          "skuId": "4897473505021",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "羽翼精灵银色"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/c1fb3b168bb4e4af83482e4458711e1302e3520a.webp",
+          "imageFallback": false,
+          "sourceColor": "羽翼精灵银色",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 993,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 7.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 7.2
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 7.05
+            }
+          ]
+        },
+        {
+          "skuId": "4897473505019",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "天使羽翼银色王者之剑"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/f594ca54cb7b20979e5303d1d996b901b44724da.webp",
+          "imageFallback": false,
+          "sourceColor": "天使羽翼银色王者之剑",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 511,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 7.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 7.2
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 7.05
+            }
+          ]
+        },
+        {
+          "skuId": "4897473505022",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色羽毛胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/c3a991ee72b7bc2e9a6ab1850f775e1ba8cd2a34.webp",
+          "imageFallback": false,
+          "sourceColor": "金色羽毛胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 989,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 7.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 7.2
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 7.05
+            }
+          ]
+        },
+        {
+          "skuId": "4812236313408",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "羽翼精灵铜色"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/b8b7c3a465bfc751ad928aab134346b563dd3cfa.webp",
+          "imageFallback": false,
+          "sourceColor": "羽翼精灵铜色",
+          "colorGroup": "multicolor",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 886,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 7.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 7.2
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 7.05
+            }
+          ]
+        },
+        {
+          "skuId": "4897473505020",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "天使羽翼金色王者之剑"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/abb9c685e158ad3e321c0fa3794f2e0e54c597bd.webp",
+          "imageFallback": false,
+          "sourceColor": "天使羽翼金色王者之剑",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 463,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 7.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 7.2
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 7.05
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:40:09.811Z",
+      "active": true
+    },
+    {
+      "id": -2000008,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "皇冠胸针链饰品男士女西装西服衬衫气质领针领扣胸花别针配饰",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/668093759030.html",
+      "offerId": "668093759030",
+      "imageUrl": "/accessories/brooches/85c9ce530f01028d3ec15b25a985d3bc926160ce.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "皇冠银色胸针",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 11.85
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 11.55
+        },
+        {
+          "minQuantity": 100,
+          "unitPrice": 11.25
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "4985286551009",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠银色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/62651c909a6c38d0ed90c8655459d28edfcd8b83.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠银色胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 750,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "4985286551010",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "老鹰银色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/e01e3ab201cd7b62bbc60941f6e0a1ad436d88ba.webp",
+          "imageFallback": false,
+          "sourceColor": "老鹰银色胸针",
+          "colorGroup": "silver",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 776,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "4985286551007",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "六芒星金色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/d6608311c3396f936753b48e90138a43dd02f910.webp",
+          "imageFallback": false,
+          "sourceColor": "六芒星金色胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 510,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        },
+        {
+          "skuId": "4985286551008",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵金色胸针"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/f7c99f9d8ec5a01842bc76507d2c5cfbf60dc364.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵金色胸针",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 669,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 11.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 11.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 11.25
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:40:09.820Z",
+      "active": true
+    },
+    {
+      "id": -2000009,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "男士英皇爵迹水钻领环夹领带箍复古骑士领带箍商务衬衫领带扣",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/678256632636.html",
+      "offerId": "678256632636",
+      "imageUrl": "/accessories/brooches/ddaba95bca37a25236c262c5c65ec819deaa653b.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "复古金色白钻领带箍+白色腰果手打",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 43.5
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 42
+        },
+        {
+          "minQuantity": 22,
+          "unitPrice": 40.5
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "5614842189510",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古金色白钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/ca64708a734b98bc45f9e5fc78988add6b1799ff.webp",
+          "imageFallback": false,
+          "sourceColor": "复古金色白钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9962,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189517",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆银色蓝宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/c431212ef9f11c39c42beeab7ae3a34e60179c19.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆银色蓝宝石领带箍+红蓝腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9998,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189515",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆金色香槟宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/48a7d1fb1a109b8d0bec3b3181de53885ced8470.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆金色香槟宝石领带箍+红蓝腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9992,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189514",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆金色黑宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/ddaba95bca37a25236c262c5c65ec819deaa653b.webp",
+          "imageFallback": true,
+          "sourceColor": "椭圆金色黑宝石领带箍+红蓝腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9995,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5813705010135",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰银色黑钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/ebaa295c68756c2ae3d9dba1035a5d39e8c710da.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰银色黑钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9998,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5813705010134",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰银色蓝钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/21de571e23a17a11fd63e1620f90348515f1bbe4.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰银色蓝钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9997,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5813705010137",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "双头老鹰金色领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/6220e8c1c990179ad57ef420c59a42af6617acab.webp",
+          "imageFallback": false,
+          "sourceColor": "双头老鹰金色领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9998,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189506",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵白钻金色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/e0a1a4f5e3251368c810f2ec1032307ea5c3d752.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵白钻金色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9985,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189513",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古银色蓝钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/67e553097e078519ad0c4c5557a2bc27cfc251e1.webp",
+          "imageFallback": false,
+          "sourceColor": "复古银色蓝钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9987,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189516",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "椭圆银色黑宝石领带箍+红蓝腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/a68dad9e19ebd527ea6c12b63eb53568361adad8.webp",
+          "imageFallback": false,
+          "sourceColor": "椭圆银色黑宝石领带箍+红蓝腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9990,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5813705010133",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰金色香槟钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/73dd83b1971dc7c1b46306f97418cc8377932872.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰金色香槟钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9997,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189507",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵白钻银色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/89c8d43c9669bdd678aa8e9ab4a2c3b485b0dd5a.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵白钻银色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9984,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189512",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古银色白钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/5825c311d32d297029f6c89ed473c51d4f18fb1b.webp",
+          "imageFallback": false,
+          "sourceColor": "复古银色白钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9986,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189508",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵黑钻金色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/2e1fc32041fedbd59fcf4b3a42b81cd6ba34d971.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵黑钻金色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9996,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5813705010138",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "双头老鹰银色领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/96735e91478bbd4a81e5d17f9826596d0258b681.webp",
+          "imageFallback": false,
+          "sourceColor": "双头老鹰银色领带箍+新款蓝色腰果手打",
+          "colorGroup": "blue",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9998,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189511",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "复古金色蓝钻领带箍+白色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/3900e8dc685b67f956ae6b9d8537e52ed9e90a08.webp",
+          "imageFallback": false,
+          "sourceColor": "复古金色蓝钻领带箍+白色腰果手打",
+          "colorGroup": "white",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9997,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5813705010136",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "皇冠老鹰金色黑钻领带箍+新款蓝色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/3f2d99ef2f98eee3682a91ada64f0234078a8e7e.webp",
+          "imageFallback": false,
+          "sourceColor": "皇冠老鹰金色黑钻领带箍+新款蓝色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9999,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        },
+        {
+          "skuId": "5614842189509",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "船舵黑钻银色领带箍+黑色腰果手打"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/fc5da98f07ff169b93753b55f68375ca3eb9f949.webp",
+          "imageFallback": false,
+          "sourceColor": "船舵黑钻银色领带箍+黑色腰果手打",
+          "colorGroup": "black",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 9997,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 43.5
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 42
+            },
+            {
+              "minQuantity": 22,
+              "unitPrice": 40.5
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:40:09.828Z",
+      "active": true
+    },
+    {
+      "id": -2000010,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "金色麋鹿胸针链饰品男士女西装西服衬衫气质领针领扣胸花别针配饰",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/668080691371.html",
+      "offerId": "668080691371",
+      "imageUrl": "/accessories/brooches/4ed2d7be625c8c8c95d6a8078018c037acd07c9f.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "金色麋鹿（别针式）",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 8.85
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 8.55
+        },
+        {
+          "minQuantity": 100,
+          "unitPrice": 8.25
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "5362279240158",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色麋鹿（别针式）"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/4ef2094176350ec4eb9e429359ea420a603ad467.webp",
+          "imageFallback": false,
+          "sourceColor": "金色麋鹿（别针式）",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "classic",
+          "stockQuantity": 906,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 8.85
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 8.55
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 8.25
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:41:13.037Z",
+      "active": true
+    },
+    {
+      "id": -2000011,
+      "ownerId": 0,
+      "category": "brooch",
+      "title": "小鹿钻石胸针链饰品男士女西装西服衬衫气质领针领扣胸花别针配饰",
+      "supplierName": "",
+      "sourceUrl": "https://detail.1688.com/offer/667367545848.html",
+      "offerId": "667367545848",
+      "imageUrl": "/accessories/brooches/9b3c6fbaeda08a29321d8c3beb47bbd28c6d379a.webp",
+      "sourceMaterial": "合金",
+      "materialGroup": "alloy",
+      "sourceColor": "金色钻石麋鹿",
+      "colorGroup": "multicolor",
+      "moq": 1,
+      "priceTiers": [
+        {
+          "minQuantity": 1,
+          "unitPrice": 10.35
+        },
+        {
+          "minQuantity": 20,
+          "unitPrice": 10.05
+        },
+        {
+          "minQuantity": 100,
+          "unitPrice": 9.75
+        }
+      ],
+      "skus": [
+        {
+          "skuId": "4807274596080",
+          "attributes": [
+            {
+              "name": "款式",
+              "value": "金色钻石麋鹿"
+            }
+          ],
+          "imageUrl": "/accessories/brooches/be010f710cbbb08ca68b7af4274f249721d36c0c.webp",
+          "imageFallback": false,
+          "sourceColor": "金色钻石麋鹿",
+          "colorGroup": "gold",
+          "sourceMaterial": "合金",
+          "materialGroup": "alloy",
+          "styleGroup": "crystal",
+          "stockQuantity": 956,
+          "stockStatus": "in_stock",
+          "priceTiers": [
+            {
+              "minQuantity": 1,
+              "unitPrice": 10.35
+            },
+            {
+              "minQuantity": 20,
+              "unitPrice": 10.05
+            },
+            {
+              "minQuantity": 100,
+              "unitPrice": 9.75
+            }
+          ]
+        }
+      ],
+      "status": "ready",
+      "checkedAt": "2026-09-21T16:41:13.045Z",
+      "active": true
+    }
+  ],
+  "imagesLocalizedAt": "2026-09-21T16:52:01.944Z",
+  "localizedImageCount": 132
+}

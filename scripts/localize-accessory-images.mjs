@@ -3,8 +3,10 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
-const catalogPath = path.resolve("app/data/cufflinks-catalog.json");
-const outputDir = path.resolve("public/accessories/cufflinks");
+const [catalogArg = "app/data/cufflinks-catalog.json", outputArg = "public/accessories/cufflinks", publicPrefixArg = "/accessories/cufflinks"] = process.argv.slice(2);
+const catalogPath = path.resolve(catalogArg);
+const outputDir = path.resolve(outputArg);
+const publicPrefix = publicPrefixArg.replace(/\/$/, "");
 const catalog = JSON.parse(await readFile(catalogPath, "utf8"));
 
 const urls = new Set();
@@ -33,7 +35,7 @@ async function download(url) {
     .webp({ quality: 78, effort: 4 })
     .toBuffer();
   await writeFile(path.join(outputDir, filename), optimized);
-  localized.set(url, `/accessories/cufflinks/${filename}`);
+  localized.set(url, `${publicPrefix}/${filename}`);
   completed += 1;
   if (completed % 50 === 0 || completed === urls.size) console.log(`Downloaded ${completed}/${urls.size}`);
 }
