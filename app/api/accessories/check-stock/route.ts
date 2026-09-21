@@ -3,6 +3,7 @@ import { getDb } from "../../../../db";
 import { accessoryProducts } from "../../../../db/schema";
 import { ensureSchema } from "../../../../db/init";
 import { getSession, scopeFor } from "../../../lib/auth";
+import { getCufflinkProduct } from "../../../lib/cufflinks-catalog";
 
 type Sku = { skuId?: string; stockQuantity?: number | null; stockStatus?: string; priceTiers?: Array<{ minQuantity: number; unitPrice: number }> };
 
@@ -12,6 +13,18 @@ export async function POST(request: Request) {
   const user = await getSession(db, request);
   if (!user) return Response.json({ error: "登录后才能检查库存" }, { status: 401 });
   const payload = await request.json() as { productId?: number; skuId?: string; quantity?: number };
+  const catalogProduct = getCufflinkProduct(Number(payload.productId));
+  if (catalogProduct) {
+    const sku = catalogProduct.skus.find((item) => String(item.skuId) === String(payload.skuId));
+    if (!sku) return Response.json({ error: "该款式已不存在，请重新选择", code: "SKU_MISSING" }, { status: 409 });
+    const quantity = Math.max(1, Number(payload.quantity) || 1);
+    if (sku.stockStatus === "out_of_stock" || (typeof sku.stockQuantity === "number" && sku.stockQuantity < quantity)) {
+      return Response.json({ error: "该款式库存不足", code: "OUT_OF_STOCK" }, { status: 409 });
+    }
+    const tiers = [...sku.priceTiers].sort((a, b) => a.minQuantity - b.minQuantity);
+    const effective = tiers.filter((tier) => quantity >= tier.minQuantity).at(-1) ?? tiers[0];
+    return Response.json({ ok: true, checkedAt: catalogProduct.checkedAt, stockQuantity: sku.stockQuantity, stockStatus: sku.stockStatus, unitPrice: effective?.unitPrice ?? null });
+  }
   const scope = scopeFor(user);
   const [product] = await db.select().from(accessoryProducts).where(and(
     eq(accessoryProducts.id, Number(payload.productId)),
