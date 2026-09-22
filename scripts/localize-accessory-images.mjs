@@ -28,7 +28,19 @@ let completed = 0;
 
 async function download(url) {
   const digest = createHash("sha1").update(url).digest("hex");
-  const response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
+  let response;
+  let lastError;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
+      if (response.ok || response.status === 404) break;
+      lastError = new Error(`${response.status} ${url}`);
+    } catch (error) {
+      lastError = error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, attempt * 750));
+  }
+  if (!response) throw lastError || new Error(`Download failed ${url}`);
   if (!response.ok) throw new Error(`${response.status} ${url}`);
   const filename = `${digest}.webp`;
   const optimized = await sharp(Buffer.from(await response.arrayBuffer()))
@@ -54,7 +66,7 @@ async function worker() {
   }
 }
 
-await Promise.all(Array.from({ length: 8 }, worker));
+await Promise.all(Array.from({ length: 4 }, worker));
 
 for (const product of catalog.products) {
   const localProductImage = localized.get(product.imageUrl) || null;
