@@ -24,10 +24,11 @@ const CATEGORIES = [
   ["pocket_square", "口袋巾", "Pocket squares"],
   ["bow_tie", "领结", "Bow ties"],
   ["tie_pin", "领针", "Tie pins"],
+  ["tie_clip", "领带夹", "Tie clips"],
 ] as const;
-const COLOR_LABELS: Record<string, [string, string]> = { black: ["黑色", "Black"], white: ["白色", "White"], grey: ["灰色", "Grey"], blue: ["蓝色", "Blue"], red: ["红色", "Red"], green: ["绿色", "Green"], gold: ["金色", "Gold"], silver: ["银色", "Silver"], purple: ["紫色", "Purple"], pink: ["粉色", "Pink"], brown: ["棕色", "Brown"], multicolor: ["多色", "Multicolour"] };
-const MATERIAL_LABELS: Record<string, [string, string]> = { copper: ["铜", "Copper"], alloy: ["合金", "Alloy"], metal: ["金属", "Metal"] };
-const STYLE_LABELS: Record<string, [string, string]> = { classic: ["经典", "Classic"], initial: ["字母", "Initial"], crystal: ["水晶/锆石", "Crystal"], enamel: ["珐琅", "Enamel"], square: ["方形", "Square"], round: ["圆形", "Round"], set: ["礼盒套装", "Gift set"], novelty: ["趣味造型", "Novelty"] };
+const COLOR_LABELS: Record<string, [string, string]> = { black: ["黑色", "Black"], white: ["白色", "White"], grey: ["灰色", "Grey"], navy: ["藏青色", "Navy"], blue: ["蓝色", "Blue"], red: ["红色", "Red"], burgundy: ["酒红色", "Burgundy"], green: ["绿色", "Green"], gold: ["金色", "Gold"], silver: ["银色", "Silver"], purple: ["紫色", "Purple"], pink: ["粉色", "Pink"], brown: ["棕色", "Brown"], orange: ["橙色", "Orange"], yellow: ["黄色", "Yellow"], multicolor: ["多色", "Multicolour"] };
+const MATERIAL_LABELS: Record<string, [string, string]> = { copper: ["铜", "Copper"], brass: ["黄铜", "Brass"], alloy: ["合金", "Alloy"], metal: ["金属", "Metal"], stainless_steel: ["不锈钢", "Stainless steel"], silk: ["真丝", "Silk"], polyester: ["聚酯纤维", "Polyester"], other: ["其他", "Other"] };
+const STYLE_LABELS: Record<string, [string, string]> = { classic: ["经典", "Classic"], initial: ["字母", "Initial"], crystal: ["水晶/锆石", "Crystal"], enamel: ["珐琅", "Enamel"], square: ["方形", "Square"], round: ["圆形", "Round"], set: ["礼盒套装", "Gift set"], novelty: ["趣味造型", "Novelty"], stripe: ["条纹", "Stripe"], dot: ["圆点", "Dot"], check: ["格纹", "Check"], pattern: ["花纹", "Pattern"], other: ["其他", "Other"] };
 const PAGE_SIZE = 48;
 function effectivePrice(tiers: PriceTier[], quantity = 1) {
   return [...tiers].sort((a, b) => a.minQuantity - b.minQuantity).filter((tier) => quantity >= tier.minQuantity).at(-1)?.unitPrice ?? tiers[0]?.unitPrice ?? null;

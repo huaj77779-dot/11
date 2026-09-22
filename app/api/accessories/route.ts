@@ -13,6 +13,7 @@ const CATEGORIES = new Set([
   "pocket_square",
   "bow_tie",
   "tie_pin",
+  "tie_clip",
 ]);
 
 function parseJson<T>(value: string, fallback: T): T {
