@@ -6,8 +6,10 @@ import { apiFetch } from "../lib/api";
 import { useAuthGuard } from "../lib/useAuthGuard";
 import { useCurrency } from "../lib/currency";
 import { useLocale } from "../lib/i18n";
+import { CountryRegionFields, shippingQuote } from "../tailoring-app";
 
-type OrderItem = { garmentType: string; garmentName: string; fabricCode?: string; fabricName?: string; totalPrice: number; currency: string; options?: Array<{ group: string; item: string; price?: number }> };
+type ShippingAddress = { country?: string; region?: string; city?: string; street?: string; postalCode?: string };
+type OrderItem = { garmentType: string; garmentName: string; fabricCode?: string; fabricName?: string; totalPrice: number; productPrice?: number; shippingFee?: number; weightKg?: number; currency: string; shippingAddress?: ShippingAddress; options?: Array<{ group: string; item: string; price?: number }> };
 type OrderDraft = { customer: Record<string, string>; order: { items: OrderItem[] }; profilePatch?: Record<string, unknown> };
 type AccessoryLine = { productId: number; offerId?: string; skuId: string; title: string; skuLabel: string; imageUrl?: string | null; quantity: number; unitPrice: number | null; sourceUrl: string };
 
@@ -27,8 +29,31 @@ export default function SelectionPage() {
     setLoaded(true);
   }, []);
 
-  const garmentItems = draft?.order.items ?? [];
+  const customer = draft?.customer;
+  const addressComplete = Boolean(customer?.country && customer?.region?.trim() && customer?.city?.trim() && customer?.street?.trim() && customer?.postalCode?.trim());
+  const shippingAddress = useMemo(() => ({
+    country: customer?.country || "",
+    region: customer?.region || "",
+    city: customer?.city || "",
+    street: customer?.street || "",
+    postalCode: customer?.postalCode || "",
+  }), [customer]);
+  const garmentItems = useMemo(() => (draft?.order.items ?? []).map((item) => {
+    const previousShipping = Number(item.shippingFee || 0);
+    const productPrice = Number(item.productPrice ?? (Number(item.totalPrice || 0) - previousShipping));
+    const shippingFee = addressComplete ? shippingQuote(shippingAddress.country, Number(item.weightKg || 0)).fee : 0;
+    return { ...item, productPrice, shippingFee, totalPrice: productPrice + shippingFee, shippingAddress };
+  }), [draft, addressComplete, shippingAddress]);
   const total = useMemo(() => garmentItems.reduce((sum, item) => sum + Number(item.totalPrice || 0), 0) + accessories.reduce((sum, item) => sum + Number(item.unitPrice || 0) * item.quantity, 0), [garmentItems, accessories]);
+
+  const updateCustomer = (field: string, value: string) => {
+    setDraft((current) => {
+      if (!current) return current;
+      const next = { ...current, customer: { ...current.customer, [field]: value } };
+      localStorage.setItem("verosuits-order-draft", JSON.stringify(next));
+      return next;
+    });
+  };
 
   const removeAccessory = (productId: number, skuId: string) => {
     const next = accessories.filter((item) => !(item.productId === productId && item.skuId === skuId));
@@ -38,6 +63,10 @@ export default function SelectionPage() {
 
   const submit = async () => {
     if (!draft?.customer?.name) { window.location.href = "/customize"; return; }
+    if (!addressComplete) {
+      alert(zh ? "请先填写完整的客户收货地址。" : "Please complete the customer shipping address.");
+      return;
+    }
     setSubmitting(true);
     try {
       await Promise.all(accessories.map((line) => apiFetch("/api/accessories/check-stock", { method: "POST", body: JSON.stringify({ productId: line.productId, skuId: line.skuId, quantity: line.quantity }) })));
@@ -67,7 +96,17 @@ export default function SelectionPage() {
     {empty ? <section className="selection-empty"><h2>{zh ? "选购单还是空的" : "Your selection is empty"}</h2><p>{zh ? "先选择成衣或配件，再回到这里统一提交。" : "Choose garments or accessories first."}</p><div><a href="/customize">{zh ? "成衣定制" : "Customise garments"}</a><a href="/accessories">{zh ? "配件采购" : "Accessories"}</a></div></section> : <>
       {garmentItems.length > 0 && <section className="selection-group"><div className="selection-group-head"><h2>{zh ? "成衣定制" : "Garments"}</h2><a href="/customize">{zh ? "返回修改" : "Edit"}</a></div>{garmentItems.map((item, index) => <article key={`${item.garmentType}:${index}`}><div className="selection-placeholder">衣</div><div><small>{item.garmentType}</small><h3>{item.garmentName}</h3><p>{[item.fabricName, item.fabricCode].filter(Boolean).join(" · ")}</p></div><strong>{money(item.totalPrice)}</strong></article>)}</section>}
       {accessories.length > 0 && <section className="selection-group"><div className="selection-group-head"><h2>{zh ? "配件采购" : "Accessories"}</h2><a href="/accessories">{zh ? "继续选购" : "Add more"}</a></div>{accessories.map((item) => <article key={`${item.productId}:${item.skuId}`}>{item.imageUrl ? <img src={item.imageUrl} alt={item.skuLabel} /> : <div className="selection-placeholder">◇</div>}<div><small>{item.title}</small><h3>{item.skuLabel}</h3><p>{zh ? `数量 ${item.quantity}` : `Qty ${item.quantity}`}</p></div><strong>{money(Number(item.unitPrice || 0) * item.quantity)}</strong><button onClick={() => removeAccessory(item.productId, item.skuId)}>{zh ? "移除" : "Remove"}</button></article>)}</section>}
-      <footer><div><span>{zh ? "合计" : "Total"}</span><strong>{money(total)}</strong></div>{!draft?.customer?.name && <p>{zh ? "提交前请先在成衣定制中填写客户资料。" : "Add customer details in garment customisation before submitting."}</p>}<button disabled={submitting} onClick={submit}>{submitting ? (zh ? "正在提交…" : "Submitting…") : draft?.customer?.name ? (zh ? "确认并提交订单" : "Confirm order") : (zh ? "填写客户资料" : "Add customer details")}</button></footer>
+      <section className="selection-address">
+        <div className="selection-address-head"><div><p className="eyebrow">SHIPPING ADDRESS</p><h2>{zh ? "客户收货地址" : "Customer shipping address"}</h2></div><small>{zh ? "用于物流报价与订单" : "Used for freight quotes and the order"}</small></div>
+        <div className="address-fields">
+          <CountryRegionFields country={shippingAddress.country} region={shippingAddress.region} setCountry={(value) => updateCustomer("country", value)} setRegion={(value) => updateCustomer("region", value)} idPrefix="selection" />
+          <label><span>{zh ? "城市" : "City"} <i>*</i></span><input value={shippingAddress.city} onChange={(event) => updateCustomer("city", event.target.value)} placeholder={zh ? "城市" : "City"} /></label>
+          <label className="street"><span>{zh ? "详细地址" : "Street address"} <i>*</i></span><input value={shippingAddress.street} onChange={(event) => updateCustomer("street", event.target.value)} placeholder={zh ? "详细地址" : "Street address"} /></label>
+          <label><span>{zh ? "邮编" : "Postal code"} <i>*</i></span><input value={shippingAddress.postalCode} onChange={(event) => updateCustomer("postalCode", event.target.value)} placeholder={zh ? "邮编" : "Postal code"} /></label>
+        </div>
+        {!addressComplete && <p className="selection-address-note">{zh ? "请补全所有必填项后提交订单。" : "Complete all required fields before submitting."}</p>}
+      </section>
+      <footer><div><span>{zh ? "合计" : "Total"}</span><strong>{money(total)}</strong></div>{!draft?.customer?.name ? <p>{zh ? "提交前请先在成衣定制中填写客户资料。" : "Add customer details in garment customisation before submitting."}</p> : !addressComplete ? <p>{zh ? "请先填写完整收货地址。" : "Complete the shipping address first."}</p> : null}<button disabled={submitting} onClick={submit}>{submitting ? (zh ? "正在提交…" : "Submitting…") : draft?.customer?.name ? (zh ? "确认并提交订单" : "Confirm order") : (zh ? "填写客户资料" : "Add customer details")}</button></footer>
     </>}
   </div></section></main>;
 }

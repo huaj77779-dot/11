@@ -568,7 +568,7 @@ const US_SHIPPING_TABLE: Record<number, number> = {
   11: 651, 11.5: 673,
 };
 
-function shippingQuote(country: string, weightKg: number) {
+export function shippingQuote(country: string, weightKg: number) {
   if (!country || weightKg <= 0) return { fee: 0, label: "" };
   if (country === "US") {
     const charged = Math.max(2, Math.ceil(weightKg * 2) / 2);
@@ -2290,45 +2290,6 @@ export function TailoringApp({ whiteLabel = false }: { whiteLabel?: boolean }) {
                       );
                     })()}
                   </div>
-                  <section className="client-shipping-address">
-                    <div className="client-address-title">
-                      <h3>{t("home.shipAddress")}</h3>
-                      <small>{loc === "zh" ? "用于物流报价与 PI" : "For freight quotes and PI"}</small>
-                    </div>
-                    <div className="address-fields">
-                      <CountryRegionFields
-                        country={country}
-                        region={region}
-                        setCountry={setCountry}
-                        setRegion={setRegion}
-                        idPrefix="customer"
-                      />
-                      <label>
-                        <span>{t("home.city")} <i>*</i></span>
-                        <input
-                          value={city}
-                          onChange={(event) => setCity(event.target.value)}
-                          placeholder={t("home.city")}
-                        />
-                      </label>
-                      <label className="street">
-                        <span>{t("home.street")} <i>*</i></span>
-                        <input
-                          value={street}
-                          onChange={(event) => setStreet(event.target.value)}
-                          placeholder={t("home.street")}
-                        />
-                      </label>
-                      <label>
-                        <span>{t("home.postal")} <i>*</i></span>
-                        <input
-                          value={postalCode}
-                          onChange={(event) => setPostalCode(event.target.value)}
-                          placeholder={t("home.postal")}
-                        />
-                      </label>
-                    </div>
-                  </section>
                 </>
               )}
               {lookupOpen && (
@@ -3347,7 +3308,7 @@ function PriceBreakdown({
   );
 }
 
-function CountryRegionFields({
+export function CountryRegionFields({
   country,
   region,
   setCountry,
