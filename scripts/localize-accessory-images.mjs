@@ -3,10 +3,12 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
-const [catalogArg = "app/data/cufflinks-catalog.json", outputArg = "public/accessories/cufflinks", publicPrefixArg = "/accessories/cufflinks"] = process.argv.slice(2);
+const [catalogArg = "app/data/cufflinks-catalog.json", outputArg = "public/accessories/cufflinks", publicPrefixArg = "/accessories/cufflinks", maxSizeArg = "480", qualityArg = "68"] = process.argv.slice(2);
 const catalogPath = path.resolve(catalogArg);
 const outputDir = path.resolve(outputArg);
 const publicPrefix = publicPrefixArg.replace(/\/$/, "");
+const maxSize = Math.max(240, Number(maxSizeArg) || 480);
+const quality = Math.min(90, Math.max(45, Number(qualityArg) || 68));
 const catalog = JSON.parse(await readFile(catalogPath, "utf8"));
 
 const urls = new Set();
@@ -31,8 +33,8 @@ async function download(url) {
   const filename = `${digest}.webp`;
   const optimized = await sharp(Buffer.from(await response.arrayBuffer()))
     .rotate()
-    .resize(720, 720, { fit: "inside", withoutEnlargement: true })
-    .webp({ quality: 78, effort: 4 })
+    .resize(maxSize, maxSize, { fit: "inside", withoutEnlargement: true })
+    .webp({ quality, effort: 5 })
     .toBuffer();
   await writeFile(path.join(outputDir, filename), optimized);
   localized.set(url, `${publicPrefix}/${filename}`);
